@@ -1,18 +1,20 @@
 package com.example.toucheese_be.domain.studio.entity;
 
-<<<<<<< HEAD
+
 import jakarta.persistence.*;
 
-=======
+
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
->>>>>>> 60e8b38f6236a79264b969089350b3fa6ebe8a16
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Builder.Default;
@@ -30,7 +32,6 @@ public class Studio {
     // 컨셉 아이디
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(length=150)
     private Long id;
 
     //스튜디오 이름
@@ -45,7 +46,6 @@ public class Studio {
     @Column(length=150)
     @ElementCollection
     private List<String> portfolioImg = new ArrayList<>();
-
 
     // 스튜디오별 평균 별점
     // asterion = 별점
