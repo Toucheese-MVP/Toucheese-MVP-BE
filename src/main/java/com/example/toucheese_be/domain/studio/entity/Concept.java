@@ -1,18 +1,27 @@
 package com.example.toucheese_be.domain.studio.entity;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-/*
-스튜디오 마다 갖고있는 컨셉 필드를 설명할 enum 클래스
- */
 @Getter
-@RequiredArgsConstructor
-public enum Concept {
-    VIBRANT("생동감있는"),
-    FLASHY_GLOSSY("플래시/유광"),
-    VIVID("선명한"),
-    WATERCOLOUR("수체화그림체");
+@Setter
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+public class Concept {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private final String description;
+    // 컨셉 이름
+    @Column(length = 150, nullable = false)
+    private String name;
+    private String conceptImg;
 }

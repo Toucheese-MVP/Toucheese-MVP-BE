@@ -14,6 +14,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/*
+개별 포트폴리오 이미지 엔티티
+ */
 @Getter
 @Setter
 @Entity
