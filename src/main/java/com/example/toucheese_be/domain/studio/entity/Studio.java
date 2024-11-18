@@ -21,6 +21,7 @@ import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.cache.spi.support.AbstractReadWriteAccess.Item;
 
 @Getter
 @Setter
@@ -56,12 +57,11 @@ public class Studio {
     @Column(length=150)
     private String address;
 
-    private int price;
-
+    // 컨셉
     @Enumerated(EnumType.STRING)
     private Concept concpet;
 
-
-
-
+    // 스튜디오 아이템
+    @OneToMany(mappedBy = "studio", fetch = FetchType.LAZY)
+    private final List<StudioItem> items = new ArrayList<>();
 }
