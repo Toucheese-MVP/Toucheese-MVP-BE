@@ -20,10 +20,15 @@ public class Studio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
+
     private String profileImg;
+
     private String portfolioImg;
+
     private Double avgRating;
+
     private String address;
     // 상품 리스트
     // 컨셉 아이디
