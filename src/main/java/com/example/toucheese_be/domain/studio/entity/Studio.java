@@ -56,5 +56,12 @@ public class Studio {
     @Column(length=150)
     private String address;
 
-    // private int price;
+    private int price;
+
+    @Enumerated(EnumType.STRING)
+    private Concept concpet;
+
+
+
+
 }
