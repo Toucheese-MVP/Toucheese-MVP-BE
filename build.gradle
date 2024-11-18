@@ -35,6 +35,10 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	// jpa PostgreSQL 연동을 위한 의존성 추가
+	implementation group: 'org.postgresql', name:'postgresql', version: '42.2.19'
+	runtimeOnly 'org.postgresql:postgresql'
 }
 
 tasks.named('test') {

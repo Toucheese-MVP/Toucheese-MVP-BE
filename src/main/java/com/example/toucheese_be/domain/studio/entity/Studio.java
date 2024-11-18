@@ -1,4 +1,4 @@
-package com.example.toucheese_be.studio.entity;
+package com.example.toucheese_be.domain.studio.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
