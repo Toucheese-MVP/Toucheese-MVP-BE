@@ -1,10 +1,21 @@
 package com.example.toucheese_be.domain.studio.entity;
 
+<<<<<<< HEAD
 import jakarta.persistence.*;
 
+=======
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+>>>>>>> 60e8b38f6236a79264b969089350b3fa6ebe8a16
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -32,7 +43,9 @@ public class Studio {
 
     // 스튜디오에서 예시로 제공하는 대표사진
     @Column(length=150)
-    private String portfolioImg;
+    @ElementCollection
+    private List<String> portfolioImg = new ArrayList<>();
+
 
     // 스튜디오별 평균 별점
     // asterion = 별점
