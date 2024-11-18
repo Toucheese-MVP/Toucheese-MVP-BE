@@ -21,8 +21,12 @@ public class StudioItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    // 상품 이름
     private String name;
+    // 상품 설명
     private String description;
+    // 상품 가격
     private Integer price;
+    // 상품 이미지
     private String image;
 }
