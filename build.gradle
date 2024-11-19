@@ -66,6 +66,9 @@ dependencies {
 	// jpa PostgreSQL 연동을 위한 의존성 추가
 	implementation group: 'org.postgresql', name:'postgresql', version: '42.2.19'
 	runtimeOnly 'org.postgresql:postgresql'
+
+	// assertThat 의존성 추가
+	testImplementation 'org.assertj:assertj-core:3.24.2'
 }
 
 tasks.named('test') {
