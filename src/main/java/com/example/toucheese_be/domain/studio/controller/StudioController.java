@@ -25,18 +25,15 @@ public class StudioController {
     @GetMapping("/")
     public void getConcepts() {}
 
-    // TODO : 컨셉 별 스튜디오 전체 조회
-    @GetMapping("/{conceptId}")
-    public ResponseEntity<List<StudioDto>> getStudiosByConcept(
-            @PathVariable
-            Long conceptId
-    ) {
-        return ResponseEntity.ok(studioService.getStudiosByConcept(conceptId));
-    };
 
-
-    // TODO: 컨셉 별 스튜디오 조건 (인기, 가격, 거리) 검색
-    @PostMapping("/{conceptId}/search")
+    /**
+     * 컨셉 별 스튜디오 잔체 조회
+     * @param conceptId 컨셉 ID
+     * @param dto 조건 (인기, 가격, 거리)
+     * @param pageable 페이징
+     * @return 스튜디오 리스트
+     */
+    @PostMapping("/search/{conceptId}")
     public ResponseEntity<Page<StudioDto>> getStudiosByConceptAndFilters(
             @PathVariable
             Long conceptId,
