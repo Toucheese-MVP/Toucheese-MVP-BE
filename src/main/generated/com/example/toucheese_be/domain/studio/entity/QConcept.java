@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -24,6 +25,8 @@ public class QConcept extends EntityPathBase<Concept> {
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final StringPath name = createString("name");
+
+    public final ListPath<Studio, QStudio> studios = this.<Studio, QStudio>createList("studios", Studio.class, QStudio.class, PathInits.DIRECT2);
 
     public QConcept(String variable) {
         super(Concept.class, forVariable(variable));

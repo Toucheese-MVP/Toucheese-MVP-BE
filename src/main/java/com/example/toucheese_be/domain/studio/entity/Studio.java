@@ -44,10 +44,11 @@ public class Studio {
     @Column(length=150)
     private String address;
 
-    // 컨셉 (스튜디오와 일대일 관계)
-    @OneToOne(fetch = FetchType.LAZY)
+    // 컨셉 (여러 스튜디오가 하나의 컨셉에 연결)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "concept_id", nullable = false)
     private Concept concept;
+
 
     // 스튜디오에서 예시로 제공하는 대표사진
     @OneToMany(mappedBy = "studio", fetch = FetchType.LAZY)
