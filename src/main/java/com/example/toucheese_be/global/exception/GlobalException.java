@@ -21,6 +21,7 @@ public class GlobalException extends RuntimeException {
 //        this(codeMsg.getCode(), codeMsg.getMessage());
 //    }
 
+        // GlobalException를 컨트롤러에 입력해주면 경고 문구 사라짐
         public GlobalException() {
             this("400-0", "에러");
         }
