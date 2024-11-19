@@ -38,11 +38,13 @@ public class StudioController {
     // TODO: 컨셉 별 스튜디오 조건 (인기, 가격, 거리) 검색
     @PostMapping("/{conceptId}/search")
     public ResponseEntity<Page<StudioDto>> getStudiosByConceptAndFilters(
-            @RequestBody
+            @PathVariable
+            Long conceptId,
+            @RequestBody(required = false)
             StudioSearchFilterDto dto,
             Pageable pageable
     ) {
-        return ResponseEntity.ok(studioService.getStudiosByConceptFilters(dto, pageable));
+        return ResponseEntity.ok(studioService.getStudiosByConceptFilters(conceptId, dto, pageable));
     }
 
 }

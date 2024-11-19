@@ -5,7 +5,7 @@ spring:
     password:
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     properties:
       show-sql: true
       format_sql: true # 보기좋게 줄바꿈

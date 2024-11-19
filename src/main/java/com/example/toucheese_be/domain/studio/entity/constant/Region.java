@@ -6,9 +6,10 @@ import lombok.Getter;
 @Getter
 public enum Region {
     ALL("전체"),
-    GANGNAM("강남/서초/송파"),
-    GANGSEO("강서/마포/영등포"),
-    GANGBUK("강북/용산/성동");
+    GANGNAM("강남구"),
+
+    GANGSEO("강서구"),
+    GANGBUK("강북구"),
 
     private final String description;
 
