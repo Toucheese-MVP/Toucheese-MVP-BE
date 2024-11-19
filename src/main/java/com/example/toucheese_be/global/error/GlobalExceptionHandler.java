@@ -1,4 +1,4 @@
-package com.example.toucheese_be.global.exception;
+package com.example.toucheese_be.global.error;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
