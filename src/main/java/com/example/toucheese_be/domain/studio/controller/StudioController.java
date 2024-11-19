@@ -1,10 +1,15 @@
 package com.example.toucheese_be.domain.studio.controller;
 
+import com.example.toucheese_be.domain.studio.dto.SearchStudioDto;
 import com.example.toucheese_be.domain.studio.entity.Studio;
 import com.example.toucheese_be.domain.studio.service.StudioService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.Mapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,11 +26,16 @@ public class StudioController {
 
     // TODO : 컨셉 별 스튜디오 전체 조회
     @GetMapping("/{conceptId}")
-    public void getStudiosByConcept() {};
+    public ResponseEntity<List<SearchStudioDto>> getStudiosByConcept(
+            @PathVariable
+            Long conceptId
+    ) {
+        return ResponseEntity.ok(studioService.getStudiosByConcept(conceptId));
+    };
 
 
     // TODO: 컨셉 별 스튜디오 조건 (인기, 가격, 거리) 검색
-    @GetMapping("/{conceptId}/search")
+    @PostMapping("/{conceptId}/search")
     public void getStudiosByConceptAndFilters() {}
 
 }
