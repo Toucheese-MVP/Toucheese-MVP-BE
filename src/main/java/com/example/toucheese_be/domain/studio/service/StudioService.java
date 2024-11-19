@@ -1,6 +1,7 @@
 package com.example.toucheese_be.domain.studio.service;
 
-import com.example.toucheese_be.domain.studio.dto.SearchStudioDto;
+import com.example.toucheese_be.domain.studio.dto.StudioDto;
+import com.example.toucheese_be.domain.studio.dto.StudioSearchFilterDto;
 import com.example.toucheese_be.domain.studio.entity.Concept;
 import com.example.toucheese_be.domain.studio.entity.Studio;
 import com.example.toucheese_be.domain.studio.repository.ConceptRepository;
@@ -8,8 +9,9 @@ import com.example.toucheese_be.domain.studio.repository.StudioRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.apache.bcel.classfile.ConstantCP;
-import org.springframework.core.annotation.MergedAnnotations.Search;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,7 +24,7 @@ public class StudioService {
 
 
     // TODO: 컨셉에 따른 스튜디오 목록 조회
-    public List<SearchStudioDto> getStudiosByConcept(Long conceptId) {
+    public List<StudioDto> getStudiosByConcept(Long conceptId) {
         // conceptId 로 Concept 조회
         Concept concept = conceptRepository.findById(conceptId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 컨셉이 존재하지 않습니다."));
@@ -30,10 +32,13 @@ public class StudioService {
         List<Studio> studios = studioRepository.findByConcept(concept);
 
         return studios.stream()
-                .map(SearchStudioDto::fromEntity)
+                .map(StudioDto::fromEntity)
                 .collect(Collectors.toList());
     }
 
 
     // TODO: 컨셉에 따른 스튜디오 목록 조건 추가 검색
+    public Page<StudioDto> getStudiosByConceptFilters(Long conceptId, StudioSearchFilterDto dto, Pageable pageable) {
+        return studioRepository.getStudioListWithPages(conceptId, dto, pageable);
+    }
 }

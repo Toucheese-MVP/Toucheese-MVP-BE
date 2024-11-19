@@ -4,8 +4,9 @@ import com.example.toucheese_be.domain.studio.entity.Concept;
 import com.example.toucheese_be.domain.studio.entity.Studio;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-
-public interface StudioRepository extends JpaRepository<Studio, Long> {
+@Repository
+public interface StudioRepository extends JpaRepository<Studio, Long>, StudioRepositoryCustom{
     List<Studio> findByConcept(Concept concept);
 }
