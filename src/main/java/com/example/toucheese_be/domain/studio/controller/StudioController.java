@@ -1,5 +1,6 @@
 package com.example.toucheese_be.domain.studio.controller;
 
+import com.example.toucheese_be.domain.studio.dto.ConceptDto;
 import com.example.toucheese_be.domain.studio.dto.StudioSearchFilterDto;
 import com.example.toucheese_be.domain.studio.dto.StudioDto;
 import com.example.toucheese_be.domain.studio.service.StudioService;
@@ -21,13 +22,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class StudioController {
     private final StudioService studioService;
 
-    // TODO : 전체 컨셉 조회
-    @GetMapping("/")
-    public void getConcepts() {}
+    /**
+     * 전체 컨셉 조회
+     */
+    @GetMapping("/concepts")
+    public ResponseEntity<List<ConceptDto>> getConcepts() {
+        return ResponseEntity.ok(studioService.getConcepts());
+    }
 
 
     /**
-     * 컨셉 별 스튜디오 잔체 조회
+     * 컨셉 별 스튜디오 조회 (전체 or 조건)
      * @param conceptId 컨셉 ID
      * @param dto 조건 (인기, 가격, 거리)
      * @param pageable 페이징
