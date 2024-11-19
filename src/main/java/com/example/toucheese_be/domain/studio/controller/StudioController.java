@@ -1,5 +1,6 @@
 package com.example.toucheese_be.domain.studio.controller;
 
+import com.example.toucheese_be.domain.studio.dto.ConceptDto;
 import com.example.toucheese_be.domain.studio.dto.StudioSearchFilterDto;
 import com.example.toucheese_be.domain.studio.dto.StudioDto;
 import com.example.toucheese_be.domain.studio.service.StudioService;
@@ -21,22 +22,23 @@ import org.springframework.web.bind.annotation.RestController;
 public class StudioController {
     private final StudioService studioService;
 
-    // TODO : 전체 컨셉 조회
-    @GetMapping("/")
-    public void getConcepts() {}
-
-    // TODO : 컨셉 별 스튜디오 전체 조회
-    @GetMapping("/{conceptId}")
-    public ResponseEntity<List<StudioDto>> getStudiosByConcept(
-            @PathVariable("conecptId") Long conceptId
-    ) {
-
-        return ResponseEntity.ok(studioService.getStudiosByConcept(conceptId));
-    };
+    /**
+     * 전체 컨셉 조회
+     */
+    @GetMapping("/concepts")
+    public ResponseEntity<List<ConceptDto>> getConcepts() {
+        return ResponseEntity.ok(studioService.getConcepts());
+    }
 
 
-    // TODO: 컨셉 별 스튜디오 조건 (인기, 가격, 거리) 검색
-    @PostMapping("/{conceptId}/search")
+    /**
+     * 컨셉 별 스튜디오 조회 (전체 or 조건)
+     * @param conceptId 컨셉 ID
+     * @param dto 조건 (인기, 가격, 거리)
+     * @param pageable 페이징
+     * @return 스튜디오 리스트
+     */
+    @PostMapping("/search/{conceptId}")
     public ResponseEntity<Page<StudioDto>> getStudiosByConceptAndFilters(
             @PathVariable
             Long conceptId,
@@ -46,5 +48,4 @@ public class StudioController {
     ) {
         return ResponseEntity.ok(studioService.getStudiosByConceptFilters(conceptId, dto, pageable));
     }
-
 }
