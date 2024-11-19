@@ -28,9 +28,9 @@ public class StudioController {
     // TODO : 컨셉 별 스튜디오 전체 조회
     @GetMapping("/{conceptId}")
     public ResponseEntity<List<StudioDto>> getStudiosByConcept(
-            @PathVariable
-            Long conceptId
+            @PathVariable("conecptId") Long conceptId
     ) {
+
         return ResponseEntity.ok(studioService.getStudiosByConcept(conceptId));
     };
 
