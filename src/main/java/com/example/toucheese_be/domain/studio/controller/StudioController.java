@@ -43,5 +43,4 @@ public class StudioController {
     ) {
         return ResponseEntity.ok(studioService.getStudiosByConceptFilters(conceptId, dto, pageable));
     }
-
 }

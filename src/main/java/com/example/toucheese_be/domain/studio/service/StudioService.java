@@ -37,7 +37,9 @@ public class StudioService {
     }
 
 
-    // TODO: 컨셉에 따른 스튜디오 목록 조건 추가 검색
+    /**
+     * 컨셉에 따른 스튜디오 목록 조건 추가 검색
+     */
     public Page<StudioDto> getStudiosByConceptFilters(Long conceptId, StudioSearchFilterDto dto, Pageable pageable) {
         return studioRepository.getStudioListWithPages(conceptId, dto, pageable);
     }
