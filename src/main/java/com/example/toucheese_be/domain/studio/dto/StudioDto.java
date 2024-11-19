@@ -13,15 +13,15 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SearchStudioDto {
+public class StudioDto {
     private Long id;
     private String name;
     private String profileImg;
     private Double avgAsterion;
     private List<String> portfolios;
 
-    public static SearchStudioDto fromEntity(Studio entity) {
-        return SearchStudioDto.builder()
+    public static StudioDto fromEntity(Studio entity) {
+        return StudioDto.builder()
                 .id(entity.getId())
                 .name(entity.getName())
                 .profileImg(entity.getProfileImg())

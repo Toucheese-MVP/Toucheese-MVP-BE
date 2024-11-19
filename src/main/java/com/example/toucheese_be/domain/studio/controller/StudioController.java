@@ -1,17 +1,18 @@
 package com.example.toucheese_be.domain.studio.controller;
 
-import com.example.toucheese_be.domain.studio.dto.SearchStudioDto;
-import com.example.toucheese_be.domain.studio.entity.Studio;
+import com.example.toucheese_be.domain.studio.dto.StudioSearchFilterDto;
+import com.example.toucheese_be.domain.studio.dto.StudioDto;
 import com.example.toucheese_be.domain.studio.service.StudioService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -26,7 +27,7 @@ public class StudioController {
 
     // TODO : 컨셉 별 스튜디오 전체 조회
     @GetMapping("/{conceptId}")
-    public ResponseEntity<List<SearchStudioDto>> getStudiosByConcept(
+    public ResponseEntity<List<StudioDto>> getStudiosByConcept(
             @PathVariable
             Long conceptId
     ) {
@@ -36,6 +37,12 @@ public class StudioController {
 
     // TODO: 컨셉 별 스튜디오 조건 (인기, 가격, 거리) 검색
     @PostMapping("/{conceptId}/search")
-    public void getStudiosByConceptAndFilters() {}
+    public ResponseEntity<Page<StudioDto>> getStudiosByConceptAndFilters(
+            @RequestBody
+            StudioSearchFilterDto dto,
+            Pageable pageable
+    ) {
+        return ResponseEntity.ok(studioService.getStudiosByConceptFilters(dto, pageable));
+    }
 
 }
