@@ -24,8 +24,6 @@ public class QStudio extends EntityPathBase<Studio> {
 
     public final StringPath address = createString("address");
 
-    public final NumberPath<Double> avgAsterion = createNumber("avgAsterion", Double.class);
-
     public final QConcept concept;
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
@@ -33,6 +31,8 @@ public class QStudio extends EntityPathBase<Studio> {
     public final ListPath<Item, QItem> items = this.<Item, QItem>createList("items", Item.class, QItem.class, PathInits.DIRECT2);
 
     public final StringPath name = createString("name");
+
+    public final NumberPath<Double> popularity = createNumber("popularity", Double.class);
 
     public final ListPath<Portfolio, QPortfolio> portfolios = this.<Portfolio, QPortfolio>createList("portfolios", Portfolio.class, QPortfolio.class, PathInits.DIRECT2);
 

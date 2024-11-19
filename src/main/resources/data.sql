@@ -10,7 +10,7 @@ VALUES
 
 
 -- Studio 테이블에 스튜디오 데이터 삽입
-INSERT INTO studio (name, profile_img, avg_asterion, address, concept_id)
+INSERT INTO studio (name, profile_img, popularity, address, concept_id)
 VALUES
     -- 생동감있는 실물느낌
     ('시현하다-강남 오리지널', 'vibrant_profile.jpg', 4.5, '서울특별시 강남구 테헤란로 19길 53-6', 1),
@@ -23,10 +23,10 @@ VALUES
     ('오해피데이스튜디오', 'flashy_profile.jpg', 4.2, '강남구 신사동 566-10 4F', 4),
     ('프롬선스튜디오', 'flashy_profile.jpg', 4.2, '서울 강남구 강남대로 522 4층(와인샵과 약국골목 정금당 옆 계단입구 4층)', 4),
     -- 플래시 터진 느낌
-    ('아워유스', 'vivid_profile.jpg', 4.8, '서울시 마포구 와우산로 64 전원빌딩 4층', 2),
-    ('허쉬스튜디오', 'vivid_profile.jpg', 4.8, '서울 강남구 강남대로120길 76 2층', 2),
-    ('레코디드(홍대)', 'vivid_profile.jpg', 4.8, '서울 마포구 동교로 212-28 지하1층', 2),
-    ('레코디드(강남)', 'vivid_profile.jpg', 4.8, '서울 강남구 봉은사로2길 24 3층 301호', 2);
+    ('아워유스', 'profile-9.jpg', 4.8, '서울시 마포구 와우산로 64 전원빌딩 4층', 2),
+    ('허쉬스튜디오', 'profile-10.jpg', 4.8, '서울 강남구 강남대로120길 76 2층', 2),
+    ('레코디드(홍대)', 'profile-11.jpg', 4.8, '서울 마포구 동교로 212-28 지하1층', 2),
+    ('레코디드(강남)', 'profile-12.jpg', 4.8, '서울 강남구 봉은사로2길 24 3층 301호', 2);
 
 -- Item 테이블에 아이템 데이터 삽입
 INSERT INTO item (name, description, price, image, studio_id)
@@ -48,7 +48,16 @@ VALUES
 -- Portfolio 테이블에 포트폴리오 데이터 삽입
 INSERT INTO portfolio (image_url, studio_id)
 VALUES
-    ('vibrant_portfolio1.jpg', 1),
-    ('flashy_portfolio1.jpg', 2),
-    ('vivid_portfolio1.jpg', 3),
-    ('watercolour_portfolio1.jpg', 4);
+    ('portfolio9-1.jpg', 9),
+    ('portfolio9-2.jpg', 9),
+    ('portfolio9-3.jpg', 9),
+    ('portfolio10-1.jpg', 10),
+    ('portfolio10-2.jpg', 10),
+    ('portfolio10-3.jpg', 10),
+    ('portfolio11-1.jpg', 11),
+    ('portfolio11-2.jpg', 11),
+    ('portfolio11-3.jpg', 11),
+    ('portfolio12-1.jpg', 12),
+    ('portfolio12-2.jpg', 12),
+    ('portfolio12-3.jpg', 12);
+

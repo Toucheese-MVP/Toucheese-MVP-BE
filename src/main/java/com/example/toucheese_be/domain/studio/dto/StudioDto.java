@@ -17,7 +17,7 @@ public class StudioDto {
     private Long id;
     private String name;
     private String profileImg;
-    private Double avgAsterion;
+    private Double popularity;
     private List<String> portfolios;
 
     public static StudioDto fromEntity(Studio entity) {
@@ -25,7 +25,7 @@ public class StudioDto {
                 .id(entity.getId())
                 .name(entity.getName())
                 .profileImg(entity.getProfileImg())
-                .avgAsterion(entity.getAvgAsterion())
+                .popularity(entity.getPopularity())
                 .portfolios(entity.getPortfolios().stream()
                         .map(Portfolio::getImageUrl)
                         .collect(Collectors.toList()))

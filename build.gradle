@@ -47,8 +47,9 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
-	// H2 DB
-	runtimeOnly 'com.h2database:h2'
+	// sqlite
+	runtimeOnly 'org.xerial:sqlite-jdbc:3.41.2.2'
+	runtimeOnly 'org.hibernate.orm:hibernate-community-dialects:6.2.4.Final'
 
 	// Test 파일 관련 의존성 추가 사항
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
