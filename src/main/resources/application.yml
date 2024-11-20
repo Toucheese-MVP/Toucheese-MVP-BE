@@ -3,26 +3,23 @@ spring:
     # 처음에 나오는 Spring Logo 제거
     banner-mode: off
   datasource:
-    url: jdbc:sqlite:db.sqlite
-    driver-class-name: org.sqlite.JDBC
-    # url: jdbc:postgresql://localhost:5432/toucheese_db
-    # username: seonik
-    # password:
+    url: jdbc:postgresql://db-toucheese-2.cja2kuiisy1n.ap-northeast-2.rds.amazonaws.com/postgres
+    username:
+    password:
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     properties:
       show-sql: true
       format_sql: true # 보기좋게 줄바꿈
       highlight_sql: true
       use_sql_comments: true
-    # database: postgresql
-    # database-platform: org.hibernate.dialect.PostgreSQLDialect
-    database-platform: org.hibernate.community.dialect.SQLiteDialect
-    defer-datasource-initialization: true
-  sql:
-    init:
-      mode: always
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    # defer-datasource-initialization: true
+#  sql:
+#    init:
+#      mode: always
 
 
 
