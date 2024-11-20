@@ -43,7 +43,7 @@ public class StudioRepositoryImpl implements StudioRepositoryCustom {
         }
         // 인기 필터
         if (dto.getPopularity() != null && dto.getPopularity() != Popularity.ALL) {
-            builder.and(studio.avgAsterion.goe(dto.getPopularity().getMinRating()));
+            builder.and(studio.popularity.goe(dto.getPopularity().getMinRating()));
         }
 
         // 가격 필터: 가장 저렴한 Item 가격 기준

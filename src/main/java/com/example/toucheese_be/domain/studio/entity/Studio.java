@@ -35,10 +35,9 @@ public class Studio {
     @Column(length=150)
     private String profileImg;
 
-    // 스튜디오별 평균 별점
-    // asterion = 별점
+    // 스튜디오별 평점
     @Column(length=150)
-    private Double avgAsterion;
+    private Double popularity;
 
     // 실제 스튜디오 위치 주소
     @Column(length=150)
