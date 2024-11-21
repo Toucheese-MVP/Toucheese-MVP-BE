@@ -28,6 +28,8 @@ public class QItem extends EntityPathBase<Item> {
 
     public final StringPath image = createString("image");
 
+    public final EnumPath<com.example.toucheese_be.domain.studio.entity.constant.ItemCategory> itemCategory = createEnum("itemCategory", com.example.toucheese_be.domain.studio.entity.constant.ItemCategory.class);
+
     public final StringPath name = createString("name");
 
     public final NumberPath<Integer> price = createNumber("price", Integer.class);

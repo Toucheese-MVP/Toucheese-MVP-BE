@@ -1,7 +1,10 @@
 package com.example.toucheese_be.domain.studio.entity;
 
 
+import com.example.toucheese_be.domain.studio.entity.constant.ItemCategory;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -28,6 +31,9 @@ public class Item {
     private String name;
     // 상품 설명
     private String description;
+    // 상품 카테고리
+    @Enumerated(EnumType.STRING)
+    private ItemCategory itemCategory;
     // 상품 가격
     private Integer price;
     // 상품 이미지
