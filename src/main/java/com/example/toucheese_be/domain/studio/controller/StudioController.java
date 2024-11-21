@@ -1,12 +1,15 @@
 package com.example.toucheese_be.domain.studio.controller;
 
 import com.example.toucheese_be.domain.studio.dto.ConceptDto;
+import com.example.toucheese_be.domain.studio.dto.PageRequestDto;
 import com.example.toucheese_be.domain.studio.dto.StudioSearchFilterDto;
 import com.example.toucheese_be.domain.studio.dto.StudioDto;
+import com.example.toucheese_be.domain.studio.dto.StudioSearchRequestDto;
 import com.example.toucheese_be.domain.studio.service.StudioService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,19 +36,16 @@ public class StudioController {
 
     /**
      * 컨셉 별 스튜디오 조회 (전체 or 조건)
-     * @param conceptId 컨셉 ID
-     * @param dto 조건 (인기, 가격, 거리)
-     * @param pageable 페이징
-     * @return 스튜디오 리스트
      */
     @PostMapping("/search/{conceptId}")
     public ResponseEntity<Page<StudioDto>> getStudiosByConceptAndFilters(
             @PathVariable
             Long conceptId,
             @RequestBody(required = false)
-            StudioSearchFilterDto dto,
-            Pageable pageable
+            StudioSearchRequestDto dto
     ) {
-        return ResponseEntity.ok(studioService.getStudiosByConceptFilters(conceptId, dto, pageable));
+        Pageable pageable = dto.getPageable().toPageable();
+        StudioSearchFilterDto filters = dto.getFilters();
+        return ResponseEntity.ok(studioService.getStudiosByConceptFilters(conceptId, filters, pageable));
     }
 }

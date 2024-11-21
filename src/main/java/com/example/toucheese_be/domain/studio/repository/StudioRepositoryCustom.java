@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface StudioRepositoryCustom {
-    Page<StudioDto> getStudioListWithPages(Long conceptId, StudioSearchFilterDto dto, Pageable pageable);
+    Page<StudioDto> getStudioListWithPages(Long conceptId, StudioSearchFilterDto filters, Pageable pageable);
 }

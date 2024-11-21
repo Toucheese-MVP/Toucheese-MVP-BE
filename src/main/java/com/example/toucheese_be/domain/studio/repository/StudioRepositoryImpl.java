@@ -30,31 +30,34 @@ public class StudioRepositoryImpl implements StudioRepositoryCustom {
     @Override
     public Page<StudioDto> getStudioListWithPages(
             Long conceptId,
-            StudioSearchFilterDto dto,
+            StudioSearchFilterDto filters,
             Pageable pageable
     ) {
         // 기본 조건 : 컨셉 ID 로 필터링
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(studio.concept.id.eq(conceptId));
 
-        // 지역 필터
-        if (dto.getRegion() != null && dto.getRegion() != Region.ALL) {
-            builder.and(studio.address.containsIgnoreCase(dto.getRegion().getDescription()));
-        }
-        // 인기 필터
-        if (dto.getPopularity() != null && dto.getPopularity() != Popularity.ALL) {
-            builder.and(studio.popularity.goe(dto.getPopularity().getMinRating()));
+        if (filters != null) {
+            // 지역 필터
+            if (filters.getRegion() != null && filters.getRegion() != Region.ALL) {
+                builder.and(studio.address.containsIgnoreCase(filters.getRegion().getDescription()));
+            }
+            // 인기 필터
+            if (filters.getPopularity() != null && filters.getPopularity() != Popularity.ALL) {
+                builder.and(studio.popularity.goe(filters.getPopularity().getMinRating()));
+            }
+
+            // 가격 필터: 가장 저렴한 Item 가격 기준
+            if (filters.getPriceFilter() != null && filters.getPriceFilter() != PriceFilter.ALL) {
+                builder.and(
+                        JPAExpressions.select(item.price.min())
+                                .from(item)
+                                .where(item.studio.eq(studio))
+                                .loe(filters.getPriceFilter().getMaxPrice())
+                );
+            }
         }
 
-        // 가격 필터: 가장 저렴한 Item 가격 기준
-        if (dto.getPriceFilter() != null && dto.getPriceFilter() != PriceFilter.ALL) {
-            builder.and(
-                    JPAExpressions.select(item.price.min())
-                            .from(item)
-                            .where(item.studio.eq(studio))
-                            .loe(dto.getPriceFilter().getMaxPrice())
-            );
-        }
 
         // 페이징 처리
         List<Studio> results = jpaQueryFactory.selectFrom(studio)
