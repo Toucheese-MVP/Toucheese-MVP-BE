@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 @Getter
 @Builder
@@ -19,4 +21,13 @@ public class StudioSearchFilterDto {
     private Popularity popularity;
     // 가격 필터
     private PriceFilter priceFilter;
+    // 페이징 필터
+    @Builder.Default
+    private int page = 0;
+    @Builder.Default
+    private int size = 10;
+
+    public Pageable toPageable() {
+        return PageRequest.of(page, size);
+    }
 }
