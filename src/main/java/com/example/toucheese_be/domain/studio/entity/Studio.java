@@ -1,6 +1,7 @@
 package com.example.toucheese_be.domain.studio.entity;
 
 
+import com.example.toucheese_be.domain.item.entity.Item;
 import jakarta.persistence.*;
 
 

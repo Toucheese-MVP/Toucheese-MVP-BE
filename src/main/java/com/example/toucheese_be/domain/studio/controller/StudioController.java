@@ -47,4 +47,21 @@ public class StudioController {
         Pageable pageable = dto.toPageable();
         return ResponseEntity.ok(studioService.getStudiosByConceptFilters(conceptId, dto, pageable));
     }
+
+    /**
+     * TODO: 스튜디오 상세 조회 - 가격 탭
+     */
+    @GetMapping("/details/{studioId}/items")
+    public void getStudioItems() {}
+
+    /**
+     * TODO: 스튜디오 상세 조회 - 리뷰탭
+     */
+    @GetMapping("/details/{studioId}/reviews")
+    public void getStudioReviews() {}
+
+    /**
+     * TODO: 스튜디오 근무 시간 조회 - 캘린더 보여주기
+     */
+
 }
