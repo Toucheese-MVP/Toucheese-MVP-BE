@@ -1,9 +1,7 @@
-package com.example.toucheese_be.domain.studio.entity;
+package com.example.toucheese_be.domain.item.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
-import com.example.toucheese_be.domain.item.entity.Item;
-import com.example.toucheese_be.domain.item.entity.constant.ItemCategory;
 import com.querydsl.core.types.dsl.*;
 
 import com.querydsl.core.types.PathMetadata;
@@ -18,7 +16,7 @@ import com.querydsl.core.types.dsl.PathInits;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QItem extends EntityPathBase<Item> {
 
-    private static final long serialVersionUID = -451597916L;
+    private static final long serialVersionUID = -252492063L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 
@@ -30,13 +28,13 @@ public class QItem extends EntityPathBase<Item> {
 
     public final StringPath image = createString("image");
 
-    public final EnumPath<ItemCategory> itemCategory = createEnum("itemCategory", ItemCategory.class);
+    public final EnumPath<com.example.toucheese_be.domain.item.entity.constant.ItemCategory> itemCategory = createEnum("itemCategory", com.example.toucheese_be.domain.item.entity.constant.ItemCategory.class);
 
     public final StringPath name = createString("name");
 
     public final NumberPath<Integer> price = createNumber("price", Integer.class);
 
-    public final QStudio studio;
+    public final com.example.toucheese_be.domain.studio.entity.QStudio studio;
 
     public QItem(String variable) {
         this(Item.class, forVariable(variable), INITS);
@@ -56,7 +54,7 @@ public class QItem extends EntityPathBase<Item> {
 
     public QItem(Class<? extends Item> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.studio = inits.isInitialized("studio") ? new QStudio(forProperty("studio"), inits.get("studio")) : null;
+        this.studio = inits.isInitialized("studio") ? new com.example.toucheese_be.domain.studio.entity.QStudio(forProperty("studio"), inits.get("studio")) : null;
     }
 
 }

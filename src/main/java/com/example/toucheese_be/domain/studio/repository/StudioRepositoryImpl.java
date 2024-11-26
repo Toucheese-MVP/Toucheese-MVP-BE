@@ -1,8 +1,8 @@
 package com.example.toucheese_be.domain.studio.repository;
 
+import com.example.toucheese_be.domain.item.entity.QItem;
 import com.example.toucheese_be.domain.studio.dto.StudioDto;
 import com.example.toucheese_be.domain.studio.dto.StudioSearchFilterDto;
-import com.example.toucheese_be.domain.studio.entity.QItem;
 import com.example.toucheese_be.domain.studio.entity.QPortfolio;
 import com.example.toucheese_be.domain.studio.entity.QStudio;
 import com.example.toucheese_be.domain.studio.entity.Studio;
