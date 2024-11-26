@@ -47,14 +47,36 @@ public class StudioRepositoryImpl implements StudioRepositoryCustom {
                 builder.and(studio.popularity.goe(dto.getPopularity().getMinRating()));
             }
 
-            // 가격 필터: 가장 저렴한 Item 가격 기준
-            if (dto.getPriceFilter() != null && dto.getPriceFilter() != PriceFilter.ALL) {
+            Integer minPrice = dto.getPriceFilter().getMinPrice(); // 최소 가격
+            Integer maxPrice = dto.getPriceFilter().getMaxPrice(); // 최대 가격
+
+            if (dto.getPriceFilter() == PriceFilter.ABOVE_20) {
+                // 20만 원 이상의 상품이 존재하는 경우
                 builder.and(
-                        JPAExpressions.select(item.price.min())
+                        JPAExpressions.selectOne()
                                 .from(item)
-                                .where(item.studio.eq(studio))
-                                .loe(dto.getPriceFilter().getMaxPrice())
+                                .where(item.studio.eq(studio)
+                                        .and(item.price.goe(minPrice))) // 20만 원 이상의 조건
+                                .exists()
                 );
+            } else {
+                // 일반적인 최소/최대 가격 필터
+                if (minPrice != null) {
+                    builder.and(
+                            JPAExpressions.select(item.price.min())
+                                    .from(item)
+                                    .where(item.studio.eq(studio))
+                                    .goe(minPrice)
+                    );
+                }
+                if (maxPrice != null) {
+                    builder.and(
+                            JPAExpressions.select(item.price.min())
+                                    .from(item)
+                                    .where(item.studio.eq(studio))
+                                    .loe(maxPrice)
+                    );
+                }
             }
         }
 
