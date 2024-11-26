@@ -30,6 +30,8 @@ public class QItem extends EntityPathBase<Item> {
 
     public final EnumPath<com.example.toucheese_be.domain.item.entity.constant.ItemCategory> itemCategory = createEnum("itemCategory", com.example.toucheese_be.domain.item.entity.constant.ItemCategory.class);
 
+    public final ListPath<ItemOption, QItemOption> itemOptions = this.<ItemOption, QItemOption>createList("itemOptions", ItemOption.class, QItemOption.class, PathInits.DIRECT2);
+
     public final StringPath name = createString("name");
 
     public final NumberPath<Integer> price = createNumber("price", Integer.class);

@@ -1,6 +1,8 @@
 package com.example.toucheese_be.domain.studio.controller;
 
 import com.example.toucheese_be.domain.studio.dto.ConceptDto;
+import com.example.toucheese_be.domain.studio.dto.StudioDetailDto;
+import com.example.toucheese_be.domain.studio.dto.StudioInfoDto;
 import com.example.toucheese_be.domain.studio.dto.StudioSearchFilterDto;
 import com.example.toucheese_be.domain.studio.dto.StudioDto;
 import com.example.toucheese_be.domain.studio.service.StudioService;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -49,15 +52,20 @@ public class StudioController {
     }
 
     /**
-     * TODO: 스튜디오 상세 조회 - 가격 탭
+     * 스튜디오 상세 조회 - 가격 탭
      */
-    @GetMapping("/details/{studioId}/items")
-    public void getStudioItems() {}
+    @GetMapping("/{studioId}/items")
+    public ResponseEntity<StudioDetailDto> getStudioItems(
+            @PathVariable
+            Long studioId
+    ) {
+        return studioService.getStudioItems(studioId);
+    }
 
     /**
      * TODO: 스튜디오 상세 조회 - 리뷰탭
      */
-    @GetMapping("/details/{studioId}/reviews")
+    @GetMapping("/{studioId}/reviews")
     public void getStudioReviews() {}
 
     /**

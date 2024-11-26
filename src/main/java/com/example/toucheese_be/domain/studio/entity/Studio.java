@@ -40,6 +40,10 @@ public class Studio {
     @Column(length=150)
     private String address;
 
+    // 스튜디오 공지사항
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
     // 컨셉 (여러 스튜디오가 하나의 컨셉에 연결)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "concept_id", nullable = false)

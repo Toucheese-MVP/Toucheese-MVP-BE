@@ -26,6 +26,8 @@ public class QStudio extends EntityPathBase<Studio> {
 
     public final QConcept concept;
 
+    public final StringPath description = createString("description");
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final ListPath<StudioImage, QStudioImage> images = this.<StudioImage, QStudioImage>createList("images", StudioImage.class, QStudioImage.class, PathInits.DIRECT2);
@@ -37,6 +39,8 @@ public class QStudio extends EntityPathBase<Studio> {
     public final NumberPath<Double> popularity = createNumber("popularity", Double.class);
 
     public final ListPath<Portfolio, QPortfolio> portfolios = this.<Portfolio, QPortfolio>createList("portfolios", Portfolio.class, QPortfolio.class, PathInits.DIRECT2);
+
+    public final ListPath<StudioDutyDate, QStudioDutyDate> studioDutyDates = this.<StudioDutyDate, QStudioDutyDate>createList("studioDutyDates", StudioDutyDate.class, QStudioDutyDate.class, PathInits.DIRECT2);
 
     public QStudio(String variable) {
         this(Studio.class, forVariable(variable), INITS);
