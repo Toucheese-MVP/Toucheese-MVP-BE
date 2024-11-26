@@ -2,7 +2,6 @@ package com.example.toucheese_be.domain.studio.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
-import com.example.toucheese_be.domain.item.entity.Item;
 import com.querydsl.core.types.dsl.*;
 
 import com.querydsl.core.types.PathMetadata;
@@ -29,15 +28,15 @@ public class QStudio extends EntityPathBase<Studio> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final ListPath<Item, QItem> items = this.<Item, QItem>createList("items", Item.class, QItem.class, PathInits.DIRECT2);
+    public final ListPath<StudioImage, QStudioImage> images = this.<StudioImage, QStudioImage>createList("images", StudioImage.class, QStudioImage.class, PathInits.DIRECT2);
+
+    public final ListPath<com.example.toucheese_be.domain.item.entity.Item, com.example.toucheese_be.domain.item.entity.QItem> items = this.<com.example.toucheese_be.domain.item.entity.Item, com.example.toucheese_be.domain.item.entity.QItem>createList("items", com.example.toucheese_be.domain.item.entity.Item.class, com.example.toucheese_be.domain.item.entity.QItem.class, PathInits.DIRECT2);
 
     public final StringPath name = createString("name");
 
     public final NumberPath<Double> popularity = createNumber("popularity", Double.class);
 
     public final ListPath<Portfolio, QPortfolio> portfolios = this.<Portfolio, QPortfolio>createList("portfolios", Portfolio.class, QPortfolio.class, PathInits.DIRECT2);
-
-    public final StringPath profileImg = createString("profileImg");
 
     public QStudio(String variable) {
         this(Studio.class, forVariable(variable), INITS);
