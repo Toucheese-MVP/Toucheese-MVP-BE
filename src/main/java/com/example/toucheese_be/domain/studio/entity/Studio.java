@@ -56,4 +56,9 @@ public class Studio {
     // 스튜디오 아이템
     @OneToMany(mappedBy = "studio", fetch = FetchType.LAZY)
     private final List<Item> items = new ArrayList<>();
+
+    // 스튜디오의 근무 시간 및 휴무일
+    @OneToMany(mappedBy = "studio", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StudioDutyDate> studioDutyDates = new ArrayList<>();
+}
 }
