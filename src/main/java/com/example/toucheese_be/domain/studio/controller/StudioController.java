@@ -1,6 +1,7 @@
 package com.example.toucheese_be.domain.studio.controller;
 
 import com.example.toucheese_be.domain.studio.dto.ConceptDto;
+import com.example.toucheese_be.domain.studio.dto.StudioInfoDto;
 import com.example.toucheese_be.domain.studio.dto.StudioSearchFilterDto;
 import com.example.toucheese_be.domain.studio.dto.StudioDto;
 import com.example.toucheese_be.domain.studio.service.StudioService;
@@ -51,8 +52,10 @@ public class StudioController {
     /**
      * TODO: 스튜디오 상세 조회 - 가격 탭
      */
-    @GetMapping("/details/{studioId}/items")
-    public void getStudioItems() {}
+    @GetMapping("/{studioId}/items")
+    public ResponseEntity<StudioInfoDto> getStudioItems() {
+        return studioService.getStudioItems();
+    }
 
     /**
      * TODO: 스튜디오 상세 조회 - 리뷰탭

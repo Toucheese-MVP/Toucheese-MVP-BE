@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ItemController {
     private final ItemService itemService;
 
+
     /**
      * TODO: 스튜디오 상품 상세 조회
      */
