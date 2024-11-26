@@ -61,4 +61,4 @@ public class Studio {
     @OneToMany(mappedBy = "studio", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StudioDutyDate> studioDutyDates = new ArrayList<>();
 }
-}
+
