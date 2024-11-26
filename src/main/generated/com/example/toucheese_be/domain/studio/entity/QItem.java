@@ -2,6 +2,8 @@ package com.example.toucheese_be.domain.studio.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
+import com.example.toucheese_be.domain.item.entity.Item;
+import com.example.toucheese_be.domain.item.entity.constant.ItemCategory;
 import com.querydsl.core.types.dsl.*;
 
 import com.querydsl.core.types.PathMetadata;
@@ -28,7 +30,7 @@ public class QItem extends EntityPathBase<Item> {
 
     public final StringPath image = createString("image");
 
-    public final EnumPath<com.example.toucheese_be.domain.studio.entity.constant.ItemCategory> itemCategory = createEnum("itemCategory", com.example.toucheese_be.domain.studio.entity.constant.ItemCategory.class);
+    public final EnumPath<ItemCategory> itemCategory = createEnum("itemCategory", ItemCategory.class);
 
     public final StringPath name = createString("name");
 

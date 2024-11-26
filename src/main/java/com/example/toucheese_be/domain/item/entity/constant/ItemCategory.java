@@ -1,4 +1,4 @@
-package com.example.toucheese_be.domain.studio.entity.constant;
+package com.example.toucheese_be.domain.item.entity.constant;
 
 
 import lombok.Getter;
