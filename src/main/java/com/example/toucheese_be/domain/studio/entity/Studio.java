@@ -32,10 +32,6 @@ public class Studio {
     @Column(length=150)
     private String name;
 
-    // 스튜디오 프로필 사진
-    @Column(length=150)
-    private String profileImg;
-
     // 스튜디오별 평점
     @Column(length=150)
     private Double popularity;
@@ -49,6 +45,9 @@ public class Studio {
     @JoinColumn(name = "concept_id", nullable = false)
     private Concept concept;
 
+    // 스튜디오 이미지
+    @OneToMany(mappedBy = "studio", fetch = FetchType.LAZY)
+    private List<StudioImage> images = new ArrayList<>();
 
     // 스튜디오에서 예시로 제공하는 대표사진
     @OneToMany(mappedBy = "studio", fetch = FetchType.LAZY)
