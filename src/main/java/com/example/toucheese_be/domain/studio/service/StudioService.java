@@ -3,8 +3,6 @@ package com.example.toucheese_be.domain.studio.service;
 import com.example.toucheese_be.domain.studio.dto.ConceptDto;
 import com.example.toucheese_be.domain.studio.dto.StudioDto;
 import com.example.toucheese_be.domain.studio.dto.StudioSearchFilterDto;
-import com.example.toucheese_be.domain.studio.entity.Concept;
-import com.example.toucheese_be.domain.studio.entity.Studio;
 import com.example.toucheese_be.domain.studio.repository.ConceptRepository;
 import com.example.toucheese_be.domain.studio.repository.StudioRepository;
 import java.util.List;
@@ -12,7 +10,6 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,6 +25,7 @@ public class StudioService {
         return conceptRepository.findAll().stream()
                 .map(ConceptDto::fromEntity)
                 .collect(Collectors.toList());
+
     }
 
 
