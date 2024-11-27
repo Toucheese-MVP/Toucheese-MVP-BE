@@ -28,6 +28,7 @@ public class StudioDto {
                 .filter(image -> image.getType() == StudioImageType.PROFILE)
                 .map(StudioImage::getImageUrl)
                 .findFirst()
+
                 .orElse(null);
 
         return StudioDto.builder()
