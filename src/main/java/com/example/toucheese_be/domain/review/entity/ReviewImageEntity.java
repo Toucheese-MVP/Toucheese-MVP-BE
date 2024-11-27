@@ -1,6 +1,5 @@
 package com.example.toucheese_be.domain.review.entity;
 
-import com.example.toucheese_be.domain.item.entity.Item;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,10 +7,10 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 @Getter
 @Setter
-@Entity
-public class Review {
+public class ReviewImageEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,12 +19,9 @@ public class Review {
     private String imageUrl;
 
     @Column(length = 150)
-    private String description;
+    private int position;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_id", nullable = false)
-    private Item item;
-
-    @OneToMany(mappedBy = "review", fetch = FetchType.LAZY)
-    private List<Review> reviewImage = new ArrayList<>();
+    @JoinColumn(name = "review_id", nullable = false)
+    private Review review;
 }
