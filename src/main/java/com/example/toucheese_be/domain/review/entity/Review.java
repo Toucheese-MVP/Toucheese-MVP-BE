@@ -27,5 +27,5 @@ public class Review {
     private Item item;
 
     @OneToMany(mappedBy = "review", fetch = FetchType.LAZY)
-    private List<Review> reviewImage = new ArrayList<>();
+    private List<ReviewImageEntity> reviewImage = new ArrayList<>();
 }
