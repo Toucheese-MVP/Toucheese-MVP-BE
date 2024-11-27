@@ -5,6 +5,7 @@ import com.example.toucheese_be.domain.studio.entity.StudioImage;
 import com.example.toucheese_be.domain.studio.entity.constant.StudioImageType;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,7 +42,21 @@ public class StudioInfoDto {
                 .map(StudioImage::getImageUrl)
                 .toList();
 
-        // TODO: 근무 시간에 대한 반환 문자열 처리
+        // 근무 시간 데이터 조합
+        String dutyDate = entity.getStudioDutyDates().stream()
+                .map(duty -> {
+                    // 휴게 시간
+                    String breakTime = (duty.getBreakStartTime() != null && duty.getBreakEndTime() != null)
+                            ? String.format(" (휴식시간 %s-%s) ", duty.getBreakStartTime(), duty.getBreakEndTime())
+                            : "";
+                    // 휴무일 처리
+                    String holidays = (duty.getHolidays() != null)
+                            ? String.format("/ 매주 %s 휴무", duty.getHolidays())
+                            : "";
+                    // 일반적인 근무 시간
+                    return String.format("근무 시간: %s-%s%s %s", duty.getOpenTime(), duty.getCloseTime(), breakTime, holidays);
+                })
+                .collect(Collectors.joining(", "));
 
         return StudioInfoDto.builder()
                 .studioId(entity.getId())
@@ -49,7 +64,7 @@ public class StudioInfoDto {
                 .studioProfile(studioProfile)
                 .studioBackgrounds(studioBackgrounds)
                 .popularity(entity.getPopularity())
-                .dutyDate(null)
+                .dutyDate(dutyDate)
                 .address(entity.getAddress())
                 .studioDescription(entity.getDescription())
                 .build();
