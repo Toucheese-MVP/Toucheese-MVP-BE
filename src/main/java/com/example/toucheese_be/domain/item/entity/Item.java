@@ -1,6 +1,7 @@
 package com.example.toucheese_be.domain.item.entity;
 
 
+import com.example.toucheese_be.domain.review.entity.Review;
 import com.example.toucheese_be.domain.studio.entity.Studio;
 import com.example.toucheese_be.domain.item.entity.constant.ItemCategory;
 import jakarta.persistence.CascadeType;
@@ -50,4 +51,7 @@ public class Item {
 
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemOption> itemOptions = new ArrayList<>();
+
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> itemReview = new ArrayList<>();
 }

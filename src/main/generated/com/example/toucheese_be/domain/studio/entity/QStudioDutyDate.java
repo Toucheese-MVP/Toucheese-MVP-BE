@@ -22,17 +22,19 @@ public class QStudioDutyDate extends EntityPathBase<StudioDutyDate> {
 
     public static final QStudioDutyDate studioDutyDate = new QStudioDutyDate("studioDutyDate");
 
+    public final TimePath<java.time.LocalTime> breakEndTime = createTime("breakEndTime", java.time.LocalTime.class);
+
+    public final TimePath<java.time.LocalTime> breakStartTime = createTime("breakStartTime", java.time.LocalTime.class);
+
     public final TimePath<java.time.LocalTime> closeTime = createTime("closeTime", java.time.LocalTime.class);
 
-    public final EnumPath<com.example.toucheese_be.domain.studio.entity.constant.DayType> day = createEnum("day", com.example.toucheese_be.domain.studio.entity.constant.DayType.class);
+    public final StringPath holidays = createString("holidays");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final TimePath<java.time.LocalTime> openTime = createTime("openTime", java.time.LocalTime.class);
 
     public final QStudio studio;
-
-    public final EnumPath<com.example.toucheese_be.domain.studio.entity.constant.DutyType> type = createEnum("type", com.example.toucheese_be.domain.studio.entity.constant.DutyType.class);
 
     public QStudioDutyDate(String variable) {
         this(StudioDutyDate.class, forVariable(variable), INITS);
