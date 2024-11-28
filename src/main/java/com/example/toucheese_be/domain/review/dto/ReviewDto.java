@@ -16,12 +16,11 @@ import java.util.stream.Collectors;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+// 리뷰 상세 페이지
 public class ReviewDto {
     private Long id;
     private List<String> imageUrl;
     private String description;
-    private String userProfileName;
-    private String userProfileImage;
 
     public static ReviewDto fromEntity(Review entity){
         return ReviewDto.builder()
