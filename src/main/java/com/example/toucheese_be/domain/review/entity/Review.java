@@ -25,7 +25,7 @@ public class Review {
     private Item item;
 
     @OneToMany(mappedBy = "review", fetch = FetchType.LAZY)
-    private List<ReviewImageEntity> reviewImage = new ArrayList<>();
+    private List<ReviewImage> reviewImage = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)

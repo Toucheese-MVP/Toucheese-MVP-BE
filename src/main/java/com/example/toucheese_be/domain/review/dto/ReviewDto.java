@@ -2,8 +2,7 @@ package com.example.toucheese_be.domain.review.dto;
 
 import com.example.toucheese_be.domain.review.entity.Review;
 
-import com.example.toucheese_be.domain.review.entity.ReviewImageEntity;
-import com.example.toucheese_be.domain.user.entity.User;
+import com.example.toucheese_be.domain.review.entity.ReviewImage;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,7 +26,7 @@ public class ReviewDto {
                 .id(entity.getId())
                 .imageUrl(entity.getReviewImage()
                         .stream()
-                        .map(ReviewImageEntity::getImageUrl)
+                        .map(ReviewImage::getImageUrl)
                         .collect(Collectors.toList()))
                 .description(entity.getDescription())
                 .build();

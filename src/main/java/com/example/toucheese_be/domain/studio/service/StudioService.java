@@ -35,9 +35,7 @@ public class StudioService {
         return conceptRepository.findAll().stream()
                 .map(ConceptDto::fromEntity)
                 .collect(Collectors.toList());
-
     }
-
 
     /**
      * 컨셉에 따른 스튜디오 목록 조건 추가 검색
@@ -46,32 +44,5 @@ public class StudioService {
         return studioRepository.getStudioListWithPages(conceptId, dto, pageable);
     }
 
-    /**
-     * 스튜디오 상세 페이지 조회 - 가격탭
-     */
-    public ResponseEntity<StudioDetailDto> getStudioItems(Long studioId) {
-        // 스튜디오 조회
-        Studio studio = studioRepository.findById(studioId)
-                .orElseThrow(() -> new IllegalArgumentException("스튜디오를 찾을 수 없습니다."));
-
-        // StudioInfoDto 변환
-        StudioInfoDto studioInfoDto = StudioInfoDto.fromEntity(studio);
-
-        // 스튜디오에 해당하는 아이템들을 가져옴
-        List<Item> items = itemRepository.findByStudioId(studioId);
-
-        // ItemCategory별로 아이템을 그룹화
-        Map<ItemCategory, List<ItemDto>> categorizedItems = items.stream()
-                .collect(Collectors.groupingBy(Item::getItemCategory,
-                        Collectors.mapping(ItemDto::fromEntity, Collectors.toList())));
-
-        // StudioDetailDto 반환
-        StudioDetailDto studioDetailDto = StudioDetailDto.builder()
-                .studioInfoDto(studioInfoDto)  // studioInfoDto는 StudioInfoDto.fromEntity()에서 변환됨
-                .categorizedItems(categorizedItems)  // 아이템을 ItemCategory별로 그룹화한 Map
-                .build();
-
-        return ResponseEntity.ok(studioDetailDto);
-    }
 
 }

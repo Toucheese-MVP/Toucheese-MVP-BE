@@ -51,25 +51,7 @@ public class StudioController {
         return ResponseEntity.ok(studioService.getStudiosByConceptFilters(conceptId, dto, pageable));
     }
 
-    /**
-     * 스튜디오 상세 조회 - 가격 탭
-     */
-    @GetMapping("/{studioId}/items")
-    public ResponseEntity<StudioDetailDto> getStudioItems(
-            @PathVariable
-            Long studioId
-    ) {
-        return studioService.getStudioItems(studioId);
-    }
+    // TODO: 스튜디오 근무 시간 조회
 
-    /**
-     * TODO: 스튜디오 상세 조회 - 리뷰탭
-     */
-    @GetMapping("/{studioId}/reviews")
-    public void getStudioReviews() {}
-
-    /**
-     * TODO: 스튜디오 근무 시간 조회 - 캘린더 보여주기
-     */
 
 }
