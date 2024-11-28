@@ -17,9 +17,6 @@ public class Review {
     private Long id;
 
     @Column(length = 150)
-    private String imageUrl;
-
-    @Column(length = 150)
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
