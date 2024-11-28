@@ -18,7 +18,7 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     // 스튜디오 상세 페이 - 리뷰탭
-    @GetMapping("/review/{studioId}")
+    @GetMapping("/reviewtap/{studioId}")
     private ResponseEntity<StudioReviewDetailDto> getReview(
             @PathVariable
             Long studioId

@@ -52,14 +52,13 @@ public class ReviewService {
 
     public StudioReviewDetailDto getReview(Long studioId) {
         //
-        Studio studio = studioRepository.findByStudioId(studioId)
+        Studio studio = studioRepository.findById(studioId)
                 .orElseThrow(()->new EntityNotFoundException("리뷰를 찾을 수 없습니다."));
 
-        StudioInfoDto studioInfoDto = new StudioInfoDto();
-        studioInfoDto = StudioInfoDto.fromEntity(studio);
+        StudioInfoDto studioInfoDto = StudioInfoDto.fromEntity(studio);
 
         List<ReviewImageDto> reviewImageDtos = studio.getItems().stream()
-                .map(item -> ReviewImageDto.fromEntity(item))
+                .map(ReviewImageDto::fromEntity)
                 .collect(Collectors.toList());
 
         StudioReviewDetailDto studioReviewDetailDto = new StudioReviewDetailDto();
