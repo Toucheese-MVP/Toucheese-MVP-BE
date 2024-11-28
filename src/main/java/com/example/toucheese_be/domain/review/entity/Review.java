@@ -1,6 +1,7 @@
 package com.example.toucheese_be.domain.review.entity;
 
 import com.example.toucheese_be.domain.item.entity.Item;
+import com.example.toucheese_be.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,4 +26,8 @@ public class Review {
 
     @OneToMany(mappedBy = "review", fetch = FetchType.LAZY)
     private List<ReviewImageEntity> reviewImage = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 }
