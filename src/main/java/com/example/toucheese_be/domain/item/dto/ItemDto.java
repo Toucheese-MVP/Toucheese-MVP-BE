@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ItemDto {
+    private Long itemId;
     private String itemName;
     private String itemDescription;
     private Integer reviewCounts;
@@ -19,9 +20,10 @@ public class ItemDto {
 
     public static ItemDto fromEntity(Item entity) {
         return ItemDto.builder()
+                .itemId(entity.getId())
                 .itemName(entity.getName())
                 .itemDescription(entity.getDescription())
-                .reviewCounts(null)
+                .reviewCounts(entity.getItemReview().size())
                 .price(entity.getPrice())
                 .build();
     }

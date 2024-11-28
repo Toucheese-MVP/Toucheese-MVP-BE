@@ -28,13 +28,17 @@ public class QStudioDutyDate extends EntityPathBase<StudioDutyDate> {
 
     public final TimePath<java.time.LocalTime> closeTime = createTime("closeTime", java.time.LocalTime.class);
 
-    public final StringPath holidays = createString("holidays");
+    public final EnumPath<java.time.DayOfWeek> dayOfWeek = createEnum("dayOfWeek", java.time.DayOfWeek.class);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
+
+    public final BooleanPath isHoliday = createBoolean("isHoliday");
 
     public final TimePath<java.time.LocalTime> openTime = createTime("openTime", java.time.LocalTime.class);
 
     public final QStudio studio;
+
+    public final NumberPath<Integer> weekOfMonth = createNumber("weekOfMonth", Integer.class);
 
     public QStudioDutyDate(String variable) {
         this(StudioDutyDate.class, forVariable(variable), INITS);

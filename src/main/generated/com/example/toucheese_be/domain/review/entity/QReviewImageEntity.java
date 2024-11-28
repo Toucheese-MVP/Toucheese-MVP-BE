@@ -11,10 +11,10 @@ import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
- * QReviewImageEntity is a Querydsl query type for ReviewImageEntity
+ * QReviewImageEntity is a Querydsl query type for ReviewImage
  */
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
-public class QReviewImageEntity extends EntityPathBase<ReviewImageEntity> {
+public class QReviewImageEntity extends EntityPathBase<ReviewImage> {
 
     private static final long serialVersionUID = 1828175987L;
 
@@ -31,10 +31,10 @@ public class QReviewImageEntity extends EntityPathBase<ReviewImageEntity> {
     public final QReview review;
 
     public QReviewImageEntity(String variable) {
-        this(ReviewImageEntity.class, forVariable(variable), INITS);
+        this(ReviewImage.class, forVariable(variable), INITS);
     }
 
-    public QReviewImageEntity(Path<? extends ReviewImageEntity> path) {
+    public QReviewImageEntity(Path<? extends ReviewImage> path) {
         this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
@@ -43,10 +43,10 @@ public class QReviewImageEntity extends EntityPathBase<ReviewImageEntity> {
     }
 
     public QReviewImageEntity(PathMetadata metadata, PathInits inits) {
-        this(ReviewImageEntity.class, metadata, inits);
+        this(ReviewImage.class, metadata, inits);
     }
 
-    public QReviewImageEntity(Class<? extends ReviewImageEntity> type, PathMetadata metadata, PathInits inits) {
+    public QReviewImageEntity(Class<? extends ReviewImage> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.review = inits.isInitialized("review") ? new QReview(forProperty("review"), inits.get("review")) : null;
     }
