@@ -16,13 +16,14 @@ import java.util.List;
 public class ReviewController {
     private final ReviewService reviewService;
 
-    @GetMapping("/review")
-    private ResponseEntity<List<ReviewDto>> getReview() {
+    // 스튜디오 상세 페이 - 리뷰탭
+//    @GetMapping("/review")
+//    private ResponseEntity<List<ReviewDto>> getReview() {
+//
+//        return ResponseEntity.ok(reviewService.getReview());
+//    }
 
-        return ResponseEntity.ok(reviewService.getReview());
-    }
-
-    // 리뷰상세페이지
+    // 리뷰 상세페이지
     @GetMapping("/review/{reviewId}")
     private ResponseEntity<ReviewDetailDto> getReviewDetail(
             @PathVariable
