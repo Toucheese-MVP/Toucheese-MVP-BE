@@ -1,6 +1,7 @@
 package com.example.toucheese_be.domain.review.repository;
 
 import com.example.toucheese_be.domain.review.entity.Review;
+import com.example.toucheese_be.domain.studio.entity.Studio;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
