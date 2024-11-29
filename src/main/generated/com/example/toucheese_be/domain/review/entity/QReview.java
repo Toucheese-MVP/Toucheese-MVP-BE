@@ -28,7 +28,7 @@ public class QReview extends EntityPathBase<Review> {
 
     public final com.example.toucheese_be.domain.item.entity.QItem item;
 
-    public final ListPath<ReviewImage, QReviewImageEntity> reviewImage = this.<ReviewImage, QReviewImageEntity>createList("reviewImage", ReviewImage.class, QReviewImageEntity.class, PathInits.DIRECT2);
+    public final ListPath<ReviewImage, QReviewImage> reviewImage = this.<ReviewImage, QReviewImage>createList("reviewImage", ReviewImage.class, QReviewImage.class, PathInits.DIRECT2);
 
     public final com.example.toucheese_be.domain.user.entity.QUser user;
 
