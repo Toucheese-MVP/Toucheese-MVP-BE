@@ -37,16 +37,21 @@ public class StudioRepositoryImpl implements StudioRepositoryCustom {
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(studio.concept.id.eq(conceptId));
 
-        if (dto != null) {
-            // 지역 필터
-            if (dto.getRegion() != null && dto.getRegion() != Region.ALL) {
-                builder.and(studio.address.containsIgnoreCase(dto.getRegion().getDescription()));
+        // 지역 필터
+        if (dto.getRegion() != null && !dto.getRegion().isEmpty()) {
+            BooleanBuilder regionBuilder = new BooleanBuilder();
+            for (Region region : dto.getRegion()) {
+                regionBuilder.or(studio.address.containsIgnoreCase(region.getDescription()));
             }
-            // 인기 필터
-            if (dto.getPopularity() != null && dto.getPopularity() != Popularity.ALL) {
-                builder.and(studio.popularity.goe(dto.getPopularity().getMinRating()));
-            }
+            builder.and(regionBuilder);
+        }
+        // 인기 필터
+        if (dto.getPopularity() != null) {
+            builder.and(studio.popularity.goe(dto.getPopularity().getMinRating()));
+        }
 
+        // 가격 필터
+        if (dto.getPriceFilter() != null) {
             Integer minPrice = dto.getPriceFilter().getMinPrice(); // 최소 가격
             Integer maxPrice = dto.getPriceFilter().getMaxPrice(); // 최대 가격
 

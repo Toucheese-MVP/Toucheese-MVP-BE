@@ -3,6 +3,7 @@ package com.example.toucheese_be.domain.studio.dto;
 import com.example.toucheese_be.domain.studio.entity.constant.Popularity;
 import com.example.toucheese_be.domain.studio.entity.constant.PriceFilter;
 import com.example.toucheese_be.domain.studio.entity.constant.Region;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,13 +16,10 @@ import org.springframework.data.domain.Pageable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class StudioSearchFilterDto {
-    // 지역 필터
-    private Region region;
-    // 인기 필터
+    private List<Region> region;
     private Popularity popularity;
-    // 가격 필터
     private PriceFilter priceFilter;
-    // 페이징 필터
+
     @Builder.Default
     private int page = 0;
     @Builder.Default

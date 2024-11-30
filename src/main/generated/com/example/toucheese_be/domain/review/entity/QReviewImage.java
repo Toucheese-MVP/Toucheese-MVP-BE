@@ -11,16 +11,16 @@ import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
- * QReviewImageEntity is a Querydsl query type for ReviewImage
+ * QReviewImage is a Querydsl query type for ReviewImage
  */
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
-public class QReviewImageEntity extends EntityPathBase<ReviewImage> {
+public class QReviewImage extends EntityPathBase<ReviewImage> {
 
-    private static final long serialVersionUID = 1828175987L;
+    private static final long serialVersionUID = 1171129456L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 
-    public static final QReviewImageEntity reviewImageEntity = new QReviewImageEntity("reviewImageEntity");
+    public static final QReviewImage reviewImage = new QReviewImage("reviewImage");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
@@ -30,23 +30,23 @@ public class QReviewImageEntity extends EntityPathBase<ReviewImage> {
 
     public final QReview review;
 
-    public QReviewImageEntity(String variable) {
+    public QReviewImage(String variable) {
         this(ReviewImage.class, forVariable(variable), INITS);
     }
 
-    public QReviewImageEntity(Path<? extends ReviewImage> path) {
+    public QReviewImage(Path<? extends ReviewImage> path) {
         this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
-    public QReviewImageEntity(PathMetadata metadata) {
+    public QReviewImage(PathMetadata metadata) {
         this(metadata, PathInits.getFor(metadata, INITS));
     }
 
-    public QReviewImageEntity(PathMetadata metadata, PathInits inits) {
+    public QReviewImage(PathMetadata metadata, PathInits inits) {
         this(ReviewImage.class, metadata, inits);
     }
 
-    public QReviewImageEntity(Class<? extends ReviewImage> type, PathMetadata metadata, PathInits inits) {
+    public QReviewImage(Class<? extends ReviewImage> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.review = inits.isInitialized("review") ? new QReview(forProperty("review"), inits.get("review")) : null;
     }
