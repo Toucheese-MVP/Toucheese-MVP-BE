@@ -10,6 +10,7 @@ import com.example.toucheese_be.domain.studio.entity.constant.Popularity;
 import com.example.toucheese_be.domain.studio.entity.constant.PriceFilter;
 import com.example.toucheese_be.domain.studio.entity.constant.Region;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
@@ -85,10 +86,17 @@ public class StudioRepositoryImpl implements StudioRepositoryCustom {
             }
         }
 
-
-        // 페이징 처리
-        List<Studio> results = jpaQueryFactory.selectFrom(studio)
-                .leftJoin(studio.portfolios, QPortfolio.portfolio).fetchJoin()
+        List<StudioDto> studioDtos = jpaQueryFactory.select(
+                        Projections.constructor(StudioDto.class,
+                                studio.id,
+                                studio.name,
+                                JPAExpressions.select(QPortfolio.portfolio.imageUrl)  // 포트폴리오 이미지 URL 가져오기
+                                        .from(QPortfolio.portfolio)
+                                        .where(QPortfolio.portfolio.studio.eq(studio))
+                        )
+                )
+                .from(studio)
+                .leftJoin(studio.portfolios, QPortfolio.portfolio)
                 .where(builder)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -98,11 +106,6 @@ public class StudioRepositoryImpl implements StudioRepositoryCustom {
         long total = jpaQueryFactory.selectFrom(studio)
                 .where(builder)
                 .fetchCount();
-
-        // 결과를 DTO로 변환
-        List<StudioDto> studioDtos = results.stream()
-                .map(StudioDto::fromEntity)
-                .collect(Collectors.toList());
 
         return new PageImpl<>(studioDtos, pageable, total);
     }
