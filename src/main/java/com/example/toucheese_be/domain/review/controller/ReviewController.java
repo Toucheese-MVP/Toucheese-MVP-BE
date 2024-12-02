@@ -25,6 +25,10 @@ public class ReviewController {
             @PathVariable
             Long studioId
     ) {
+        //if (!){
+
+        //}
+
       return reviewService.getStudioReviews(studioId);
     }
 
