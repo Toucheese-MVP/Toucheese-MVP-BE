@@ -102,6 +102,7 @@ public class StudioRepositoryImpl implements StudioRepositoryCustom {
                                 studio.popularity
                         )
                 )
+                .distinct() // 중복 제거를 위해 distinct() 추가
                 .from(studio)
                 .leftJoin(studio.portfolios, portfolio)
                 .where(builder)
