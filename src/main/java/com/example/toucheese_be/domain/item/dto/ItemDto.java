@@ -17,6 +17,7 @@ public class ItemDto {
     private String itemDescription;
     private Integer reviewCounts;
     private Integer price;
+    private String itemImage;
 
     public static ItemDto fromEntity(Item entity) {
         return ItemDto.builder()
@@ -25,6 +26,7 @@ public class ItemDto {
                 .itemDescription(entity.getDescription())
                 .reviewCounts(entity.getItemReview().size())
                 .price(entity.getPrice())
+                .itemImage(entity.getImage())
                 .build();
     }
 }
