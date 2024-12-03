@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 public enum ItemCategory {
     PROFILE_PHOTO("프로필사진"),
-    ID_PHOTO("증명사진"),
+    ID_PHOTO("증명/여권사진"),
     PORTRAIT_PHOTO("화보사진"),
     SEMI_PORTRAIT_PHOTO("세미화보"),
     GROUP_PHOTO("단체사진"),
