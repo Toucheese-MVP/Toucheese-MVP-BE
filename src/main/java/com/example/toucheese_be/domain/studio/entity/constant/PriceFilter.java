@@ -4,10 +4,9 @@ import lombok.Getter;
 
 @Getter
 public enum PriceFilter {
-    ALL(null, null),
-    BELOW_10(0, 100000),
-    BELOW_20(0, 200000),
-    ABOVE_20(200000, null);
+    BELOW_10(0, 99999),
+    BELOW_20(100000, 199999),
+    ABOVE_20(200000, 1000000);
 
     private final Integer minPrice;
     private final Integer maxPrice;

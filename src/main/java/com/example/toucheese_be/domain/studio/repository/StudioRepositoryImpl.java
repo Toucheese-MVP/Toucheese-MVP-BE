@@ -1,6 +1,9 @@
 package com.example.toucheese_be.domain.studio.repository;
 
+import static org.hibernate.query.sqm.produce.function.StandardArgumentsValidators.between;
+
 import com.example.toucheese_be.domain.item.entity.QItem;
+import com.example.toucheese_be.domain.item.entity.constant.ItemCategory;
 import com.example.toucheese_be.domain.studio.dto.StudioDto;
 import com.example.toucheese_be.domain.studio.dto.StudioSearchFilterDto;
 import com.example.toucheese_be.domain.studio.entity.QPortfolio;
@@ -60,34 +63,15 @@ public class StudioRepositoryImpl implements StudioRepositoryCustom {
             Integer minPrice = dto.getPriceFilter().getMinPrice(); // 최소 가격
             Integer maxPrice = dto.getPriceFilter().getMaxPrice(); // 최대 가격
 
-            if (dto.getPriceFilter() == PriceFilter.ABOVE_20) {
-                // 20만 원 이상의 상품이 존재하는 경우
-                builder.and(
-                        JPAExpressions.selectOne()
-                                .from(item)
-                                .where(item.studio.eq(studio)
-                                        .and(item.price.goe(minPrice))) // 20만 원 이상의 조건
-                                .exists()
-                );
-            } else {
-                // 일반적인 최소/최대 가격 필터
-                if (minPrice != null) {
-                    builder.and(
-                            JPAExpressions.select(item.price.min())
-                                    .from(item)
-                                    .where(item.studio.eq(studio))
-                                    .goe(minPrice)
+            var priceQuery = JPAExpressions.select(item.price.min())
+                    .from(item)
+                    .where(
+                            item.studio.eq(studio)
+                                    .and(item.itemCategory.eq(ItemCategory.PROFILE_PHOTO))
                     );
-                }
-                if (maxPrice != null) {
-                    builder.and(
-                            JPAExpressions.select(item.price.min())
-                                    .from(item)
-                                    .where(item.studio.eq(studio))
-                                    .loe(maxPrice)
-                    );
-                }
-            }
+
+            builder.and(priceQuery.goe(minPrice).and(priceQuery.loe(maxPrice)));
+
         }
         // 1. StudioDto 기본 정보 조회
         List<StudioDto> studioDtos = jpaQueryFactory.select(
@@ -110,9 +94,7 @@ public class StudioRepositoryImpl implements StudioRepositoryCustom {
                 .limit(pageable.getPageSize())
                 .fetch();
 
-
         // 2. 포트폴리오 URL 그룹핑
-        // LEFT JOIN 사용
         Map<Long, List<String>> portfolioMap = jpaQueryFactory
                 .select(portfolio.studio.id, portfolio.imageUrl)
                 .from(portfolio)
@@ -134,7 +116,6 @@ public class StudioRepositoryImpl implements StudioRepositoryCustom {
         long total = jpaQueryFactory.selectFrom(studio)
                 .where(builder)
                 .fetchCount();
-
 
         return new PageImpl<>(studioDtos, pageable, total);
     }
