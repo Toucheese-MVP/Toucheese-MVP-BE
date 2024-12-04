@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 public class ItemDto {
     private Long itemId;
     private String itemName;
+    private String itemCategory;
     private String itemDescription;
     private Integer reviewCounts;
     private Integer price;
@@ -23,6 +24,7 @@ public class ItemDto {
         return ItemDto.builder()
                 .itemId(entity.getId())
                 .itemName(entity.getName())
+                .itemCategory(entity.getItemCategory().toString())
                 .itemDescription(entity.getDescription())
                 .reviewCounts(entity.getItemReview().size())
                 .price(entity.getPrice())

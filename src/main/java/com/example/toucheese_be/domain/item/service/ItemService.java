@@ -13,8 +13,10 @@ import com.example.toucheese_be.domain.studio.dto.StudioDetailDto;
 import com.example.toucheese_be.domain.studio.dto.StudioInfoDto;
 import com.example.toucheese_be.domain.studio.entity.Studio;
 import com.example.toucheese_be.domain.studio.repository.StudioRepository;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -38,18 +40,15 @@ public class ItemService {
 
         // 스튜디오에 해당하는 아이템들을 가져옴
         List<Item> items = itemRepository.findByStudioId(studioId);
-
-        // ItemCategory별로 아이템을 그룹화 (null은 "촬영상품"으로 처리)
-        Map<ItemCategory, List<ItemDto>> categorizedItems = items.stream()
-                .collect(Collectors.groupingBy(
-                        item -> item.getItemCategory() != null ? item.getItemCategory() : ItemCategory.UNKNOWN, // null이면 UNKNOWN
-                        Collectors.mapping(ItemDto::fromEntity, Collectors.toList())
-                ));
+        List<ItemDto> itemDtos = new ArrayList<>();
+        for (Item item : items) {
+            itemDtos.add(ItemDto.fromEntity(item));
+        }
 
         // StudioDetailDto 반환
         StudioDetailDto studioDetailDto = StudioDetailDto.builder()
                 .studioInfoDto(studioInfoDto)  // studioInfoDto는 StudioInfoDto.fromEntity()에서 변환됨
-                .categorizedItems(categorizedItems)  // 아이템을 ItemCategory별로 그룹화한 Map
+                .items(itemDtos)  // 아이템을 ItemCategory별로 그룹화한 Map
                 .build();
 
         return ResponseEntity.ok(studioDetailDto);

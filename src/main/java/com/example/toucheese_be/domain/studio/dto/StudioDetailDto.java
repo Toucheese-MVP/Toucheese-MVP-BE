@@ -15,5 +15,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class StudioDetailDto {
     private StudioInfoDto studioInfoDto;
-    private Map<ItemCategory, List<ItemDto>> categorizedItems;
+    private List<ItemDto> items;
 }
