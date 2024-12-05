@@ -66,6 +66,9 @@ dependencies {
 
 	// assertThat 의존성 추가
 	testImplementation 'org.assertj:assertj-core:3.24.2'
+
+	// Email
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
 }
 
 tasks.named('test') {
