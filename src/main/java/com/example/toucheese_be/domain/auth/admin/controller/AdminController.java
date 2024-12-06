@@ -19,26 +19,26 @@ public class AdminController {
 
     // 관리자 페이지 - 예약 리스트 조회
     @GetMapping
-    public ResponseEntity<List<AdminOrderDto>> readAllReservations() {
-        return adminService.readAllOrders();
+    public void readAllOrders() {
+        adminService.readAllOrders();
     }
 
     // 관리자 페이지 - 예약 승인
-    @GetMapping("/{reserveId}/approve")
-    public void approveReservations(
+    @GetMapping("/{orderId}/approve")
+    public void approveOrder(
             @PathVariable
-            Long reserveId
+            Long orderId
     ) {
-        adminService.approveReservations(reserveId);
+        adminService.approveOrder(orderId);
     }
 
     // 관리자 페이지 - 예약 거절
-    @GetMapping("/{reserveId}/reject")
-    public void rejectReservations(
+    @GetMapping("/{orderId}/reject")
+    public void rejectOrder(
             @PathVariable
-            Long reserveId
+            Long orderId
     ) {
-        adminService.rejectReservations(reserveId);
+        adminService.rejectOrder(orderId);
     }
 
 }

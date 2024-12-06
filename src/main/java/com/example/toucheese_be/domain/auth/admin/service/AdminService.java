@@ -15,7 +15,7 @@ public class AdminService {
 
 
     // 예약 리스트 조회
-    public ResponseEntity<List<AdminOrderDto>> readAllOrders() {
+    public void readAllOrders() {
         // 모든 예약 정보 찾기 로직
         List<Order> orderList = orderRepository.findAll();
 
