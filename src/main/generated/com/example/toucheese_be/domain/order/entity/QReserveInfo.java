@@ -1,7 +1,8 @@
-package com.example.toucheese_be.domain.reserve.entity;
+package com.example.toucheese_be.domain.order.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
+import com.example.toucheese_be.domain.order.entity.constant.OrderStatus;
 import com.querydsl.core.types.dsl.*;
 
 import com.querydsl.core.types.PathMetadata;
@@ -11,10 +12,10 @@ import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
- * QReserveInfo is a Querydsl query type for ReserveInfo
+ * QReserveInfo is a Querydsl query type for Order
  */
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
-public class QReserveInfo extends EntityPathBase<ReserveInfo> {
+public class QReserveInfo extends EntityPathBase<Order> {
 
     private static final long serialVersionUID = -437091921L;
 
@@ -26,7 +27,7 @@ public class QReserveInfo extends EntityPathBase<ReserveInfo> {
 
     public final com.example.toucheese_be.domain.item.entity.QItem item;
 
-    public final EnumPath<com.example.toucheese_be.domain.reserve.entity.constant.NowReserveInfo> nowReserveInfo = createEnum("nowReserveInfo", com.example.toucheese_be.domain.reserve.entity.constant.NowReserveInfo.class);
+    public final EnumPath<OrderStatus> nowReserveInfo = createEnum("nowReserveInfo", OrderStatus.class);
 
     public final com.example.toucheese_be.domain.item.entity.QOption option;
 
@@ -37,10 +38,10 @@ public class QReserveInfo extends EntityPathBase<ReserveInfo> {
     public final com.example.toucheese_be.domain.user.entity.QUser user;
 
     public QReserveInfo(String variable) {
-        this(ReserveInfo.class, forVariable(variable), INITS);
+        this(Order.class, forVariable(variable), INITS);
     }
 
-    public QReserveInfo(Path<? extends ReserveInfo> path) {
+    public QReserveInfo(Path<? extends Order> path) {
         this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
@@ -49,10 +50,10 @@ public class QReserveInfo extends EntityPathBase<ReserveInfo> {
     }
 
     public QReserveInfo(PathMetadata metadata, PathInits inits) {
-        this(ReserveInfo.class, metadata, inits);
+        this(Order.class, metadata, inits);
     }
 
-    public QReserveInfo(Class<? extends ReserveInfo> type, PathMetadata metadata, PathInits inits) {
+    public QReserveInfo(Class<? extends Order> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.item = inits.isInitialized("item") ? new com.example.toucheese_be.domain.item.entity.QItem(forProperty("item"), inits.get("item")) : null;
         this.option = inits.isInitialized("option") ? new com.example.toucheese_be.domain.item.entity.QOption(forProperty("option")) : null;
