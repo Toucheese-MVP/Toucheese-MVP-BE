@@ -4,16 +4,12 @@ import com.example.toucheese_be.domain.item.entity.Item;
 import com.example.toucheese_be.domain.item.entity.Option;
 import com.example.toucheese_be.domain.reserve.entity.constant.NowReserveInfo;
 import com.example.toucheese_be.domain.studio.entity.Studio;
-import com.example.toucheese_be.domain.studio.entity.StudioDutyDate;
-import com.example.toucheese_be.domain.studio.entity.constant.StudioImageType;
 import com.example.toucheese_be.domain.user.entity.User;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
