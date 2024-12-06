@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdminController {
     private final AdminService adminService;
 
-    // 관리자 페이지 - 예약 리스트 조회
+    /**
+     * 관리자 페이지 - 예약 리스트 조회
+     */
     @GetMapping
     public ResponseEntity<List<AdminOrderDto>> readAllOrders() {
         return adminService.readAllOrders();
