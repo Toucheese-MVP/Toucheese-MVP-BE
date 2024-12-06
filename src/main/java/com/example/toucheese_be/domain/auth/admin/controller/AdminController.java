@@ -19,8 +19,8 @@ public class AdminController {
 
     // 관리자 페이지 - 예약 리스트 조회
     @GetMapping
-    public void readAllOrders() {
-        adminService.readAllOrders();
+    public ResponseEntity<List<AdminOrderDto>> readAllOrders() {
+        return adminService.readAllOrders();
     }
 
     // 관리자 페이지 - 예약 승인

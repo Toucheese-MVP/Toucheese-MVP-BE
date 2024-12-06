@@ -39,7 +39,7 @@ public class Order {
     private User user;
 
     // 주문 시간
-    private LocalDateTime reservedDateTime;
+    private LocalDateTime orderDateTime;
 
     // 주문 상태
     @Enumerated(EnumType.STRING)

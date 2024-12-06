@@ -1,5 +1,8 @@
 package com.example.toucheese_be.domain.auth.admin.dto;
 
+import com.example.toucheese_be.domain.item.entity.Option;
+import com.example.toucheese_be.domain.order.entity.Order;
+import com.example.toucheese_be.domain.order.entity.OrderOption;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,7 +15,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AdminOrderOptionDto {
-    private String orderName;
-    private Integer orderPrice;
-    private Integer orderQuantity;
+    private String optionName;
+    private Integer optionPrice;
+    private Integer optionQuantity;
 }
