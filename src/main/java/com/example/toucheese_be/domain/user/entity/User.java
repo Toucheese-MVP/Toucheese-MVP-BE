@@ -22,4 +22,9 @@ public class User {
 
     @Column(length = 150, nullable = false)
     private String profile_img;
+
+    private String phoneNumber;
+
+    @Column(length = 150, nullable = false)
+    private String email;
 }

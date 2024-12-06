@@ -1,6 +1,7 @@
 package com.example.toucheese_be.domain.reserve.entity;
 
 import com.example.toucheese_be.domain.item.entity.Item;
+import com.example.toucheese_be.domain.item.entity.Option;
 import com.example.toucheese_be.domain.reserve.entity.constant.NowReserveInfo;
 import com.example.toucheese_be.domain.studio.entity.Studio;
 import com.example.toucheese_be.domain.studio.entity.StudioDutyDate;
@@ -33,6 +34,10 @@ public class ReserveInfo {
     @ManyToOne
     @JoinColumn(name = "item_id", nullable = false)
     private Item item;
+
+    @ManyToOne
+    @JoinColumn(name = "option_id", nullable = false)
+    private Option option;
 
 //    @OneToMany(mappedBy = "studio", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<StudioDutyDate> studioDutyDates = new ArrayList<>();
