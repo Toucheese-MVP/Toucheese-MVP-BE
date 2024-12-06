@@ -15,6 +15,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AdminOrderOptionDto {
+    private Long optionId;
     private String optionName;
     private Integer optionPrice;
     private Integer optionQuantity;

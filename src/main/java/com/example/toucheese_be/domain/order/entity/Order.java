@@ -47,6 +47,6 @@ public class Order {
     private OrderStatus status = OrderStatus.KEEP;
 
     // 주문 상품과 연결
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<OrderItem> orderItems = new ArrayList<>();
 }
