@@ -1,4 +1,4 @@
-package com.example.toucheese_be.domain.user.dto;
+package com.example.toucheese_be.domain.auth.admin.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,8 @@ import lombok.Setter;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserProfileDto {
-    private String name;
-    private String profileImg;
+public class AdminOrderOptionDto {
+    private String orderName;
+    private Integer orderPrice;
+    private Integer orderQuantity;
 }

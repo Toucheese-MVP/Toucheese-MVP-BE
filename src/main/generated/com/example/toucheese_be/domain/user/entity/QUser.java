@@ -2,6 +2,7 @@ package com.example.toucheese_be.domain.user.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
+import com.example.toucheese_be.domain.auth.user.entity.User;
 import com.querydsl.core.types.dsl.*;
 
 import com.querydsl.core.types.PathMetadata;

@@ -1,6 +1,7 @@
 package com.example.toucheese_be.domain.order.entity;
 
 import com.example.toucheese_be.domain.item.entity.Item;
+import com.example.toucheese_be.domain.studio.entity.Studio;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

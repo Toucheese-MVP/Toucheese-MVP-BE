@@ -1,9 +1,8 @@
 package com.example.toucheese_be.domain.order.entity;
 
-import com.example.toucheese_be.domain.item.entity.Option;
 import com.example.toucheese_be.domain.order.entity.constant.OrderStatus;
+import com.example.toucheese_be.domain.auth.user.entity.User;
 import com.example.toucheese_be.domain.studio.entity.Studio;
-import com.example.toucheese_be.domain.user.entity.User;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -28,6 +27,11 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    // Studio과 연결
+    @ManyToOne
+    @JoinColumn(name = "studio_id", nullable = false)
+    private Studio studio;
 
     // 사용자와 연결
     @OneToOne
