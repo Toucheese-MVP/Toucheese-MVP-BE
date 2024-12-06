@@ -28,6 +28,8 @@ public class QReserveInfo extends EntityPathBase<ReserveInfo> {
 
     public final EnumPath<com.example.toucheese_be.domain.reserve.entity.constant.NowReserveInfo> nowReserveInfo = createEnum("nowReserveInfo", com.example.toucheese_be.domain.reserve.entity.constant.NowReserveInfo.class);
 
+    public final com.example.toucheese_be.domain.item.entity.QOption option;
+
     public final DateTimePath<java.time.LocalDateTime> reserveDateTime = createDateTime("reserveDateTime", java.time.LocalDateTime.class);
 
     public final com.example.toucheese_be.domain.studio.entity.QStudio studio;
@@ -53,6 +55,7 @@ public class QReserveInfo extends EntityPathBase<ReserveInfo> {
     public QReserveInfo(Class<? extends ReserveInfo> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.item = inits.isInitialized("item") ? new com.example.toucheese_be.domain.item.entity.QItem(forProperty("item"), inits.get("item")) : null;
+        this.option = inits.isInitialized("option") ? new com.example.toucheese_be.domain.item.entity.QOption(forProperty("option")) : null;
         this.studio = inits.isInitialized("studio") ? new com.example.toucheese_be.domain.studio.entity.QStudio(forProperty("studio"), inits.get("studio")) : null;
         this.user = inits.isInitialized("user") ? new com.example.toucheese_be.domain.user.entity.QUser(forProperty("user")) : null;
     }
