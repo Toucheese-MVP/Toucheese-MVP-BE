@@ -1,6 +1,8 @@
 package com.example.toucheese_be.domain.auth.admin.dto;
 
 import com.example.toucheese_be.domain.order.entity.Order;
+import com.example.toucheese_be.domain.studio.entity.StudioImage;
+import com.example.toucheese_be.domain.studio.entity.constant.StudioImageType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,8 +40,17 @@ public class AdminOrderDto {
                         .build())
                 .collect(Collectors.toList());
 
+        String studioProfileUrl = orderEntity.getStudio().getImages().stream()
+                .filter(image -> image.getType() == StudioImageType.PROFILE)
+                .findFirst()
+                .map(StudioImage::getImageUrl)
+                .orElse(null);
+
+
         return AdminOrderDto.builder()
                 .orderId(orderEntity.getId())
+                .studioProfile(studioProfileUrl)
+                .studioName(orderEntity.getStudio().getName())
                 .orderDateTime(orderEntity.getOrderDateTime().toString())
                 .userName(orderEntity.getUser().getName())
                 .orderItemDtos(orderItemDtos)
