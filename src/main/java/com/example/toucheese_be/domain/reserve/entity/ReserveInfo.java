@@ -7,6 +7,7 @@ import com.example.toucheese_be.domain.studio.entity.StudioDutyDate;
 import com.example.toucheese_be.domain.studio.entity.constant.StudioImageType;
 import com.example.toucheese_be.domain.user.entity.User;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -33,8 +34,9 @@ public class ReserveInfo {
     @JoinColumn(name = "item_id", nullable = false)
     private Item item;
 
-    @OneToMany(mappedBy = "studio", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<StudioDutyDate> studioDutyDates = new ArrayList<>();
+//    @OneToMany(mappedBy = "studio", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<StudioDutyDate> studioDutyDates = new ArrayList<>();
+    private LocalDateTime reserveDateTime;
 
     @Enumerated(EnumType.STRING)
     private NowReserveInfo nowReserveInfo;
