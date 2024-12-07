@@ -1,4 +1,4 @@
-package com.example.toucheese_be.domain.user.entity;
+package com.example.toucheese_be.domain.auth.user.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -15,7 +15,7 @@ import com.querydsl.core.types.Path;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QUser extends EntityPathBase<User> {
 
-    private static final long serialVersionUID = -763177903L;
+    private static final long serialVersionUID = 1400880347L;
 
     public static final QUser user = new QUser("user");
 

@@ -1,6 +1,6 @@
 package com.example.toucheese_be.domain.cart.entity;
 
-import com.example.toucheese_be.domain.user.entity.User;
+import com.example.toucheese_be.domain.auth.user.entity.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

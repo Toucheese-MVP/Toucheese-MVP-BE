@@ -24,13 +24,15 @@ public class QOrder extends EntityPathBase<Order> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final ListPath<OrderItem, QOrderItem> orderItems = this.<OrderItem, QOrderItem>createList("orderItems", OrderItem.class, QOrderItem.class, PathInits.DIRECT2);
+    public final DateTimePath<java.time.LocalDateTime> orderDateTime = createDateTime("orderDateTime", java.time.LocalDateTime.class);
 
-    public final DateTimePath<java.time.LocalDateTime> reservedDateTime = createDateTime("reservedDateTime", java.time.LocalDateTime.class);
+    public final ListPath<OrderItem, QOrderItem> orderItems = this.<OrderItem, QOrderItem>createList("orderItems", OrderItem.class, QOrderItem.class, PathInits.DIRECT2);
 
     public final EnumPath<com.example.toucheese_be.domain.order.entity.constant.OrderStatus> status = createEnum("status", com.example.toucheese_be.domain.order.entity.constant.OrderStatus.class);
 
-    public final com.example.toucheese_be.domain.user.entity.QUser user;
+    public final com.example.toucheese_be.domain.studio.entity.QStudio studio;
+
+    public final com.example.toucheese_be.domain.auth.user.entity.QUser user;
 
     public QOrder(String variable) {
         this(Order.class, forVariable(variable), INITS);
@@ -50,7 +52,8 @@ public class QOrder extends EntityPathBase<Order> {
 
     public QOrder(Class<? extends Order> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.user = inits.isInitialized("user") ? new com.example.toucheese_be.domain.user.entity.QUser(forProperty("user")) : null;
+        this.studio = inits.isInitialized("studio") ? new com.example.toucheese_be.domain.studio.entity.QStudio(forProperty("studio"), inits.get("studio")) : null;
+        this.user = inits.isInitialized("user") ? new com.example.toucheese_be.domain.auth.user.entity.QUser(forProperty("user")) : null;
     }
 
 }

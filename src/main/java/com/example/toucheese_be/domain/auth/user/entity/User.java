@@ -1,4 +1,4 @@
-package com.example.toucheese_be.domain.user.entity;
+package com.example.toucheese_be.domain.auth.user.entity;
 
 import com.example.toucheese_be.domain.review.entity.Review;
 import jakarta.persistence.*;

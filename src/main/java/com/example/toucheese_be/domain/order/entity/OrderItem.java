@@ -1,8 +1,10 @@
 package com.example.toucheese_be.domain.order.entity;
 
 import com.example.toucheese_be.domain.item.entity.Item;
+import com.example.toucheese_be.domain.studio.entity.Studio;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -15,6 +17,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.BatchSize;
 
 @Getter
 @Setter
@@ -45,6 +48,6 @@ public class OrderItem {
     private Integer totalPrice;
 
     // 주문 옵션과 연결
-    @OneToMany(mappedBy = "orderItem", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "orderItem", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<OrderOption> orderOptions = new ArrayList<>();
 }

@@ -1,7 +1,7 @@
 package com.example.toucheese_be.domain.review.entity;
 
 import com.example.toucheese_be.domain.item.entity.Item;
-import com.example.toucheese_be.domain.user.entity.User;
+import com.example.toucheese_be.domain.auth.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

@@ -30,7 +30,7 @@ public class QReview extends EntityPathBase<Review> {
 
     public final ListPath<ReviewImage, QReviewImage> reviewImage = this.<ReviewImage, QReviewImage>createList("reviewImage", ReviewImage.class, QReviewImage.class, PathInits.DIRECT2);
 
-    public final com.example.toucheese_be.domain.user.entity.QUser user;
+    public final com.example.toucheese_be.domain.auth.user.entity.QUser user;
 
     public QReview(String variable) {
         this(Review.class, forVariable(variable), INITS);
@@ -51,7 +51,7 @@ public class QReview extends EntityPathBase<Review> {
     public QReview(Class<? extends Review> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.item = inits.isInitialized("item") ? new com.example.toucheese_be.domain.item.entity.QItem(forProperty("item"), inits.get("item")) : null;
-        this.user = inits.isInitialized("user") ? new com.example.toucheese_be.domain.user.entity.QUser(forProperty("user")) : null;
+        this.user = inits.isInitialized("user") ? new com.example.toucheese_be.domain.auth.user.entity.QUser(forProperty("user")) : null;
     }
 
 }
