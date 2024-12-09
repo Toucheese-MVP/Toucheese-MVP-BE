@@ -6,10 +6,12 @@ import com.example.toucheese_be.domain.auth.admin.dto.AdminOrderOptionDto;
 import com.example.toucheese_be.domain.order.entity.Order;
 import com.example.toucheese_be.domain.order.entity.OrderItem;
 import com.example.toucheese_be.domain.order.repository.OrderRepository;
+import com.example.toucheese_be.domain.studio.dto.PageRequestDto;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties.Admin;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +23,8 @@ public class AdminService {
     /**
      * 예약 리스트 조회
      */
-    public ResponseEntity<List<AdminOrderDto>> readAllOrders() {
-         List<AdminOrderDto> adminOrderDtos = orderRepository.findAllOrdersWithDetails();
+    public ResponseEntity<Page<AdminOrderDto>> readAllOrders(PageRequestDto dto) {
+         Page<AdminOrderDto> adminOrderDtos = orderRepository.findAllOrdersWithDetails(dto);
          return ResponseEntity.ok(adminOrderDtos);
     }
 
