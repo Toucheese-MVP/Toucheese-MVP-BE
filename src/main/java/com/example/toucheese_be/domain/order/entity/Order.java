@@ -1,6 +1,5 @@
 package com.example.toucheese_be.domain.order.entity;
 
-import com.example.toucheese_be.domain.order.dto.OrderUserDto;
 import com.example.toucheese_be.domain.order.entity.constant.OrderStatus;
 import com.example.toucheese_be.domain.auth.user.entity.User;
 import com.example.toucheese_be.domain.studio.entity.Studio;
@@ -52,4 +51,7 @@ public class Order {
     private List<OrderItem> orderItems = new ArrayList<>();
 
 
+    public String setStudio(String studio) {
+        return studio;
+    }
 }

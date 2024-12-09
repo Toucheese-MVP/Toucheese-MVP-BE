@@ -3,6 +3,7 @@ package com.example.toucheese_be.domain.order.dto;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.toucheese_be.domain.item.entity.Item;
 import com.example.toucheese_be.domain.order.entity.OrderItem;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,13 +17,15 @@ import lombok.NoArgsConstructor;
 
 public class OrderItemDto {
     // 싱품 ID
-    private Long itemId;
+    private Long id;
     // 상품 가격
-    private String itemName;
+    private String name;
+
+    private Item item;
     // 상품 이미지
     private String itemImage;
     // 상품 가격
-    private Integer itemQuantity;
+    private Integer quantity;
     // 최종 가격
     private Integer totalPrice;
     // 상품에 대한 옵션
@@ -30,10 +33,10 @@ public class OrderItemDto {
 
     public static OrderItemDto fromEntity(OrderItem orderItem) {
         return OrderItemDto.builder()
-                .itemId(orderItem.getId())
-                .itemName(orderItem.getItem().getName())
+                .id(orderItem.getId())
+                .name(orderItem.getItem().getName())
                 .itemImage(orderItem.getItem().getImage())
-                .itemQuantity(orderItem.getQuantity())
+                .quantity(orderItem.getQuantity())
                 .totalPrice(orderItem.getTotalPrice())
                 .build();
     }

@@ -12,19 +12,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class OrderOptionDto {
     // 옵션 ID
-    private Long optionId;
+    private Long id;
     // 옵션 이름
-    private String optionName;
+    private String name;
     // 옵션 가격
-    private Integer optionPrice;
+    private Integer price;
     // 옵션 수량
-    private Integer optionQuantity;
+    private Integer quantity;
 
     public static OrderOptionDto fromEntity(OrderOption orderOption){
         return OrderOptionDto.builder()
-                .optionId(orderOption.getId())
-                .optionPrice(orderOption.getPrice())
-                .optionQuantity(orderOption.getQuantity())
+                .id(orderOption.getId())
+                .price(orderOption.getPrice())
+                .quantity(orderOption.getQuantity())
                 .build();
     }
 }

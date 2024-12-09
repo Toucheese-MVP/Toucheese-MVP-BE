@@ -1,6 +1,7 @@
 package com.example.toucheese_be.domain.order.controller;
 
 import com.example.toucheese_be.domain.order.dto.OrderDetailDto;
+import com.example.toucheese_be.domain.order.dto.OrderRequestDto;
 import com.example.toucheese_be.domain.order.entity.Order;
 import com.example.toucheese_be.domain.order.service.OrderService;
 import com.example.toucheese_be.domain.studio.dto.PageRequestDto;
@@ -25,9 +26,9 @@ public class OrderController {
     @PostMapping("/create")
     public ResponseEntity<Boolean> getCreateOrder(
             @RequestBody
-            OrderDetailDto orderDetailDto){
+            OrderRequestDto orderRequestDto){
 
-                boolean isOrderCreated = orderService.createOrder(orderDetailDto);
+                boolean isOrderCreated = orderService.createOrder(orderRequestDto);
 
                 return ResponseEntity.ok(isOrderCreated);
         }

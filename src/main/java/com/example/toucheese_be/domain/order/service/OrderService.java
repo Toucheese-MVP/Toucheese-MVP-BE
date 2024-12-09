@@ -5,6 +5,7 @@ import com.example.toucheese_be.domain.auth.user.service.UserService;
 import com.example.toucheese_be.domain.order.dto.OrderDetailDto;
 import com.example.toucheese_be.domain.order.dto.OrderItemDto;
 import com.example.toucheese_be.domain.order.dto.OrderOptionDto;
+import com.example.toucheese_be.domain.order.dto.OrderRequestDto;
 import com.example.toucheese_be.domain.order.entity.Order;
 import com.example.toucheese_be.domain.order.entity.OrderItem;
 import com.example.toucheese_be.domain.order.entity.OrderOption;
@@ -28,10 +29,45 @@ import java.util.stream.Collectors;
 public class OrderService {
     // TODO: 주문 생성 컨트롤러 메서드에 대한 서비스 로직
     private final OrderRepository orderRepository;
-    private final UserService userService;
-    private final StudioService studioService;
+
     //
-    public boolean createOrder(OrderDetailDto orderDetailDto) {
+    public boolean createOrder(OrderRequestDto orderRequest) {
+        //사용자 정보 생성
+        User user = new User();
+        user.setEmail(orderRequest.getEmail());
+
+        // 주문 객체 생성
+        // 사용자 정보를 order에 세팅
+        Order order = new Order();
+        order.setId(orderRequest.getId());
+        order.setStudio(orderRequest.getStudio());
+
+        // 주문 항목 처리
+        List<OrderItem> orderItems = new ArrayList<>();
+        for (OrderItemDto itemDto : orderRequest.getItemDtos()) {
+            OrderItem orderItem = new OrderItem();
+            orderItem.setItem(itemDto.getItem());
+            orderItem.setQuantity(itemDto.getQuantity());
+
+            // 옵션 처리
+            List<OrderOption> orderOptions =new ArrayList<>();
+            for(OrderOptionDto optionDto : itemDto.getOrderOptionDtos()){
+                OrderOption orderOption = new OrderOption();
+                orderOption.setId(optionDto.getId());
+                orderOption.setQuantity(optionDto.getQuantity());
+            }
+
+            orderItem.setOrderOptions(orderOptions);
+            orderItems.add(orderItem);
+        }
+        order.setOrderItems(orderItems);
+
+        orderRepository.save(order);
+
+        return true;
+    }
+
+
 
     //public boolean processPayment(Order orderId) {
         //orderRepository.
