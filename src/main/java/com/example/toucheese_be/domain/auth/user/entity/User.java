@@ -1,5 +1,6 @@
 package com.example.toucheese_be.domain.auth.user.entity;
 
+import com.example.toucheese_be.domain.order.entity.Order;
 import com.example.toucheese_be.domain.review.entity.Review;
 import jakarta.persistence.*;
 import java.util.ArrayList;
@@ -27,4 +28,7 @@ public class User {
 
     @Column(length = 150, nullable = false)
     private String email;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Order> orders = new ArrayList<>();
 }
