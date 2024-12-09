@@ -45,4 +45,7 @@ public class StudioService {
     }
 
 
+    //public Studio findByName(String studioName) {
+    //    return studioRepository.findByName(studioName);
+    //}
 }

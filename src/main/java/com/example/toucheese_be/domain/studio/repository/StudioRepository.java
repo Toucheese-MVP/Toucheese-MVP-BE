@@ -11,4 +11,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface StudioRepository extends JpaRepository<Studio, Long>, StudioRepositoryCustom{
     List<Studio> findByConcept(Concept concept);
+
+    Studio findByName(String studioName);
 }
