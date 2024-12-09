@@ -12,6 +12,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.BatchSize;
 
 
 @Getter
@@ -34,7 +35,7 @@ public class Order {
     private Studio studio;
 
     // 사용자와 연결
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
@@ -48,5 +49,6 @@ public class Order {
 
     // 주문 상품과 연결
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @BatchSize(size = 10)
     private List<OrderItem> orderItems = new ArrayList<>();
 }

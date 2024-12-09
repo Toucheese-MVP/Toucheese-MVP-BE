@@ -19,6 +19,7 @@ public class AdminOrderItemDto {
     private Long itemId;
     private String itemName;
     private Integer itemPrice;
+    private Integer itemQuantity;
     private List<AdminOrderOptionDto> adminOrderOptions = new ArrayList<>();
 
     public static AdminOrderItemDto fromEntity(OrderItem entity) {
@@ -26,6 +27,7 @@ public class AdminOrderItemDto {
                 .itemId(entity.getItem().getId())
                 .itemName(entity.getItem().getName())
                 .itemPrice(entity.getItem().getPrice())
+                .itemQuantity(entity.getQuantity())
                 .adminOrderOptions(entity.getOrderOptions().stream()
                         .map(orderOption -> AdminOrderOptionDto.builder()
                                 .optionId(orderOption.getId())

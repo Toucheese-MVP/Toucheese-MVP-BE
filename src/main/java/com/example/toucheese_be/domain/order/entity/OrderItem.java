@@ -49,5 +49,6 @@ public class OrderItem {
 
     // 주문 옵션과 연결
     @OneToMany(mappedBy = "orderItem", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @BatchSize(size = 10)
     private List<OrderOption> orderOptions = new ArrayList<>();
 }

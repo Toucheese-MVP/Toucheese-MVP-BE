@@ -9,6 +9,8 @@ import com.example.toucheese_be.domain.order.entity.QOrder;
 import com.example.toucheese_be.domain.order.entity.QOrderItem;
 import com.example.toucheese_be.domain.order.entity.QOrderOption;
 import com.example.toucheese_be.domain.studio.dto.PageRequestDto;
+import com.example.toucheese_be.domain.studio.entity.QStudio;
+import com.example.toucheese_be.domain.studio.entity.Studio;
 import com.example.toucheese_be.domain.studio.entity.constant.StudioImageType;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Collections;
@@ -29,12 +31,13 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
     private final QOrder order = QOrder.order;
     private final QOrderItem orderItem = QOrderItem.orderItem;
     private final QOrderOption orderOption = QOrderOption.orderOption;
+    private final QStudio studio = QStudio.studio;
 
     @Override
     public Page<AdminOrderDto> findAllOrdersWithDetails(PageRequestDto dto) {
         Pageable pageable = dto.toPageable();
 
-        // 1. 주문과 주문 아이템 가져오기 (페이지네이션 적용)
+        // 1. 주문과 주문 상품 가져오기
         List<Order> ordersWithItems = jpaQueryFactory.selectFrom(order)
                 .distinct()
                 .leftJoin(order.orderItems, orderItem).fetchJoin()
@@ -42,14 +45,16 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        // 2. 주문 아이템과 옵션 정보를 가져오기
-        List<OrderItem> itemsWithOptions = jpaQueryFactory.selectFrom(orderItem)
+        // 2. 주문 상품과 주문 옵션를 가져오기
+        List<OrderItem> orderItemsWithOptions = jpaQueryFactory.selectFrom(orderItem)
                 .leftJoin(orderItem.orderOptions, orderOption).fetchJoin()
                 .fetch();
 
-        // 주문 아이템과 옵션 정보를 매핑할 Map 생성 (Order ID -> List<OrderItem>)
-        Map<Long, List<OrderItem>> orderItemsMap = itemsWithOptions.stream()
-                .collect(Collectors.groupingBy(orderItemEntity -> orderItemEntity.getOrder().getId()));
+        // 3. Map<주문ID, 주문 상품 리스트> 만들기
+        Map<Long, List<OrderItem>> orderItemsMap = orderItemsWithOptions.stream()
+                .collect(Collectors.groupingBy(orderItem -> orderItem.getOrder().getId()));
+
+
 
         // 3. AdminOrderDto로 변환
         List<AdminOrderDto> adminOrderDtos = ordersWithItems.stream().map(orderEntity -> AdminOrderDto.builder()
