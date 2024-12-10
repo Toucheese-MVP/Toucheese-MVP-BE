@@ -51,9 +51,4 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @BatchSize(size = 10)
     private List<OrderItem> orderItems = new ArrayList<>();
-
-
-    public String setStudio(String studio) {
-        return studio;
-    }
 }

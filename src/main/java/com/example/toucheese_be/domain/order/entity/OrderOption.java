@@ -31,10 +31,13 @@ public class OrderOption {
     @JoinColumn(name = "order_item_id", nullable = false)
     private OrderItem orderItem;
 
-    // ItemOption(상품-옵션) 테이블과 연결
+    // ItemOption(상품-옵션) 테이블과 연결 -> ManyToOne
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_option_id", nullable = false)
-    private ItemOption itemOption;
+    private ItemOption itemOptionId;
+
+    // 옵션 이름
+    private String name;
 
     // 옵션 수량
     private Integer quantity;

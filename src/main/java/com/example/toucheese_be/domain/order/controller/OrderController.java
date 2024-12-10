@@ -1,15 +1,8 @@
 package com.example.toucheese_be.domain.order.controller;
 
-import com.example.toucheese_be.domain.order.dto.OrderDetailDto;
-import com.example.toucheese_be.domain.order.dto.OrderRequestDto;
-import com.example.toucheese_be.domain.order.entity.Order;
+import com.example.toucheese_be.domain.order.dto.request.OrderRequestDto;
 import com.example.toucheese_be.domain.order.service.OrderService;
-import com.example.toucheese_be.domain.studio.dto.PageRequestDto;
-import com.example.toucheese_be.domain.studio.dto.StudioDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,11 +19,10 @@ public class OrderController {
     @PostMapping("/create")
     public ResponseEntity<Boolean> getCreateOrder(
             @RequestBody
-            OrderRequestDto orderRequestDto){
-
-                boolean isOrderCreated = orderService.createOrder(orderRequestDto);
-
-                return ResponseEntity.ok(isOrderCreated);
+            OrderRequestDto orderRequestDto
+    ){
+            boolean isOrderCreated = orderService.createOrder(orderRequestDto);
+            return ResponseEntity.ok(isOrderCreated);
         }
 
     // boolean paymentSuccess = orderService.processPayment(orderId);

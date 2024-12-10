@@ -13,7 +13,6 @@ import lombok.Setter;
 @Entity
 @Table(name = "users")
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,7 +20,7 @@ public class User {
     @Column(length = 150)
     private String name;
 
-    @Column(length = 150, nullable = false)
+    @Column(length = 150)
     private String profile_img;
 
     private String phoneNumber;
