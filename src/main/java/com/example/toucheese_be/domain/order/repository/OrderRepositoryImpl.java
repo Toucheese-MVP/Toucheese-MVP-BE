@@ -29,7 +29,7 @@ import org.springframework.stereotype.Repository;
 public class OrderRepositoryImpl implements OrderRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
     private final QOrder order = QOrder.order;
-    private final QOrderItem orderItem = QOrderItem.orderItem; //
+    private final QOrderItem orderItem = QOrderItem.orderItem;
     private final QOrderOption orderOption = QOrderOption.orderOption;
     private final QStudio studio = QStudio.studio;
 

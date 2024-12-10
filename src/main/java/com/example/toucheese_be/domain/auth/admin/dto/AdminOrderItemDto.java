@@ -31,7 +31,7 @@ public class AdminOrderItemDto {
                 .adminOrderOptions(entity.getOrderOptions().stream()
                         .map(orderOption -> AdminOrderOptionDto.builder()
                                 .optionId(orderOption.getId())
-                                .optionName(orderOption.getItemOption().getOption().getName())
+                                .optionName(orderOption.getName())
                                 .optionPrice(orderOption.getPrice())
                                 .optionQuantity(orderOption.getQuantity())
                                 .build())

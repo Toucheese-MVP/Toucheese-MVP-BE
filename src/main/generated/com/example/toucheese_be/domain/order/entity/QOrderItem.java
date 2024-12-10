@@ -26,13 +26,15 @@ public class QOrderItem extends EntityPathBase<OrderItem> {
 
     public final com.example.toucheese_be.domain.item.entity.QItem Item;
 
+    public final StringPath name = createString("name");
+
     public final QOrder order;
 
     public final ListPath<OrderOption, QOrderOption> orderOptions = this.<OrderOption, QOrderOption>createList("orderOptions", OrderOption.class, QOrderOption.class, PathInits.DIRECT2);
 
     public final NumberPath<Integer> quantity = createNumber("quantity", Integer.class);
 
-    public final NumberPath<Integer> totalPrice = createNumber("totalPrice", Integer.class);
+    public final NumberPath<Integer> TotalPrice = createNumber("TotalPrice", Integer.class);
 
     public QOrderItem(String variable) {
         this(OrderItem.class, forVariable(variable), INITS);

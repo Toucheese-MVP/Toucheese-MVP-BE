@@ -41,11 +41,13 @@ public class OrderItem {
     @JoinColumn(name = "item_id", nullable = false)
     private Item Item;
 
+    private String name;
+
     // 상품 수량
     private Integer quantity;
 
     // 상품 총 가격
-    private Integer totalPrice;
+    private Integer TotalPrice;
 
     // 주문 옵션과 연결
     @OneToMany(mappedBy = "orderItem", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)

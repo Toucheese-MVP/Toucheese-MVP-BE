@@ -9,6 +9,9 @@ public enum ErrorCode {
     // 예외 코드 부분 (추후 작성)
     INVALID_FILTER_PARAMETER(400, "FILTER_INVALID_PARAMETER", "필터링 파라미터가 유효하지 않습니다."),
     REVIEW_NOT_FOUND(404, "REVIEW_NOT_FOUND", "해당 리뷰를 찾을 수 없습니다."),
+    STUDIO_NOT_FOUND(404, "STUDIO_NOT_FOUND", "해당 스튜디오를 찾을 수 없습니다."),
+    ITEM_NOT_FOUND(404, "ITEM_NOT_FOUND", "해당 상품을 찾을 수 없습니다."),
+    ITEM_OPTION_NOT_FOUND(404, "ITEM_OPTION_NOT_FOUND", "해당 상품 옵션을 찾을 수 없습니다."),
 
     // 예약 관련 예외 처리
     ORDER_NOT_FOUND(404, "ORDER_NOT_FOUND", "해당 예약 정보를 찾을 수 없습니다."),
