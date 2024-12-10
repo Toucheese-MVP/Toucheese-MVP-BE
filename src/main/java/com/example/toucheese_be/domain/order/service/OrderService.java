@@ -100,13 +100,11 @@ public class OrderService {
 
             orderItems.add(orderItem);
         }
-
         // Order에 OrderItem 설정
         order.setOrderItems(orderItems);
 
         // Order 저장
         orderRepository.save(order);
-
         return true;
     }
 

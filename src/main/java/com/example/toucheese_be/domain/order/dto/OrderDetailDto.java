@@ -25,16 +25,16 @@ public class OrderDetailDto {
     // 상품 확인
     private List<OrderItemDto> orderItemDto;
 
-    public static OrderDetailDto fromEntity(Order entity) {
-        return OrderDetailDto.builder()
-                .orderId(entity.getId())
-                .orderUserDto(OrderUserDto.fromEntity(entity.getUser())) // User 객체에서 OrderUserDto로 변환
-                .studioName(entity.getStudio().getName())
-                .reservedDateTime(entity.getOrderDateTime().toString()) // 필요에 따라 형식 변환
-                .orderItemDto(entity.getOrderItems().stream()
-                        .map(OrderItemDto::fromEntity) // OrderItemDto 변환 필요
-                        .collect(Collectors.toList()))
-                .build();
-
-    }
+//    public static OrderDetailDto fromEntity(Order entity) {
+//        return OrderDetailDto.builder()
+//                .orderId(entity.getId())
+//                .orderUserDto(OrderUserDto.fromEntity(entity.getUser())) // User 객체에서 OrderUserDto로 변환
+//                .studioName(entity.getStudio().getName())
+//                .reservedDateTime(entity.getOrderDateTime().toString()) // 필요에 따라 형식 변환
+//                .orderItemDto(entity.getOrderItems().stream()
+//                        .map(OrderItemDto::fromEntity) // OrderItemDto 변환 필요
+//                        .collect(Collectors.toList()))
+//                .build();
+//
+//    }
 }

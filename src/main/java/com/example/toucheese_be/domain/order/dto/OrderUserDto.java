@@ -18,12 +18,12 @@ public class OrderUserDto {
     // 사용자 연락처
     private String userPhone;
 
-    public static OrderUserDto fromEntity(User user) {
-        return OrderUserDto.builder()
-                .userId(user.getId())
-                .userName(user.getName())
-                .userPhone(user.getPhoneNumber())
-                .userEmail(user.getEmail())
-                .build();
-    }
+//    public static OrderUserDto fromEntity(User user) {
+//        return OrderUserDto.builder()
+//                .userId(user.getId())
+//                .userName(user.getName())
+//                .userPhone(user.getPhoneNumber())
+//                .userEmail(user.getEmail())
+//                .build();
+//    }
 }

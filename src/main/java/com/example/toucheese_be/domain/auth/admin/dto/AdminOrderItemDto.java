@@ -20,7 +20,7 @@ public class AdminOrderItemDto {
     private String itemName;
     private Integer itemPrice;
     private Integer itemQuantity;
-    private List<AdminOrderOptionDto> adminOrderOptions = new ArrayList<>();
+    private List<AdminOrderOptionDto> adminOrderOptions;
 
     public static AdminOrderItemDto fromEntity(OrderItem entity) {
         return AdminOrderItemDto.builder()
