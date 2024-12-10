@@ -20,11 +20,11 @@ public class OrderOptionDto {
     // 옵션 수량
     private Integer quantity;
 
-    public static OrderOptionDto fromEntity(OrderOption orderOption){
-        return OrderOptionDto.builder()
-                .id(orderOption.getId())
-                .price(orderOption.getPrice())
-                .quantity(orderOption.getQuantity())
-                .build();
-    }
+//    public static OrderOptionDto fromEntity(OrderOption orderOption){
+//        return OrderOptionDto.builder()
+//                .id(orderOption.getId())
+//                .price(orderOption.getPrice())
+//                .quantity(orderOption.getQuantity())
+//                .build();
+//    }
 }

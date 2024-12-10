@@ -23,5 +23,5 @@ public class AdminOrderDto {
     private String studioName;
     private String orderDateTime;
     private String userName;
-    private List<AdminOrderItemDto> orderItems = new ArrayList<>();
+    private List<AdminOrderItemDto> orderItems;
 }

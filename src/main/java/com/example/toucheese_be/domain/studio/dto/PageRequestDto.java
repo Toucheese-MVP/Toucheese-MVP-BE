@@ -10,9 +10,10 @@ import org.springframework.data.domain.Pageable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PageRequestDto {
+    @Builder.Default
     private int page = 0;
+    @Builder.Default
     private int size = 10;
-
     public Pageable toPageable() {
         return PageRequest.of(page, size);
     }
