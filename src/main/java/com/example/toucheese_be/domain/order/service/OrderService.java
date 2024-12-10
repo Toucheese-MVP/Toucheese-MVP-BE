@@ -1,8 +1,6 @@
 package com.example.toucheese_be.domain.order.service;
 
 import com.example.toucheese_be.domain.auth.user.entity.User;
-import com.example.toucheese_be.domain.auth.user.service.UserService;
-import com.example.toucheese_be.domain.order.dto.OrderDetailDto;
 import com.example.toucheese_be.domain.order.dto.OrderItemDto;
 import com.example.toucheese_be.domain.order.dto.OrderOptionDto;
 import com.example.toucheese_be.domain.order.dto.OrderRequestDto;
@@ -10,13 +8,7 @@ import com.example.toucheese_be.domain.order.entity.Order;
 import com.example.toucheese_be.domain.order.entity.OrderItem;
 import com.example.toucheese_be.domain.order.entity.OrderOption;
 import com.example.toucheese_be.domain.order.repository.OrderRepository;
-import com.example.toucheese_be.domain.studio.dto.ConceptDto;
-import com.example.toucheese_be.domain.studio.dto.PageRequestDto;
-import com.example.toucheese_be.domain.studio.entity.Studio;
-import com.example.toucheese_be.domain.studio.service.StudioService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -53,7 +45,7 @@ public class OrderService {
             List<OrderOption> orderOptions =new ArrayList<>();
             for(OrderOptionDto optionDto : itemDto.getOrderOptionDtos()){
                 OrderOption orderOption = new OrderOption();
-                orderOption.setId(optionDto.getId());
+                orderOption.setId(optionDto.getId()); // 원래 상품 이름이어야 하는 자리
                 orderOption.setQuantity(optionDto.getQuantity());
             }
 
@@ -73,7 +65,7 @@ public class OrderService {
         //orderRepository.
 
         //return true;
-    //}
+    // }
 
 
     // Order 엔티티를 OrderDetailDto로 변환하는 메서드

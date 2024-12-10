@@ -39,7 +39,7 @@ public class OrderItem {
     // Item과 연결
     @ManyToOne
     @JoinColumn(name = "item_id", nullable = false)
-    private Item item;
+    private Item Item;
 
     // 상품 수량
     private Integer quantity;

@@ -10,7 +10,7 @@ import com.example.toucheese_be.domain.order.entity.QOrderItem;
 import com.example.toucheese_be.domain.order.entity.QOrderOption;
 import com.example.toucheese_be.domain.studio.dto.PageRequestDto;
 import com.example.toucheese_be.domain.studio.entity.QStudio;
-import com.example.toucheese_be.domain.studio.entity.Studio;
+// import com.example.toucheese_be.domain.studio.entity.Studio;
 import com.example.toucheese_be.domain.studio.entity.constant.StudioImageType;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Collections;
@@ -29,7 +29,7 @@ import org.springframework.stereotype.Repository;
 public class OrderRepositoryImpl implements OrderRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
     private final QOrder order = QOrder.order;
-    private final QOrderItem orderItem = QOrderItem.orderItem;
+    private final QOrderItem orderItem = QOrderItem.orderItem; //
     private final QOrderOption orderOption = QOrderOption.orderOption;
     private final QStudio studio = QStudio.studio;
 
