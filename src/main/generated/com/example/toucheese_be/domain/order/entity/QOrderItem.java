@@ -24,7 +24,7 @@ public class QOrderItem extends EntityPathBase<OrderItem> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final com.example.toucheese_be.domain.item.entity.QItem item;
+    public final com.example.toucheese_be.domain.item.entity.QItem Item;
 
     public final QOrder order;
 
@@ -52,7 +52,7 @@ public class QOrderItem extends EntityPathBase<OrderItem> {
 
     public QOrderItem(Class<? extends OrderItem> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.item = inits.isInitialized("item") ? new com.example.toucheese_be.domain.item.entity.QItem(forProperty("item"), inits.get("item")) : null;
+        this.Item = inits.isInitialized("Item") ? new com.example.toucheese_be.domain.item.entity.QItem(forProperty("Item"), inits.get("Item")) : null;
         this.order = inits.isInitialized("order") ? new QOrder(forProperty("order"), inits.get("order")) : null;
     }
 

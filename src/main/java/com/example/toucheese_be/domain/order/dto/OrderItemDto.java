@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 
 public class OrderItemDto {
     // 싱품 ID
-    private Long id;
+    private Long itemId;
     // 상품 가격
     private String name;
 
@@ -33,7 +33,7 @@ public class OrderItemDto {
 
     public static OrderItemDto fromEntity(OrderItem orderItem) {
         return OrderItemDto.builder()
-                .id(orderItem.getId())
+                .itemId(orderItem.getId())
                 .name(orderItem.getItem().getName())
                 .itemImage(orderItem.getItem().getImage())
                 .quantity(orderItem.getQuantity())
