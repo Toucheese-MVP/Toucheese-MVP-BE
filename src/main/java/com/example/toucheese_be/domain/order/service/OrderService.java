@@ -45,6 +45,13 @@ public class OrderService {
         Studio studio = studioRepository.findById(dto.getStudioId())
                 .orElseThrow(() -> new GlobalCustomException(ErrorCode.STUDIO_NOT_FOUND));
 
+        // 주문 생성
+        Order order = Order.builder()
+                .studio(studio)
+                .user(user)
+                .orderDateTime(dto.getOrderDateTime())
+                .build();
+
         // 주문 상품 생성
         List<OrderItem> orderItems = dto.getOrderRequestItemDtos().stream()
                 .map(orderRequestItemDto -> {
@@ -55,8 +62,7 @@ public class OrderService {
                     // 옵션 처리
                     List<OrderOption> orderOptions = orderRequestItemDto.getOrderRequestOptionDtos().stream()
                             .map(orderRequestOptionDto -> {
-                                ItemOption itemOption = itemOptionRepository.findById(
-                                                orderRequestOptionDto.getOptionId())
+                                ItemOption itemOption = itemOptionRepository.findById(orderRequestOptionDto.getOptionId())
                                         .orElseThrow(() -> new GlobalCustomException(ErrorCode.ITEM_OPTION_NOT_FOUND));
 
                                 return OrderOption.builder()
@@ -72,32 +78,23 @@ public class OrderService {
                             .mapToInt(option -> option.getPrice() * option.getQuantity())
                             .sum();
 
-                    int totalOrderItemPrice = item.getPrice() * orderRequestItemDto.getItemQuantity() + orderOptionsTotalPrice;
+                    int totalOrderItemPrice =
+                            item.getPrice() * orderRequestItemDto.getItemQuantity() + orderOptionsTotalPrice;
 
                     // OrderItem 생성
-                    OrderItem orderItem = OrderItem.builder()
+                    return OrderItem.builder()
                             .item(item)
                             .name(item.getName())
                             .price(item.getPrice())
                             .quantity(orderRequestItemDto.getItemQuantity())
                             .totalPrice(totalOrderItemPrice)
+                            .order(order)
                             .build();
-
-                    // Cascade 설정이 ALL 이므로 OrderOption 입장에서 orderItem 을 개별적으로 set 해주지 않아도 됨
-                    orderItem.setOrderOptions(orderOptions);
-                    return orderItem;
                 })
                 .toList();
 
-        // Cascade 설정이 ALL 이므로 OrderItem 입장에서 order를 개별적으로 set 해주지 않아도 됨
-        // 주문 생성
-        orderRepository.save(Order.builder()
-                .studio(studio)
-                .orderItems(orderItems)
-                .user(user)
-                .orderDateTime(dto.getOrderDateTime())
-                .build());
-
+        order.setOrderItems(orderItems);
+        orderRepository.save(order);
         return true;
     }
 }
