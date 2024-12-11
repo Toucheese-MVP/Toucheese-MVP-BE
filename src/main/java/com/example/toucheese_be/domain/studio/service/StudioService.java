@@ -1,24 +1,19 @@
 package com.example.toucheese_be.domain.studio.service;
 
-import com.example.toucheese_be.domain.item.dto.ItemDto;
-import com.example.toucheese_be.domain.item.entity.Item;
-import com.example.toucheese_be.domain.item.entity.constant.ItemCategory;
 import com.example.toucheese_be.domain.item.repository.ItemRepository;
 import com.example.toucheese_be.domain.studio.dto.ConceptDto;
-import com.example.toucheese_be.domain.studio.dto.StudioDetailDto;
 import com.example.toucheese_be.domain.studio.dto.StudioDto;
-import com.example.toucheese_be.domain.studio.dto.StudioInfoDto;
 import com.example.toucheese_be.domain.studio.dto.StudioSearchFilterDto;
-import com.example.toucheese_be.domain.studio.entity.Studio;
+import com.example.toucheese_be.domain.studio.dto.response.StudioDutyDateDto;
+import com.example.toucheese_be.domain.studio.entity.StudioDutyDate;
 import com.example.toucheese_be.domain.studio.repository.ConceptRepository;
+import com.example.toucheese_be.domain.studio.repository.StudioDutyDateRepository;
 import com.example.toucheese_be.domain.studio.repository.StudioRepository;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,6 +22,7 @@ public class StudioService {
     private final StudioRepository studioRepository;
     private final ConceptRepository conceptRepository;
     private final ItemRepository itemRepository;
+    private final StudioDutyDateRepository studioDutyDateRepository;
 
     /**
      * 컨셉 조회
@@ -44,8 +40,15 @@ public class StudioService {
         return studioRepository.getStudioListWithPages(conceptId, dto, pageable);
     }
 
+    /**
+     * 스튜디오 근무시간 조회
+     */
 
-    //public Studio findByName(String studioName) {
-    //    return studioRepository.findByName(studioName);
-    //}
+    public List<StudioDutyDateDto> getStudioDutyDate(Long studioId) {
+        List<StudioDutyDate> studioDutyDates = studioDutyDateRepository.findStudioDutyDatesByStudioId(studioId);
+        return studioDutyDates.stream()
+                .map(StudioDutyDateDto::fromEntity)
+                .toList();
+    }
+
 }

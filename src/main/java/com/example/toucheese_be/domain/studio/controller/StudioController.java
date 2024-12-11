@@ -5,6 +5,7 @@ import com.example.toucheese_be.domain.studio.dto.StudioDetailDto;
 import com.example.toucheese_be.domain.studio.dto.StudioInfoDto;
 import com.example.toucheese_be.domain.studio.dto.StudioSearchFilterDto;
 import com.example.toucheese_be.domain.studio.dto.StudioDto;
+import com.example.toucheese_be.domain.studio.dto.response.StudioDutyDateDto;
 import com.example.toucheese_be.domain.studio.service.StudioService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -51,7 +52,13 @@ public class StudioController {
         return ResponseEntity.ok(studioService.getStudiosByConceptFilters(conceptId, dto, pageable));
     }
 
-    // TODO: 스튜디오 근무 시간 조회
-
+    // 스튜디오 날짜 선택
+    @GetMapping("/{studioId}/date")
+    public ResponseEntity<List<StudioDutyDateDto>> getStudioDutyDate(
+            @PathVariable
+            Long studioId
+    ) {
+        return ResponseEntity.ok(studioService.getStudioDutyDate(studioId));
+    }
 
 }
