@@ -5,11 +5,7 @@ import com.example.toucheese_be.domain.item.entity.Item;
 import com.example.toucheese_be.domain.item.entity.ItemOption;
 import com.example.toucheese_be.domain.item.repository.ItemOptionRepository;
 import com.example.toucheese_be.domain.item.repository.ItemRepository;
-import com.example.toucheese_be.domain.order.dto.OrderItemDto;
-import com.example.toucheese_be.domain.order.dto.OrderOptionDto;
 import com.example.toucheese_be.domain.order.dto.request.OrderRequestDto;
-import com.example.toucheese_be.domain.order.dto.request.OrderRequestItemDto;
-import com.example.toucheese_be.domain.order.dto.request.OrderRequestOptionDto;
 import com.example.toucheese_be.domain.order.entity.Order;
 import com.example.toucheese_be.domain.order.entity.OrderItem;
 import com.example.toucheese_be.domain.order.entity.OrderOption;
@@ -24,121 +20,84 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class OrderService {
-
     private final UserRepository userRepository;
     private final StudioRepository studioRepository;
     private final ItemRepository itemRepository;
     private final ItemOptionRepository itemOptionRepository;
     private final OrderRepository orderRepository;
 
+    // 추후 querydsl 로 쿼리 성능 최적화할 예정
     @Transactional
-    public boolean createOrder(OrderRequestDto orderRequest) {
+    public boolean createOrder(OrderRequestDto dto) {
         // 사용자 정보 생성 및 저장
-        User user = new User();
-        user.setEmail(orderRequest.getEmail());
-        user.setName(orderRequest.getName());
-        user.setPhoneNumber(orderRequest.getPhone());
-        userRepository.save(user);
+        User user = userRepository.save(User.builder()
+                .username(dto.getName())
+                .phone(dto.getPhone())
+                .email(dto.getEmail())
+                .build());
 
         // 스튜디오 조회
-        Studio studio = studioRepository.findById(orderRequest.getStudioId())
+        Studio studio = studioRepository.findById(dto.getStudioId())
                 .orElseThrow(() -> new GlobalCustomException(ErrorCode.STUDIO_NOT_FOUND));
 
+        // 주문 상품 생성
+        List<OrderItem> orderItems = dto.getOrderRequestItemDtos().stream()
+                .map(orderRequestItemDto -> {
+                    // item 조회
+                    Item item = itemRepository.findById(orderRequestItemDto.getItemId())
+                            .orElseThrow(() -> new GlobalCustomException(ErrorCode.ITEM_NOT_FOUND));
+
+                    // 옵션 처리
+                    List<OrderOption> orderOptions = orderRequestItemDto.getOrderRequestOptionDtos().stream()
+                            .map(orderRequestOptionDto -> {
+                                ItemOption itemOption = itemOptionRepository.findById(
+                                                orderRequestOptionDto.getOptionId())
+                                        .orElseThrow(() -> new GlobalCustomException(ErrorCode.ITEM_OPTION_NOT_FOUND));
+
+                                return OrderOption.builder()
+                                        .itemOptionId(itemOption)
+                                        .name(itemOption.getOption().getName())
+                                        .price(itemOption.getOption().getPrice())
+                                        .quantity(orderRequestOptionDto.getOptionQuantity())
+                                        .build();
+                            })
+                            .toList();
+
+                    int orderOptionsTotalPrice = orderOptions.stream()
+                            .mapToInt(option -> option.getPrice() * option.getQuantity())
+                            .sum();
+
+                    int totalOrderItemPrice = item.getPrice() * orderRequestItemDto.getItemQuantity() + orderOptionsTotalPrice;
+
+                    // OrderItem 생성
+                    OrderItem orderItem = OrderItem.builder()
+                            .item(item)
+                            .name(item.getName())
+                            .price(item.getPrice())
+                            .quantity(orderRequestItemDto.getItemQuantity())
+                            .totalPrice(totalOrderItemPrice)
+                            .build();
+
+                    // Cascade 설정이 ALL 이므로 OrderOption 입장에서 orderItem 을 개별적으로 set 해주지 않아도 됨
+                    orderItem.setOrderOptions(orderOptions);
+                    return orderItem;
+                })
+                .toList();
+
+        // Cascade 설정이 ALL 이므로 OrderItem 입장에서 order를 개별적으로 set 해주지 않아도 됨
         // 주문 생성
-        Order order = new Order();
-        order.setStudio(studio);
-        order.setUser(user);
-        order.setOrderDateTime(orderRequest.getOrderDateTime());
+        orderRepository.save(Order.builder()
+                .studio(studio)
+                .orderItems(orderItems)
+                .user(user)
+                .orderDateTime(dto.getOrderDateTime())
+                .build());
 
-        // 주문 항목 생성
-        List<OrderItem> orderItems = new ArrayList<>();
-        for (OrderRequestItemDto itemDto : orderRequest.getItemDtos()) {
-            // Item 조회
-            Item item = itemRepository.findById(itemDto.getItemId())
-                    .orElseThrow(() -> new GlobalCustomException(ErrorCode.ITEM_NOT_FOUND));
-
-            // OrderItem 생성
-            OrderItem orderItem = new OrderItem();
-            orderItem.setOrder(order);
-            orderItem.setItem(item);
-            orderItem.setName(item.getName());
-            orderItem.setQuantity(itemDto.getItemQuantity());
-
-            // 옵션 총 가격 계산
-            int optionsTotalPrice = 0;
-            List<OrderOption> orderOptions = new ArrayList<>();
-            for (OrderRequestOptionDto optionDto : itemDto.getOptionDtoList()) {
-                // ItemOption 조회
-                ItemOption itemOption = itemOptionRepository.findById(optionDto.getOptionId())
-                        .orElseThrow(() -> new GlobalCustomException(ErrorCode.ITEM_OPTION_NOT_FOUND));
-
-                // OrderOption 생성
-                OrderOption orderOption = new OrderOption();
-                orderOption.setOrderItem(orderItem);
-                orderOption.setItemOptionId(itemOption);
-                orderOption.setName(itemOption.getOption().getName());
-                orderOption.setPrice(itemOption.getOption().getPrice());
-                orderOption.setQuantity(optionDto.getOptionQuantity());
-
-                // 옵션 총 가격 계산
-                optionsTotalPrice += itemOption.getOption().getPrice() * optionDto.getOptionQuantity();
-                orderOptions.add(orderOption);
-            }
-
-            // OrderItem에 옵션 설정
-            orderItem.setOrderOptions(orderOptions);
-
-            // 상품 총 가격 (상품 + 옵션)
-            int itemTotalPrice = item.getPrice() * itemDto.getItemQuantity();
-            orderItem.setTotalPrice(itemTotalPrice + optionsTotalPrice);
-
-            orderItems.add(orderItem);
-        }
-        // Order에 OrderItem 설정
-        order.setOrderItems(orderItems);
-
-        // Order 저장
-        orderRepository.save(order);
         return true;
     }
-
-
-
-    //public boolean processPayment(Order orderId) {
-        //orderRepository.
-
-        //return true;
-    // }
-
-
-    // Order 엔티티를 OrderDetailDto로 변환하는 메서드
-    /*
-    private OrderDetailDto convertToDto(Order order) {
-        return OrderDetailDto.fromEntity(order);
-    }*/
-
-    // 장바구니 생성
-    /*
-    public Page<OrderDetailDto> getOrders(PageRequestDto dto, Pageable pageable){
-
-        Page<Order> orders = orderRepository.findAll(pageable);
-
-        return
-    }
-
-
-    // 주문서 조회
-    public OrderDetailDto getSearchOrders(Long orderId) {
-        // 주문 ID로 주문을 조회
-        Order orders = orderRepository.findOrdersWithDetails(orderId);
-        // 엔티티를 DTO로 변환
-        return OrderDetailDto.fromEntity(orders);
-    }
-    */
 }

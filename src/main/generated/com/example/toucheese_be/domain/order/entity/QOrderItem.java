@@ -24,7 +24,7 @@ public class QOrderItem extends EntityPathBase<OrderItem> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final com.example.toucheese_be.domain.item.entity.QItem Item;
+    public final com.example.toucheese_be.domain.item.entity.QItem item;
 
     public final StringPath name = createString("name");
 
@@ -32,9 +32,11 @@ public class QOrderItem extends EntityPathBase<OrderItem> {
 
     public final ListPath<OrderOption, QOrderOption> orderOptions = this.<OrderOption, QOrderOption>createList("orderOptions", OrderOption.class, QOrderOption.class, PathInits.DIRECT2);
 
+    public final NumberPath<Integer> price = createNumber("price", Integer.class);
+
     public final NumberPath<Integer> quantity = createNumber("quantity", Integer.class);
 
-    public final NumberPath<Integer> TotalPrice = createNumber("TotalPrice", Integer.class);
+    public final NumberPath<Integer> totalPrice = createNumber("totalPrice", Integer.class);
 
     public QOrderItem(String variable) {
         this(OrderItem.class, forVariable(variable), INITS);
@@ -54,7 +56,7 @@ public class QOrderItem extends EntityPathBase<OrderItem> {
 
     public QOrderItem(Class<? extends OrderItem> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.Item = inits.isInitialized("Item") ? new com.example.toucheese_be.domain.item.entity.QItem(forProperty("Item"), inits.get("Item")) : null;
+        this.item = inits.isInitialized("item") ? new com.example.toucheese_be.domain.item.entity.QItem(forProperty("item"), inits.get("item")) : null;
         this.order = inits.isInitialized("order") ? new QOrder(forProperty("order"), inits.get("order")) : null;
     }
 

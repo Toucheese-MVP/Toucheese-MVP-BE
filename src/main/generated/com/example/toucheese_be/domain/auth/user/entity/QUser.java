@@ -24,13 +24,13 @@ public class QUser extends EntityPathBase<User> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final StringPath name = createString("name");
-
     public final ListPath<com.example.toucheese_be.domain.order.entity.Order, com.example.toucheese_be.domain.order.entity.QOrder> orders = this.<com.example.toucheese_be.domain.order.entity.Order, com.example.toucheese_be.domain.order.entity.QOrder>createList("orders", com.example.toucheese_be.domain.order.entity.Order.class, com.example.toucheese_be.domain.order.entity.QOrder.class, PathInits.DIRECT2);
 
-    public final StringPath phoneNumber = createString("phoneNumber");
+    public final StringPath phone = createString("phone");
 
-    public final StringPath profile_img = createString("profile_img");
+    public final StringPath profileImg = createString("profileImg");
+
+    public final StringPath username = createString("username");
 
     public QUser(String variable) {
         super(User.class, forVariable(variable));

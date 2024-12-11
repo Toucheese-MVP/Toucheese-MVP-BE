@@ -16,5 +16,5 @@ import lombok.Setter;
 public class OrderRequestItemDto {
     private Long itemId;
     private Integer itemQuantity;
-    private List<OrderRequestOptionDto> optionDtoList;
+    private List<OrderRequestOptionDto> orderRequestOptionDtos;
 }

@@ -24,10 +24,11 @@ import org.hibernate.annotations.BatchSize;
 @Table(name = "orders")
 /* 주문 엔티티 */
 public class Order {
-    // 주문 ID
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private LocalDateTime orderDateTime;
+    private Integer totalPrice;
 
     // Studio과 연결
     @ManyToOne
@@ -38,9 +39,6 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
-    // 주문 시간
-    private LocalDateTime orderDateTime;
 
     // 주문 상태
     @Enumerated(EnumType.STRING)

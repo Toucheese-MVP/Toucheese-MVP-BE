@@ -16,5 +16,5 @@ public class OrderRequestDto {
     private String phone;
     private Long studioId;
     private LocalDateTime orderDateTime;
-    private List<OrderRequestItemDto> itemDtos;
+    private List<OrderRequestItemDto> orderRequestItemDtos;
 }

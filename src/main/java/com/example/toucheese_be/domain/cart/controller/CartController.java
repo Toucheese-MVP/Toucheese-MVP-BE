@@ -2,21 +2,31 @@ package com.example.toucheese_be.domain.cart.controller;
 
 
 import com.example.toucheese_be.domain.cart.service.CartService;
+import com.example.toucheese_be.domain.order.dto.request.OrderRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/api/v1/cart")
 @RequiredArgsConstructor
 public class CartController {
     private final CartService cartService;
 
     // 장바구니에 상품 추가
-    @PostMapping
-    public void addCartItem() {};
+//    @PostMapping("/items/add")
+//    public ResponseEntity<Boolean> addCartItem(
+//        @RequestBody
+//        OrderRequestDto dto
+//    ) {
+//        return cartService.addCartItem(dto);
+//    };
 
     // 장바구니 조회
     @GetMapping
