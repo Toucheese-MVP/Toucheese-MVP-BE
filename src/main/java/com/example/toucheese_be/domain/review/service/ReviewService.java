@@ -52,8 +52,8 @@ public class ReviewService {
 
         // 유저 프로필 이미지, 유저 이름
         UserProfileDto userProfileDto = UserProfileDto.builder()
-                .name(review.getUser().getName())
-                .profileImg(review.getUser().getProfile_img())
+                .name(review.getUser().getUsername())
+                .profileImg(review.getUser().getProfileImg())
                 .build();
 
         return ResponseEntity.ok(ReviewDetailDto.builder()

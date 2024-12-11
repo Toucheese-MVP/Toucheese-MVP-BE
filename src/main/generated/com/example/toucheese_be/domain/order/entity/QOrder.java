@@ -32,6 +32,8 @@ public class QOrder extends EntityPathBase<Order> {
 
     public final com.example.toucheese_be.domain.studio.entity.QStudio studio;
 
+    public final NumberPath<Integer> totalPrice = createNumber("totalPrice", Integer.class);
+
     public final com.example.toucheese_be.domain.auth.user.entity.QUser user;
 
     public QOrder(String variable) {

@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,6 +18,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 /* 주문 옵션 엔티티 */
@@ -25,6 +27,9 @@ public class OrderOption {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String name;
+    private Integer quantity;
+    private Integer price;
 
     // 주문 상품과 연결
     @ManyToOne(fetch = FetchType.LAZY)
@@ -35,13 +40,4 @@ public class OrderOption {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_option_id", nullable = false)
     private ItemOption itemOptionId;
-
-    // 옵션 이름
-    private String name;
-
-    // 옵션 수량
-    private Integer quantity;
-
-    // 옵션 가격
-    private Integer price;
 }

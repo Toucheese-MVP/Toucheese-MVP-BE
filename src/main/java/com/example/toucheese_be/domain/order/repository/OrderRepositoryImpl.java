@@ -54,8 +54,6 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
         Map<Long, List<OrderItem>> orderItemsMap = orderItemsWithOptions.stream()
                 .collect(Collectors.groupingBy(orderItem -> orderItem.getOrder().getId()));
 
-
-
         // 3. AdminOrderDto로 변환
         List<AdminOrderDto> adminOrderDtos = ordersWithItems.stream().map(orderEntity -> AdminOrderDto.builder()
                         .orderId(orderEntity.getId())
@@ -64,7 +62,7 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
                                 .filter(studioImage -> studioImage.getType().equals(StudioImageType.PROFILE))
                                 .toList().get(0).getImageUrl())
                         .orderDateTime(orderEntity.getOrderDateTime().toString())
-                        .userName(orderEntity.getUser().getName())
+                        .userName(orderEntity.getUser().getUsername())
                         .orderItems(orderItemsMap.getOrDefault(orderEntity.getId(), Collections.emptyList()).stream()
                                 .map(AdminOrderItemDto::fromEntity)
                                 .collect(Collectors.toList()))

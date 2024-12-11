@@ -10,30 +10,14 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/order")
 public class OrderController {
-    // TODO: 주문을 만드는 주문 생성 컨트롤러
-
     private final OrderService orderService;
-
-    // 주문서 결제(성공 = true, 실패 = false)
 
     @PostMapping("/create")
     public ResponseEntity<Boolean> getCreateOrder(
             @RequestBody
             OrderRequestDto orderRequestDto
     ){
-            boolean isOrderCreated = orderService.createOrder(orderRequestDto);
-            return ResponseEntity.ok(isOrderCreated);
-        }
-
-    // boolean paymentSuccess = orderService.processPayment(orderId);
-
-    /* 장바구니 생성 시 필요할 로직
-
-    public ResponseEntity<OrderDetailDto> getOrderDetails(
-            Order orderId
-    ) {
-        OrderDetailDto orderDetails = orderService.getSearchOrders(orderId.getId());
-
-        return ResponseEntity.ok(orderDetails);
-    }*/
+        boolean isOrderCreated = orderService.createOrder(orderRequestDto);
+        return ResponseEntity.ok(isOrderCreated);
+    }
 }
