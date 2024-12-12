@@ -1,4 +1,4 @@
-package com.example.toucheese_be.domain.auth.user.dto;
+package com.example.toucheese_be.domain.auth.user.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

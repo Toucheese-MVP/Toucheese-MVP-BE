@@ -24,11 +24,19 @@ public class QUser extends EntityPathBase<User> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final StringPath nickname = createString("nickname");
+
     public final ListPath<com.example.toucheese_be.domain.order.entity.Order, com.example.toucheese_be.domain.order.entity.QOrder> orders = this.<com.example.toucheese_be.domain.order.entity.Order, com.example.toucheese_be.domain.order.entity.QOrder>createList("orders", com.example.toucheese_be.domain.order.entity.Order.class, com.example.toucheese_be.domain.order.entity.QOrder.class, PathInits.DIRECT2);
+
+    public final StringPath password = createString("password");
 
     public final StringPath phone = createString("phone");
 
     public final StringPath profileImg = createString("profileImg");
+
+    public final EnumPath<com.example.toucheese_be.domain.auth.user.constant.Role> role = createEnum("role", com.example.toucheese_be.domain.auth.user.constant.Role.class);
+
+    public final EnumPath<com.example.toucheese_be.domain.auth.user.constant.SocialType> socialType = createEnum("socialType", com.example.toucheese_be.domain.auth.user.constant.SocialType.class);
 
     public final StringPath username = createString("username");
 

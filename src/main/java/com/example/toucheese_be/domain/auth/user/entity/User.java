@@ -1,7 +1,8 @@
 package com.example.toucheese_be.domain.auth.user.entity;
 
+import com.example.toucheese_be.domain.auth.user.constant.Role;
+import com.example.toucheese_be.domain.auth.user.constant.SocialType;
 import com.example.toucheese_be.domain.order.entity.Order;
-import com.example.toucheese_be.domain.review.entity.Review;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,17 +23,19 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(length = 150)
+    @Column(nullable = false, unique = true)
+    private String email;
+    private String password;
     private String username;
-
-    @Column(length = 150)
+    private String nickname;
+    private String phone;
     private String profileImg;
 
-    private String phone;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
-    @Column(length = 150, nullable = false)
-    private String email;
+    @Enumerated(EnumType.STRING)
+    private SocialType socialType;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();

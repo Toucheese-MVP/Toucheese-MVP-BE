@@ -24,15 +24,25 @@ repositories {
 }
 
 dependencies {
-
 	// Spring JPA
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 
 	// oauth2
-	// implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
 	// Spring Security
-	// implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	testImplementation 'org.springframework.security:spring-security-test'
+
+	// redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	// jjwt
+	implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.3'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.3'
 
 	// Spring Validation
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
@@ -41,30 +51,23 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
 	// Lombok
-	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-
-	runtimeOnly 'com.h2database:h2'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
-
-	// Test 파일 관련 의존성 추가 사항
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	// testImplementation 'org.springframework.security:spring-security-test'
 
 	// JUnit
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-	//querydsl
+	// querydsl
 	implementation 'com.querydsl:querydsl-jpa:5.1.0:jakarta'
 	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
 	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
 	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 
-	// jpa PostgreSQL 연동을 위한 의존성 추가
+	// PostgreSQL
 	implementation group: 'org.postgresql', name:'postgresql', version: '42.2.19'
 	runtimeOnly 'org.postgresql:postgresql'
 
-	// assertThat 의존성 추가
+	// assertThat
 	testImplementation 'org.assertj:assertj-core:3.24.2'
 
 	// Email

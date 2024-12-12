@@ -1,6 +1,6 @@
 package com.example.toucheese_be.domain.review.dto;
 
-import com.example.toucheese_be.domain.auth.user.dto.UserProfileDto;
+import com.example.toucheese_be.domain.auth.user.dto.response.UserProfileDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
