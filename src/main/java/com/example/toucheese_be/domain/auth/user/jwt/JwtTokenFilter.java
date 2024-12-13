@@ -1,35 +1,36 @@
 package com.example.toucheese_be.domain.auth.user.jwt;
 
 
-import com.example.toucheese_be.domain.auth.user.entity.PrincipalDetails;
-import com.example.toucheese_be.domain.auth.user.service.PrincipalDetailsService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
-import org.springframework.security.authentication.AbstractAuthenticationToken;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 @Slf4j
 @RequiredArgsConstructor
 public class JwtTokenFilter extends OncePerRequestFilter {
     private final JwtTokenUtils jwtTokenUtils;
-    private final PrincipalDetailsService principalDetailsService;
 
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+    protected boolean shouldNotFilter(HttpServletRequest request) {
         String[] excludePath = {
                 "/api/v1/studio/**",
                 "/api/v1/order/**",
-                "/api/v1/auth/**"
-                //"/api/v1/admin/**"
+                "/api/v1/auth/**",
+                "/api/v1/admin/**"
         };
         String path = request.getRequestURI();
         return Arrays.stream(excludePath).anyMatch(path::startsWith);
@@ -41,32 +42,39 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain
     ) throws ServletException, IOException {
-        String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        try {
+            String token = resolveToken(request);
+            if (token != null && jwtTokenUtils.validate(token)) {
+                Authentication authentication = jwtTokenUtils.getAuthentication(token);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
             filterChain.doFilter(request, response);
-            return;
+        } catch (JwtException | IllegalArgumentException e) {
+            log.error("JWT 검증 실패: {}", e.getMessage());
+            sendErrorResponse(response, e.getMessage());
         }
+    }
 
-        String accessToken = authHeader.split(" ")[1];
-        // 토큰 소멸 시간 검증
-        if (jwtTokenUtils.isExpired(accessToken)) {
-            log.info("accessToken 이 만료 되었습니다.");
-            filterChain.doFilter(request, response);
-            return;
+    private String resolveToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")) {
+            return bearerToken.substring(7);
         }
-        String email = jwtTokenUtils.getEmail(accessToken);
-        PrincipalDetails principalDetails = principalDetailsService.loadUserByUsername(email);
-        AbstractAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                principalDetails, accessToken, principalDetails.getAuthorities()
-        );
-        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        return null;
+    }
 
-        log.info("현재 사용자 : {}", SecurityContextHolder.getContext().getAuthentication().getName());
-        log.info("이메일 : {}", email);
-        log.info("권한 : {}", SecurityContextHolder.getContext().getAuthentication().getAuthorities());
+    private void sendErrorResponse(HttpServletResponse response, String errorMessage) throws IOException {
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json;charset=UTF-8");
 
-        // 다음 필터 실행
-        filterChain.doFilter(request, response);
+        Map<String, String> errors = new HashMap<>();
+        errors.put("error", "Unauthorized");
+        errors.put("message", errorMessage);
+
+        try (PrintWriter writer = response.getWriter()) {
+            writer.write(new ObjectMapper().writeValueAsString(errors));
+            writer.flush();
+        }
     }
 }
 

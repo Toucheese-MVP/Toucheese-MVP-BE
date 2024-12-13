@@ -42,7 +42,7 @@ public class PrincipalDetailsService implements UserDetailsService {
                 .password(passwordEncoder.encode(dto.getPassword()))
                 .nickname(dto.getNickname())
                 .role(Role.MEMBER)
-                .socialType(SocialType.none) // 대소문자 일관성 주의
+                .socialType(SocialType.NONE)
                 .build());
 
         return UserDto.fromEntity(savedUser);
@@ -50,18 +50,15 @@ public class PrincipalDetailsService implements UserDetailsService {
 
     // 일반 로그인
     public JwtTokenDto signIn(SignInDto dto) {
-        // 이메일 체크
+        // 로그인 시만 DB 접근 (이외의 요청은 DB 접근 X)
         User user = userRepository.findByEmail(dto.getEmail())
                 .orElseThrow(() -> new GlobalCustomException(ErrorCode.SIGN_IN_EMAIL_NOT_FOUND));
-
-        // 이메일에 대한 비밀번호 체크
         if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
             throw new GlobalCustomException(ErrorCode.SIGN_IN_PASSWORD_NOT_MATCH);
         }
 
-        // accesToken 발급하기 (RTK 는 현재는 고려 X)
-        // https://jofestudio.tistory.com/114
-        String accessToken = jwtTokenUtils.generateAccessToken(user.getEmail());
+        // JWT 발급
+        String accessToken = jwtTokenUtils.generateAccessToken(user);
 
         return JwtTokenDto.builder()
                 .accessToken(accessToken)
@@ -69,10 +66,14 @@ public class PrincipalDetailsService implements UserDetailsService {
     }
 
     @Override
-    // username -> email 로 변경
     public PrincipalDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new GlobalCustomException(ErrorCode.USER_NOT_FOUND));
-        return new PrincipalDetails(user);
+        return PrincipalDetails.builder()
+                .userId(user.getId())
+                //.username(user.getUsername())
+                .email(user.getEmail())
+                .authorities(user.getRole().getRoles())
+                .build();
     }
 }

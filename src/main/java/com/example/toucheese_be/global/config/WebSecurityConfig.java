@@ -2,7 +2,6 @@ package com.example.toucheese_be.global.config;
 
 import com.example.toucheese_be.domain.auth.user.jwt.JwtTokenFilter;
 import com.example.toucheese_be.domain.auth.user.jwt.JwtTokenUtils;
-import com.example.toucheese_be.domain.auth.user.service.PrincipalDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +15,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class WebSecurityConfig {
     private final JwtTokenUtils jwtTokenUtils;
-    private final PrincipalDetailsService principalDetailsService;
     private final PermitAllPath permitAllPath;
 
     @Bean
@@ -32,7 +30,7 @@ public class WebSecurityConfig {
                         .requestMatchers(permitAllPath.getPaths())
                         .permitAll()
                         //.requestMatchers().hasRole("GUEST")
-                        //.requestMatchers().hasRole("MEMBER")
+                        //.requestMatchers("/api/v1/studio/**").hasRole("MEMBER")
                         //.requestMatchers().hasRole("ADMIN")
                 )
                 // JWT를 사용하기 때문에 보안 관련 세션 해제
@@ -41,10 +39,7 @@ public class WebSecurityConfig {
                 )
                 // JWT 필터를 권한 필터 앞에 삽입
                 .addFilterBefore(
-                        new JwtTokenFilter(
-                                jwtTokenUtils,
-                                principalDetailsService
-                        ),
+                        new JwtTokenFilter(jwtTokenUtils),
                         UsernamePasswordAuthenticationFilter.class
                 );
         return http.build();
