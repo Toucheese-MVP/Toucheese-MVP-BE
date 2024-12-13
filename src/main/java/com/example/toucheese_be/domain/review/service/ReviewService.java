@@ -9,7 +9,7 @@ import com.example.toucheese_be.domain.studio.dto.StudioInfoDto;
 import com.example.toucheese_be.domain.studio.dto.StudioReviewDetailDto;
 import com.example.toucheese_be.domain.studio.entity.Studio;
 import com.example.toucheese_be.domain.studio.repository.StudioRepository;
-import com.example.toucheese_be.domain.auth.user.dto.UserProfileDto;
+import com.example.toucheese_be.domain.auth.user.dto.response.UserProfileDto;
 import com.example.toucheese_be.global.error.ErrorCode;
 import com.example.toucheese_be.global.error.GlobalCustomException;
 import jakarta.persistence.EntityNotFoundException;

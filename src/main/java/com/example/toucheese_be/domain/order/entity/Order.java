@@ -37,7 +37,7 @@ public class Order {
 
     // 사용자와 연결
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     private User user;
 
     // 주문 상태
