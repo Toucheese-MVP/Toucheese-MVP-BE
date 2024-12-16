@@ -33,6 +33,7 @@ public class StudioDutyDateDto {
                 .closeTime(entity.getCloseTime())
                 .breakStartTime(entity.getBreakStartTime())
                 .breakEndTime(entity.getBreakEndTime())
+                .isHoliday(entity.isHoliday())
                 .build();
     }
 }

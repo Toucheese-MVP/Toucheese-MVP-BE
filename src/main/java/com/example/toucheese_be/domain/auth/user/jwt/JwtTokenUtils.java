@@ -39,7 +39,7 @@ public class JwtTokenUtils {
         Date now = new Date();
         Date accessExpiration = new Date(now.getTime() + ACCESS_TOKEN_EXPIRATION_TIME);
         return Jwts.builder()
-                //.subject(user.getUsername())
+                .subject(user.getUsername())
                 .claim("userId", user.getId())
                 .claim("email", user.getEmail())
                 .claim("auth", authorities)
@@ -63,7 +63,7 @@ public class JwtTokenUtils {
 
         PrincipalDetails principalDetails = PrincipalDetails.builder()
                 .userId(userId)
-                //.username(claims.getSubject())
+                .username(claims.getSubject())
                 .email(email)
                 .authorities(auth)
                 .build();
