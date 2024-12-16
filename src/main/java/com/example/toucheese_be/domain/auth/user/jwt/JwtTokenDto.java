@@ -13,8 +13,5 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class JwtTokenDto {
-    // private Long userId;
     private String accessToken;
-    // private LocalDateTime expiredDate;
-    // private Long expiredSecond;
 }

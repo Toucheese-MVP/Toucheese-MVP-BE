@@ -42,7 +42,6 @@ public class PrincipalDetailsService implements UserDetailsService {
                 .password(passwordEncoder.encode(dto.getPassword()))
                 .nickname(dto.getNickname())
                 .role(Role.MEMBER)
-                .socialType(SocialType.NONE)
                 .build());
 
         return UserDto.fromEntity(savedUser);
@@ -65,13 +64,15 @@ public class PrincipalDetailsService implements UserDetailsService {
                 .build();
     }
 
+    // TODO: 로그아웃
+
     @Override
     public PrincipalDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new GlobalCustomException(ErrorCode.USER_NOT_FOUND));
         return PrincipalDetails.builder()
                 .userId(user.getId())
-                //.username(user.getUsername())
+                .username(user.getUsername())
                 .email(user.getEmail())
                 .authorities(user.getRole().getRoles())
                 .build();
