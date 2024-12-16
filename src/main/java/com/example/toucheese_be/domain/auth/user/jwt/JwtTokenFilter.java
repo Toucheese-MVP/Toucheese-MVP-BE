@@ -36,7 +36,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 "/oauth2/**",
                 "/static/**",
                 "/login/oauth2/code/google",
-                "/oauth2/authorization/**",
+                "/oauth2/authorization/google",
 
         };
         String path = request.getRequestURI();

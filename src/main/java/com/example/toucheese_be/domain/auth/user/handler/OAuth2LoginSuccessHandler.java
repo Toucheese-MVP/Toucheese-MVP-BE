@@ -25,12 +25,13 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     ) throws IOException {
         log.info("OAuth2 Login 성공");
 
-        // principal 정보 가져오기
-        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-        Long userId = principalDetails.getUserId();
-        String email = principalDetails.getEmail();
-
         // jwt 토큰 발급
-        // String accessToken = jwtTokenUtils.generateAccessToken(principalDetails);
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        String accessToken = jwtTokenUtils.generateAccessToken(principalDetails);
+
+        // JSON 형태로 응답
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write("{\"accessToken\": \"" + accessToken + "\"}");
     }
 }

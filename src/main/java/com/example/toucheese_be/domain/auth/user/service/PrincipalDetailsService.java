@@ -57,7 +57,9 @@ public class PrincipalDetailsService implements UserDetailsService {
         }
 
         // JWT 발급
-        String accessToken = jwtTokenUtils.generateAccessToken(user);
+        // 아래 코드가 유효하려면 회원가입 시점에 PrincipalDetails 가 만들어지는 코드를 추가해야함
+        PrincipalDetails principalDetails = loadUserByUsername(user.getEmail());
+        String accessToken = jwtTokenUtils.generateAccessToken(principalDetails);
 
         return JwtTokenDto.builder()
                 .accessToken(accessToken)

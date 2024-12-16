@@ -34,14 +34,14 @@ public class JwtTokenUtils {
 
 
     // JWT (accessToken) 생성
-    public String generateAccessToken(User user) {
-        String authorities = user.getRole().getRoles();
+    public String generateAccessToken(PrincipalDetails principalDetails) {
+        String authorities = principalDetails.getAuthorities().toString();
         Date now = new Date();
         Date accessExpiration = new Date(now.getTime() + ACCESS_TOKEN_EXPIRATION_TIME);
         return Jwts.builder()
-                .subject(user.getUsername())
-                .claim("userId", user.getId())
-                .claim("email", user.getEmail())
+                .subject(principalDetails.getUsername())
+                .claim("userId", principalDetails.getUserId())
+                .claim("email", principalDetails.getEmail())
                 .claim("auth", authorities)
                 .issuedAt(now)
                 .expiration(accessExpiration)

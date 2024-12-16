@@ -26,6 +26,9 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
+//                .oauth2Login(oauth2 -> oauth2
+//                        .loginPage("/oauth2/authorization/google") // OAuth2 로그인 페이지 설정
+//                )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(permitAllPath.getPaths())
                         .permitAll()

@@ -15,6 +15,6 @@ public class PermitAllPath {
             "/oauth2/**",
             "/static/**",
             "/login/oauth2/code/google",
-            "/oauth2/authorization/google"
+            "/oauth2/authorization/**"
     };
 }
