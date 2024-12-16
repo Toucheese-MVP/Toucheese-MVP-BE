@@ -7,17 +7,18 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -30,7 +31,13 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 "/api/v1/studio/**",
                 "/api/v1/order/**",
                 "/api/v1/auth/**",
-                "/api/v1/admin/**"
+                "/api/v1/admin/**",
+                "/index.html",
+                "/oauth2/**",
+                "/static/**",
+                "/login/oauth2/code/google",
+                "/oauth2/authorization/**",
+
         };
         String path = request.getRequestURI();
         return Arrays.stream(excludePath).anyMatch(path::startsWith);

@@ -10,6 +10,11 @@ public class PermitAllPath {
             "/api/v1/studio/**",
             "/api/v1/order/**",
             "/api/v1/auth/**",
-            "/api/v1/admin/**"
+            "/api/v1/admin/**",
+            "/index.html",
+            "/oauth2/**",
+            "/static/**",
+            "/login/oauth2/code/google",
+            "/oauth2/authorization/google"
     };
 }
