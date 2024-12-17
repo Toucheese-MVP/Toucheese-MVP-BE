@@ -1,6 +1,6 @@
 package com.example.toucheese_be.global.util;
 
-import com.example.toucheese_be.domain.auth.user.entity.PrincipalDetails;
+import com.example.toucheese_be.domain.user.entity.PrincipalDetails;
 import com.example.toucheese_be.global.error.ErrorCode;
 import com.example.toucheese_be.global.error.GlobalCustomException;
 import lombok.RequiredArgsConstructor;

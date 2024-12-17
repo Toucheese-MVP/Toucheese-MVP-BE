@@ -34,7 +34,7 @@ public class QOrder extends EntityPathBase<Order> {
 
     public final NumberPath<Integer> totalPrice = createNumber("totalPrice", Integer.class);
 
-    public final com.example.toucheese_be.domain.auth.user.entity.QUser user;
+    public final com.example.toucheese_be.domain.user.entity.QUser user;
 
     public QOrder(String variable) {
         this(Order.class, forVariable(variable), INITS);
@@ -55,7 +55,7 @@ public class QOrder extends EntityPathBase<Order> {
     public QOrder(Class<? extends Order> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.studio = inits.isInitialized("studio") ? new com.example.toucheese_be.domain.studio.entity.QStudio(forProperty("studio"), inits.get("studio")) : null;
-        this.user = inits.isInitialized("user") ? new com.example.toucheese_be.domain.auth.user.entity.QUser(forProperty("user")) : null;
+        this.user = inits.isInitialized("user") ? new com.example.toucheese_be.domain.user.entity.QUser(forProperty("user")) : null;
     }
 
 }

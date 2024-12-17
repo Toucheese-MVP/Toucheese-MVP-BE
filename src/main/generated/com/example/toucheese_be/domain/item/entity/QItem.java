@@ -32,7 +32,7 @@ public class QItem extends EntityPathBase<Item> {
 
     public final ListPath<ItemOption, QItemOption> itemOptions = this.<ItemOption, QItemOption>createList("itemOptions", ItemOption.class, QItemOption.class, PathInits.DIRECT2);
 
-    public final ListPath<com.example.toucheese_be.domain.review.entity.Review, com.example.toucheese_be.domain.review.entity.QReview> itemReview = this.<com.example.toucheese_be.domain.review.entity.Review, com.example.toucheese_be.domain.review.entity.QReview>createList("itemReview", com.example.toucheese_be.domain.review.entity.Review.class, com.example.toucheese_be.domain.review.entity.QReview.class, PathInits.DIRECT2);
+    public final ListPath<com.example.toucheese_be.domain.studio.entity.Review, com.example.toucheese_be.domain.studio.entity.QReview> itemReview = this.<com.example.toucheese_be.domain.studio.entity.Review, com.example.toucheese_be.domain.studio.entity.QReview>createList("itemReview", com.example.toucheese_be.domain.studio.entity.Review.class, com.example.toucheese_be.domain.studio.entity.QReview.class, PathInits.DIRECT2);
 
     public final StringPath name = createString("name");
 

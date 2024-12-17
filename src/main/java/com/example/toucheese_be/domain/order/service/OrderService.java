@@ -1,6 +1,6 @@
 package com.example.toucheese_be.domain.order.service;
 
-import com.example.toucheese_be.domain.auth.user.entity.User;
+import com.example.toucheese_be.domain.user.entity.User;
 import com.example.toucheese_be.domain.item.entity.Item;
 import com.example.toucheese_be.domain.item.entity.ItemOption;
 import com.example.toucheese_be.domain.item.repository.ItemOptionRepository;
@@ -10,7 +10,7 @@ import com.example.toucheese_be.domain.order.entity.Order;
 import com.example.toucheese_be.domain.order.entity.OrderItem;
 import com.example.toucheese_be.domain.order.entity.OrderOption;
 import com.example.toucheese_be.domain.order.repository.OrderRepository;
-import com.example.toucheese_be.domain.auth.user.repository.UserRepository;
+import com.example.toucheese_be.domain.user.repository.UserRepository;
 
 import com.example.toucheese_be.domain.studio.entity.Studio;
 import com.example.toucheese_be.domain.studio.repository.StudioRepository;

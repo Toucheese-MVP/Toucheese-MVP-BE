@@ -1,8 +1,8 @@
 package com.example.toucheese_be.domain.order.repository;
 
-import com.example.toucheese_be.domain.auth.admin.dto.AdminOrderDto;
+import com.example.toucheese_be.domain.user.dto.response.AdminOrderDto;
 
-import com.example.toucheese_be.domain.auth.admin.dto.AdminOrderItemDto;
+import com.example.toucheese_be.domain.user.dto.response.AdminOrderItemDto;
 import com.example.toucheese_be.domain.order.entity.Order;
 import com.example.toucheese_be.domain.order.entity.OrderItem;
 import com.example.toucheese_be.domain.order.entity.QOrder;

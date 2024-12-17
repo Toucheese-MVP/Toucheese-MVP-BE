@@ -1,11 +1,10 @@
 package com.example.toucheese_be.domain.order.entity;
 
 import com.example.toucheese_be.domain.order.entity.constant.OrderStatus;
-import com.example.toucheese_be.domain.auth.user.entity.User;
+import com.example.toucheese_be.domain.user.entity.User;
 import com.example.toucheese_be.domain.studio.entity.Studio;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
