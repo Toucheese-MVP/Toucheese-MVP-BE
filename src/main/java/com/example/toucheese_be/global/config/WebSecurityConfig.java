@@ -35,7 +35,9 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/api/v1/studio/**",
-                                "/api/v1/order/**"
+                                "/api/v1/order/**",
+                                "/api/v1/toss/**",
+                                "/api/v1/admin/**"
                         )
                         .authenticated()
                         .requestMatchers(
