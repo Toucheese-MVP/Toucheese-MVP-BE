@@ -42,7 +42,7 @@ public class Order {
     // 주문 상태
     @Enumerated(EnumType.STRING)
     @Builder.Default
-    private OrderStatus status = OrderStatus.KEEP;
+    private OrderStatus status = OrderStatus.KEEP_RESERVATION;
 
     // 주문 상품과 연결
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
