@@ -1,5 +1,6 @@
 package com.example.toucheese_be.domain.order.service;
 
+import com.example.toucheese_be.domain.order.dto.OrderDetailDto;
 import com.example.toucheese_be.domain.user.entity.User;
 import com.example.toucheese_be.domain.item.entity.Item;
 import com.example.toucheese_be.domain.item.entity.ItemOption;
@@ -96,5 +97,9 @@ public class OrderService {
         order.setOrderItems(orderItems);
         orderRepository.save(order);
         return true;
+    }
+
+    public List<String> checkedSchedule(Long userId) {
+        return null;
     }
 }

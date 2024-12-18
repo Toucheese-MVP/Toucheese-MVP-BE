@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/order")
@@ -19,5 +21,15 @@ public class OrderController {
     ){
         boolean isOrderCreated = orderService.createOrder(orderRequestDto);
         return ResponseEntity.ok(isOrderCreated);
+    }
+
+    @GetMapping("/{userId}/schedule")
+    public ResponseEntity<List<String>> getOrderSchedule(
+            @PathVariable
+            Long userId
+    ){
+        List<String> isOrderScheduled = orderService.checkedSchedule(userId);
+
+        return ResponseEntity.ok(isOrderScheduled);
     }
 }
