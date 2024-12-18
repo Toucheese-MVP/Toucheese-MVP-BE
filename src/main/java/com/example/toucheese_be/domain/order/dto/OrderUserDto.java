@@ -1,6 +1,5 @@
 package com.example.toucheese_be.domain.order.dto;
 
-import com.example.toucheese_be.domain.auth.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
