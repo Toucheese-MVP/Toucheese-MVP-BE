@@ -9,13 +9,16 @@ import com.example.toucheese_be.domain.user.dto.request.CreateUserDto;
 import com.example.toucheese_be.domain.user.dto.request.SignInDto;
 import com.example.toucheese_be.domain.user.dto.response.UserDto;
 import com.example.toucheese_be.domain.user.entity.User;
-import com.example.toucheese_be.domain.user.jwt.JwtTokenDto;
+import com.example.toucheese_be.domain.user.jwt.TokenRequestDto;
+import com.example.toucheese_be.domain.user.jwt.TokenResponseDto;
 import com.example.toucheese_be.domain.user.repository.UserRepository;
 import com.example.toucheese_be.global.error.ErrorCode;
 import com.example.toucheese_be.global.error.GlobalCustomException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,8 +31,13 @@ public class PrincipalDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenUtils jwtTokenUtils;
+    private final RefreshTokenService refreshTokenService;
 
-    // 일반 회원가입
+    /**
+     * 일반 회원가입
+     * @param dto
+     * @return
+     */
     public UserDto signUp(CreateUserDto dto) {
         if (userRepository.existsByEmail(dto.getEmail())) {
             throw new GlobalCustomException(ErrorCode.SIGN_UP_DUPLICATED_EMAIL);
@@ -49,8 +57,12 @@ public class PrincipalDetailsService implements UserDetailsService {
         return UserDto.fromEntity(savedUser);
     }
 
-    // 일반 로그인
-    public JwtTokenDto signIn(SignInDto dto) {
+    /**
+     * 일반 로그인
+     * @param dto
+     * @return
+     */
+    public String signIn(SignInDto dto) {
         // 로그인 시만 DB 접근 (이외의 요청은 DB 접근 X)
         User user = userRepository.findByEmail(dto.getEmail())
                 .orElseThrow(() -> new GlobalCustomException(ErrorCode.SIGN_IN_EMAIL_NOT_FOUND));
@@ -64,8 +76,12 @@ public class PrincipalDetailsService implements UserDetailsService {
         return jwtTokenUtils.generateAccessToken(principalDetails);
     }
 
-    // 소셜 로그인
-    public JwtTokenDto oAuthSignIn(OAuthSignInDto dto) {
+    /**
+     * 소셜 로그인
+     * @param dto
+     * @return
+     */
+    public TokenResponseDto oAuthSignIn(OAuthSignInDto dto) {
         // socialId 존재 유무 판단
         Optional<User> optionalUser = userRepository.findBySocialId(dto.getSocialId());
         PrincipalDetails principalDetails;
@@ -92,8 +108,54 @@ public class PrincipalDetailsService implements UserDetailsService {
             principalDetails = new PrincipalDetails(user);
         }
 
-        // jwt 토큰 발급
-        return jwtTokenUtils.generateAccessToken(principalDetails);
+        String accessToken = jwtTokenUtils.generateAccessToken(principalDetails);
+        String refreshToken = jwtTokenUtils.generateRefreshToken();
+
+        refreshTokenService.saveRefreshToken(principalDetails.getEmail(), refreshToken);
+
+        return TokenResponseDto.builder()
+                .accessToken(accessToken)
+                .issuedAt(jwtTokenUtils.getClaims(accessToken).getIssuedAt())
+                .expiration(jwtTokenUtils.getClaims(accessToken).getExpiration())
+                .refreshToken(refreshToken)
+                .build();
+    }
+
+    /**
+     * accessToken, refreshToken 재발급
+     * @param dto
+     * @return
+     */
+    public TokenResponseDto refreshAccessToken(TokenRequestDto dto) {
+        String accessToken = dto.getAccessToken();
+        String refreshToken = dto.getRefreshToken();
+        String email = jwtTokenUtils.extractEmailFromToken(accessToken);
+
+        String storedRefreshToken = refreshTokenService.getRefreshToken(email);
+        // refresh token 불일치
+        if (storedRefreshToken == null || !storedRefreshToken.equals(refreshToken)) {
+            throw new GlobalCustomException(ErrorCode.REFRESH_TOKEN_NOT_EQAUL);
+        }
+        // refresh token 일치
+        else {
+            // 새로운 ATK, RTK 생성
+            PrincipalDetails principalDetails = loadUserByUsername(email);
+            String newAccessToken = jwtTokenUtils.generateAccessToken(principalDetails);
+            String newRefreshToken = jwtTokenUtils.generateRefreshToken();
+
+            refreshTokenService.deleteRefreshToken(email);
+            refreshTokenService.saveRefreshToken(email, newRefreshToken);
+
+            log.info("새로운 Access Token 및 Refresh Token 발급 성공. 사용지: {}", email);
+
+            // 응답 DTO
+            return TokenResponseDto.builder()
+                    .accessToken(newAccessToken)
+                    .issuedAt(jwtTokenUtils.getClaims(newAccessToken).getIssuedAt())
+                    .expiration(jwtTokenUtils.getClaims(newAccessToken).getExpiration())
+                    .refreshToken(newRefreshToken)
+                    .build();
+        }
     }
 
     @Override

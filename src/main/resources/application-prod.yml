@@ -1,0 +1,47 @@
+jwt:
+  header: Authorization
+  secret: YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd6eXoxMjMxMjMxMjMxMjMxMjMxMzEyMzEyMzEzMTIzMTIzMTIzMTMxMjMxMzEzMTMxMjM
+
+spring:
+  datasource:
+    url: jdbc:postgresql://db-toucheese-2.cja2kuiisy1n.ap-northeast-2.rds.amazonaws.com/postgres
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      show-sql: true
+      format_sql: true
+      highlight_sql: true
+      use_sql_comments: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: toucheesebe@gmail.com
+    password: ${SMTP_PASSWORD}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: debug
+        stat: debug
+        type:
+          descriptor:
+            sql: trace
+      springframework:
+        security: debug
