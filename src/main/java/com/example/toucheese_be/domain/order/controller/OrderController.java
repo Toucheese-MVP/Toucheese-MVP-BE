@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,11 +26,11 @@ public class OrderController {
     }
 
     @GetMapping("/{userId}/schedule")
-    public ResponseEntity<List<OrderDetailDto>> getOrderSchedule(
+    public ResponseEntity<Map<String, List<OrderDetailDto>>> getOrderSchedule(
             @PathVariable
             Long userId
     ){
-        List<OrderDetailDto> isOrderScheduled = orderService.checkedSchedule(userId);
+        Map<String, List<OrderDetailDto>> isOrderScheduled = orderService.checkedSchedule(userId);
 
         return ResponseEntity.ok(isOrderScheduled);
     }

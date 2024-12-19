@@ -1,6 +1,7 @@
 package com.example.toucheese_be.domain.order.service;
 
 import com.example.toucheese_be.domain.order.dto.OrderDetailDto;
+import com.example.toucheese_be.domain.order.entity.constant.OrderStatus;
 import com.example.toucheese_be.domain.user.entity.User;
 import com.example.toucheese_be.domain.item.entity.Item;
 import com.example.toucheese_be.domain.item.entity.ItemOption;
@@ -21,7 +22,10 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -99,7 +103,30 @@ public class OrderService {
         return true;
     }
 
-    public List<OrderDetailDto> checkedSchedule(Long userId) {
-        return null;
+    // 예약 일정 탭 구현
+    public Map<String, List<OrderDetailDto>> checkedSchedule(Long userId) {
+        // 사용자 예약 주문을 사용자 ID로 조회
+        List<Order> orders = orderRepository.findByUserId(userId);
+
+        // 결과를 저장할 맵 생성
+        Map<String, List<OrderDetailDto>> scheduleMap = new HashMap<>();
+        scheduleMap.put("다가오는 예약 일정", new ArrayList<>());
+        scheduleMap.put("이전 예약 일정", new ArrayList<>());
+
+        // 주문이 없는 경우 빈 리스트를 반환
+        if(orders.isEmpty()){
+            return scheduleMap;
+        }
+        // 주문 상태에 따라 리스트에 추가
+        for(Order order : orders){
+            OrderStatus orderStatus = order.getStatus();
+            List<OrderDetailDto> orderDetailDtos = order.getOrderDetails().stream()
+                    .map()
+                    .collect();
+        }
+
     }
+
+
+
 }
