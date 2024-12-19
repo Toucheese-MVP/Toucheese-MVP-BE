@@ -1,15 +1,11 @@
 package com.example.toucheese_be.global.config;
 
-import com.example.toucheese_be.domain.user.handler.OAuth2LoginSuccessHandler;
 import com.example.toucheese_be.domain.user.jwt.JwtTokenFilter;
 import com.example.toucheese_be.domain.user.jwt.JwtTokenUtils;
-import com.example.toucheese_be.domain.user.service.PrincipalDetailsService;
-import com.example.toucheese_be.domain.user.service.PrincipalOAuth2UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -20,8 +16,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class WebSecurityConfig {
     private final JwtTokenUtils jwtTokenUtils;
-    private final PrincipalOAuth2UserService principalOAuth2UserService;
-    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(
@@ -48,10 +42,7 @@ public class WebSecurityConfig {
                                 "/api/v1/admin/**"
                         ).hasRole("ADMIN")
                         .requestMatchers(
-                                "/index.html",
-                                "/static/**",
-                                "/login/**",
-                                "/oauth2/**"
+                                "/api/v1/auth/**"
                         )
                         .permitAll()
                 )
@@ -59,17 +50,6 @@ public class WebSecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                .oauth2Login(oauth2 -> oauth2
-                        .userInfoEndpoint((userInfoEndpointConfig -> userInfoEndpointConfig
-                                .userService(principalOAuth2UserService)))
-                        .successHandler(oAuth2LoginSuccessHandler))
-                // 사용자가 인증되지 않은 경우 리다이렉트를 막고 대신 에러 처리
-                .exceptionHandling(exception -> exception
-                        .authenticationEntryPoint((request, response, authException) -> {
-                            response.setContentType("application/json;charset=UTF-8");
-                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                            response.getWriter().write("{\"error\": \"Unauthorized access\"}");
-                        }))
                 // JWT 필터를 권한 필터 앞에 삽입
                 .addFilterBefore(
                         new JwtTokenFilter(jwtTokenUtils),

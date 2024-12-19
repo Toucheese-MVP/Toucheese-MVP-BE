@@ -1,7 +1,7 @@
 package com.example.toucheese_be.domain.user.dto.response;
 
 import com.example.toucheese_be.domain.user.constant.Role;
-import com.example.toucheese_be.domain.user.constant.SocialType;
+import com.example.toucheese_be.domain.user.constant.SocialProvider;
 import com.example.toucheese_be.domain.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,7 +23,7 @@ public class UserDto {
     private String phone;
     private String profileImg;
     private Role role;
-    private SocialType socialType;
+    private SocialProvider socialProvider;
 
     public static UserDto fromEntity(User entity) {
         return UserDto.builder()
@@ -35,7 +35,7 @@ public class UserDto {
                 .phone(entity.getPhone())
                 .profileImg(entity.getProfileImg())
                 .role(entity.getRole())
-                .socialType(entity.getSocialType())
+                .socialProvider(entity.getSocialProvider())
                 .build();
     }
 }

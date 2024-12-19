@@ -50,7 +50,9 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             if (token != null && jwtTokenUtils.validate(token)) {
                 Authentication authentication = jwtTokenUtils.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+                log.info("인증된 사용자: {}", authentication.getName());
             }
+
             filterChain.doFilter(request, response);
         } catch (JwtException | IllegalArgumentException e) {
             log.error("JWT 검증 실패: {}", e.getMessage());
