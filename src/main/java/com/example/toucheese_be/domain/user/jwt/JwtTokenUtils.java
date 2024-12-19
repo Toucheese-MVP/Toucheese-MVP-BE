@@ -33,11 +33,11 @@ public class JwtTokenUtils {
 
 
     // JWT (accessToken) 생성
-    public String generateAccessToken(PrincipalDetails principalDetails) {
+    public JwtTokenDto generateAccessToken(PrincipalDetails principalDetails) {
         String authorities = principalDetails.getAuthorities().toString();
         Date now = new Date();
         Date accessExpiration = new Date(now.getTime() + ACCESS_TOKEN_EXPIRATION_TIME);
-        return Jwts.builder()
+        String accessToken = Jwts.builder()
                 .subject(principalDetails.getUsername())
                 .claim("userId", principalDetails.getUserId())
                 .claim("email", principalDetails.getEmail())
@@ -46,6 +46,12 @@ public class JwtTokenUtils {
                 .expiration(accessExpiration)
                 .signWith(secretKey, Jwts.SIG.HS256)
                 .compact();
+
+        return JwtTokenDto.builder()
+                .accessToken(accessToken)
+                .issuedAt(now)
+                .expiration(accessExpiration)
+                .build();
     }
 
 

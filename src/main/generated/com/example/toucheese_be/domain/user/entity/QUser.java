@@ -36,7 +36,9 @@ public class QUser extends EntityPathBase<User> {
 
     public final EnumPath<com.example.toucheese_be.domain.user.constant.Role> role = createEnum("role", com.example.toucheese_be.domain.user.constant.Role.class);
 
-    public final EnumPath<com.example.toucheese_be.domain.user.constant.SocialType> socialType = createEnum("socialType", com.example.toucheese_be.domain.user.constant.SocialType.class);
+    public final StringPath socialId = createString("socialId");
+
+    public final EnumPath<com.example.toucheese_be.domain.user.constant.SocialProvider> socialProvider = createEnum("socialProvider", com.example.toucheese_be.domain.user.constant.SocialProvider.class);
 
     public final StringPath username = createString("username");
 

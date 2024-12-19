@@ -1,6 +1,8 @@
 package com.example.toucheese_be.domain.user.service;
 
 import com.example.toucheese_be.domain.user.constant.Role;
+import com.example.toucheese_be.domain.user.constant.SocialProvider;
+import com.example.toucheese_be.domain.user.dto.request.OAuthSignInDto;
 import com.example.toucheese_be.domain.user.entity.PrincipalDetails;
 import com.example.toucheese_be.domain.user.jwt.JwtTokenUtils;
 import com.example.toucheese_be.domain.user.dto.request.CreateUserDto;
@@ -11,6 +13,7 @@ import com.example.toucheese_be.domain.user.jwt.JwtTokenDto;
 import com.example.toucheese_be.domain.user.repository.UserRepository;
 import com.example.toucheese_be.global.error.ErrorCode;
 import com.example.toucheese_be.global.error.GlobalCustomException;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -58,14 +61,40 @@ public class PrincipalDetailsService implements UserDetailsService {
         // JWT 발급
         // 아래 코드가 유효하려면 회원가입 시점에 PrincipalDetails 가 만들어지는 코드를 추가해야함
         PrincipalDetails principalDetails = loadUserByUsername(user.getEmail());
-        String accessToken = jwtTokenUtils.generateAccessToken(principalDetails);
-
-        return JwtTokenDto.builder()
-                .accessToken(accessToken)
-                .build();
+        return jwtTokenUtils.generateAccessToken(principalDetails);
     }
 
-    // TODO: 로그아웃
+    // 소셜 로그인
+    public JwtTokenDto oAuthSignIn(OAuthSignInDto dto) {
+        // socialId 존재 유무 판단
+        Optional<User> optionalUser = userRepository.findBySocialId(dto.getSocialId());
+        PrincipalDetails principalDetails;
+
+        // 로그인을 한적이 있는 경우
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            log.info("{}님은 로그인을 한 적이 있습니다", user.getUsername());
+            user.setEmail(dto.getEmail());
+            user.setUsername(dto.getUsername());
+            userRepository.save(user);
+            principalDetails = new PrincipalDetails(user);
+        }
+        // 최초 로그인
+        else {
+            log.info("최초 로그인 입니다.");
+            User user = userRepository.save(User.builder()
+                    .socialId(dto.getSocialId())
+                    .email(dto.getEmail())
+                    .username(dto.getUsername())
+                    .socialProvider(SocialProvider.valueOf(dto.getSocialProvider()))
+                    .role(Role.MEMBER)
+                    .build());
+            principalDetails = new PrincipalDetails(user);
+        }
+
+        // jwt 토큰 발급
+        return jwtTokenUtils.generateAccessToken(principalDetails);
+    }
 
     @Override
     public PrincipalDetails loadUserByUsername(String email) throws UsernameNotFoundException {
