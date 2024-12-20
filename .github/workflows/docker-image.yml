@@ -9,15 +9,20 @@ jobs:
     steps:
       - name: Checkout Source
         uses: actions/checkout@v4
+
       # 이미지 태그 설정
       - name: Set Image Tag
         id: image-tag
         run: echo "TAG=$(date +%s)-ci" >> "$GITHUB_OUTPUT"
+
       # Docker Build 진행
       - name: Build the Docker image
         env:
           TAG: ${{ steps.image-tag.outputs.TAG }}
-        run: docker build file Dockerfile --tag "{{ secrets.DOCKERHUB_USERNAME }}/toucheese:$TAG" .
+        run: |
+          docker buildx create --use
+          docker buildx build --platform linux/amd64 --tag "{{ secrets.DOCKERHUB_USERNAME }}/toucheese:$TAG" .
+
       # Docker hub 에 로그인 후 Push
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -27,4 +32,4 @@ jobs:
       - name : Push the Docker Image
         env:
           TAG: ${{ steps.image-tag.outputs.TAG }}
-        run: docker push "${{ secrets.DOCKERHUB_USERNAME }}/tocheese:$TAG"
+        run: docker push "${{ secrets.DOCKERHUB_USERNAME }}/toucheese:$TAG"
