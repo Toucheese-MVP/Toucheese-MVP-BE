@@ -31,10 +31,9 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String[] excludePath = {
-                "/index.html",
-                "/oauth2/**",
-                "/login/**",
-                "/static/**"
+                "/api/v1/studio/**",
+                "/api/v1/auth/sign-up/**",
+                "/api/v1/auth/sign-in/**"
         };
         String path = request.getRequestURI();
         return Arrays.stream(excludePath).anyMatch(path::startsWith);

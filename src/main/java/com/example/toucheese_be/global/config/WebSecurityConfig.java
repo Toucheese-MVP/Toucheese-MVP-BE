@@ -29,23 +29,30 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/api/v1/studio/**",
-                                "/api/v1/order/**",
-                                "/api/v1/toss/**",
-                                "/api/v1/admin/**"
-                        )
-                        .authenticated()
-                        .requestMatchers(
-                                "/api/v1/studio/**"
-                        )
-                        .hasRole("MEMBER")
-                        .requestMatchers(
-                                "/api/v1/admin/**"
-                        ).hasRole("ADMIN")
-                        .requestMatchers(
-                                "/api/v1/auth/**",
-                                "/api/v1/token/**"
+                                "/api/v1/auth/sign-up/**",
+                                "/api/v1/auth/sign-in/**"
                         )
                         .permitAll()
+                        .requestMatchers(
+                                "/api/v1/toss/**",
+                                "/api/v1/admin/**",
+                                "/api/v1/auth/profile/update",
+                                "/api/v1/token/**",
+                                "/api/v1/order/**"
+                        )
+                        .authenticated()
+//                        .requestMatchers(
+//                                "/api/v1/studio/**"
+//                        )
+//                        .hasAuthority("ROLE_GUEST")
+                        .requestMatchers(
+                                "/api/v1/order/**",
+                                "/api/v1/auth/profile/update"
+                        )
+                        .hasAuthority("ROLE_MEMBER")
+//                        .requestMatchers(
+//                                "/api/v1/admin/**"
+//                        ).hasAuthority("ROLE_ADMIN")
                 )
                 // JWT를 사용하기 때문에 보안 관련 세션 해제
                 .sessionManagement(session -> session

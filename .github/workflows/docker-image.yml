@@ -22,7 +22,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # Docker Build 진행
+      # Docker Build 진행 후 Docker hub 로 Push
       - name: Build and Push the Docker image
         env:
           TAG: ${{ steps.image-tag.outputs.TAG }}
@@ -30,4 +30,25 @@ jobs:
           docker buildx create --use
           docker buildx build --platform linux/amd64 --tag "toucheeseteam2/toucheese:$TAG" --push .
 
-      
+      # latest 태그로 덧붙여서 푸시하기
+      - name: Tag Image as latest
+        env:
+          TAG: ${{ steps.image-tag.outputs.TAG }}
+        run: |
+          docker tag "toucheeseteam2/toucheese:$TAG" \
+          "toucheeseteam2/toucheese:latest"
+      - name: Push latest
+        run: docker push "toucheeseteam2/toucheese:latest"
+
+      # AWS Codedeploy
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+      - name: Create Deployment
+        run: |
+          aws deploy create-deployment \
+          --cli-input-json file://./code-deploy.json \
+          --region ap-northeast-2

@@ -3,6 +3,7 @@ package com.example.toucheese_be.domain.user.service;
 import com.example.toucheese_be.domain.user.constant.Role;
 import com.example.toucheese_be.domain.user.constant.SocialProvider;
 import com.example.toucheese_be.domain.user.dto.request.OAuthSignInDto;
+import com.example.toucheese_be.domain.user.dto.request.UpdateUserDto;
 import com.example.toucheese_be.domain.user.entity.PrincipalDetails;
 import com.example.toucheese_be.domain.user.jwt.JwtTokenUtils;
 import com.example.toucheese_be.domain.user.dto.request.CreateUserDto;
@@ -12,6 +13,7 @@ import com.example.toucheese_be.domain.user.entity.User;
 import com.example.toucheese_be.domain.user.jwt.TokenRequestDto;
 import com.example.toucheese_be.domain.user.jwt.TokenResponseDto;
 import com.example.toucheese_be.domain.user.repository.UserRepository;
+import com.example.toucheese_be.global.common.AuthenticationFacade;
 import com.example.toucheese_be.global.error.ErrorCode;
 import com.example.toucheese_be.global.error.GlobalCustomException;
 import java.util.Optional;
@@ -32,6 +34,7 @@ public class PrincipalDetailsService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenUtils jwtTokenUtils;
     private final RefreshTokenService refreshTokenService;
+    private final AuthenticationFacade authFacade;
 
     /**
      * 일반 회원가입
@@ -158,6 +161,26 @@ public class PrincipalDetailsService implements UserDetailsService {
         }
     }
 
+    /**
+     * profile update
+     * @return
+     */
+    public Boolean profileUpdate(UpdateUserDto dto) {
+        // 현재 인증된 사용자 정보
+        PrincipalDetails principalDetails = authFacade.getAuth();
+
+        User user = userRepository.findByEmail(principalDetails.getEmail())
+                .orElseThrow(() -> new GlobalCustomException(ErrorCode.USER_NOT_FOUND));
+
+        if (dto.getUsername() == null || dto.getUsername().isEmpty()) {
+            throw new GlobalCustomException(ErrorCode.UPDATE_USERNAME_EMPTY);
+        } else {
+            user.setUsername(dto.getUsername());
+            userRepository.save(user);
+            return true;
+        }
+    }
+
     @Override
     public PrincipalDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email)
@@ -169,4 +192,6 @@ public class PrincipalDetailsService implements UserDetailsService {
                 .authorities(user.getRole().getRoles())
                 .build();
     }
+
+
 }

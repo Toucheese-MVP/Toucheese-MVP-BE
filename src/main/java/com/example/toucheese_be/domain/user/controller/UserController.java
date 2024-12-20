@@ -4,13 +4,17 @@ package com.example.toucheese_be.domain.user.controller;
 import com.example.toucheese_be.domain.user.dto.request.CreateUserDto;
 import com.example.toucheese_be.domain.user.dto.request.OAuthSignInDto;
 import com.example.toucheese_be.domain.user.dto.request.SignInDto;
+import com.example.toucheese_be.domain.user.dto.request.UpdateUserDto;
 import com.example.toucheese_be.domain.user.jwt.TokenResponseDto;
 import com.example.toucheese_be.domain.user.service.PrincipalDetailsService;
 import com.example.toucheese_be.domain.user.dto.response.UserDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,5 +50,14 @@ public class UserController {
             OAuthSignInDto dto
     ) {
         return ResponseEntity.ok(principalDetailsService.oAuthSignIn(dto));
+    }
+
+    // 추가 정보 업데이트
+    @PutMapping("profile/update")
+    public Boolean profileUpdate(
+            @RequestBody
+            UpdateUserDto dto
+    ) {
+        return principalDetailsService.profileUpdate(dto);
     }
 }

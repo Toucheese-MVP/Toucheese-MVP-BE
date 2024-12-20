@@ -23,7 +23,11 @@ public enum ErrorCode {
     SIGN_IN_EMAIL_NOT_FOUND(404, "2003", "존재하지 않는 이메일입니다."),
     SIGN_IN_PASSWORD_NOT_MATCH(400, "2004", "비밀번호가 일치하지 않습니다."),
     USER_NOT_FOUND(404, "2005", "존재하지 않는 회원입니다."),
+    UPDATE_USERNAME_EMPTY(400, "2006", "사용자 이름이 비어있습니다."),
     AUTHENTICATION_FAILED(403, "2006", "인증 확인에 실패했습니다."),
+
+
+
 
     // 토큰 관련 예외
     REFRESH_TOKEN_NOT_EQAUL(401, "3001", "Refresh Token 이 일치하지 않습니다."),
