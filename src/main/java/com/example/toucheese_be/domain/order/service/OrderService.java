@@ -115,6 +115,7 @@ public class OrderService {
         scheduleMap.put("이전 예약 일정", new ArrayList<>());
 
         // 주문이 없는 경우 빈 리스트를 반환
+
         if(orders.isEmpty()){
             return scheduleMap;
         }
