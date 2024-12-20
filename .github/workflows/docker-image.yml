@@ -35,20 +35,21 @@ jobs:
         env:
           TAG: ${{ steps.image-tag.outputs.TAG }}
         run: |
+          docker pull "toucheeseteam2/toucheese:$TAG"
           docker tag "toucheeseteam2/toucheese:$TAG" \
           "toucheeseteam2/toucheese:latest"
       - name: Push latest
         run: docker push "toucheeseteam2/toucheese:latest"
 
       # AWS Codedeploy
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-northeast-2
-      - name: Create Deployment
-        run: |
-          aws deploy create-deployment \
-          --cli-input-json file://./code-deploy.json \
-          --region ap-northeast-2
+#      - name: Configure AWS Credentials
+#        uses: aws-actions/configure-aws-credentials@v1
+#        with:
+#          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#          aws-region: ap-northeast-2
+#      - name: Create Deployment
+#        run: |
+#          aws deploy create-deployment \
+#          --cli-input-json file://./code-deploy.json \
+#          --region ap-northeast-2
