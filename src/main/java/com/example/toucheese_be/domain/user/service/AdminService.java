@@ -37,9 +37,9 @@ public class AdminService {
                 .orElseThrow(() -> new GlobalCustomException(ErrorCode.ORDER_NOT_FOUND));
         // 예약의 상태를 "승인" 으로 변경 후 저장
         OrderStatus orderStatus = order.getStatus();
-        if (orderStatus.equals(OrderStatus.KEEP)) {
+        if (orderStatus.equals(OrderStatus.KEEP_RESERVATION)) {
             // 예약 승인 email 발송
-            order.setStatus(OrderStatus.SUCCESS);
+            order.setStatus(OrderStatus.CONFIRM_RESERVATION);
             orderRepository.save(order);
             // 사용자 이메일 가져오기
             String userEmail = order.getUser().getEmail();
@@ -52,7 +52,7 @@ public class AdminService {
             );
 
             return ResponseEntity.ok(true);
-        } else if (orderStatus.equals(OrderStatus.SUCCESS)) {
+        } else if (orderStatus.equals(OrderStatus.CONFIRM_RESERVATION)) {
             throw new GlobalCustomException(ErrorCode.ORDER_ALREADY_APPROVED);
         } else {
             throw new GlobalCustomException(ErrorCode.ORDER_ALREADY_REJECTED);
@@ -67,9 +67,9 @@ public class AdminService {
                 .orElseThrow(() -> new GlobalCustomException(ErrorCode.ORDER_NOT_FOUND));
         // 예약의 상태를 "거절" 으로 변경 후 저장
         OrderStatus orderStatus = order.getStatus();
-        if (orderStatus.equals(OrderStatus.KEEP)) {
+        if (orderStatus.equals(OrderStatus.KEEP_RESERVATION)) {
             // 예약 거절 email 발송
-            order.setStatus(OrderStatus.FAIL);
+            order.setStatus(OrderStatus.CANCEL_RESERVATION);
             orderRepository.save(order);
             // 사용자 이메일 가져오기
             String userEmail = order.getUser().getEmail();
@@ -82,7 +82,7 @@ public class AdminService {
             );
 
             return ResponseEntity.ok(true);
-        } else if (orderStatus.equals(OrderStatus.FAIL)) {
+        } else if (orderStatus.equals(OrderStatus.CANCEL_RESERVATION)) {
             throw new GlobalCustomException(ErrorCode.ORDER_ALREADY_REJECTED);
         } else {
             throw new GlobalCustomException(ErrorCode.ORDER_ALREADY_APPROVED);
