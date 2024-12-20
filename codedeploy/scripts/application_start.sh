@@ -4,7 +4,8 @@
 running=$(sudo docker ps -a --format "{{.ID}}" --filter "name=toucheese-cd" | wc -l)
 # 존재하면 중단
 if [ $running -eq 1 ]; then
-  sudo docker stop toucheese-cd
+  sudo docker kill toucheese-cd
+  sleep 5
   sudo docker rm toucheese-cd
 fi
 
