@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 
 # 실행중인 컨테이너 확인
-running=$(sudo docker ps -a --format "{{.ID}}" --filter "name=todo-cd" | wc -l)
+running=$(sudo docker ps -a --format "{{.ID}}" --filter "name=toucheese-cd" | wc -l)
 # 존재하면 중단
 if [ $running -eq 1 ]; then
-  sudo docker stop todo-cd
+  sudo docker stop toucheese-cd
+  sudo docker rm toucheese-cd
 fi
 
 # 최신 이미지를 pull
