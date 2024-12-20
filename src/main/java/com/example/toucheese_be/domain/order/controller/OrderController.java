@@ -41,16 +41,11 @@ public class OrderController {
 
     //예약 취소
     @PutMapping("/{orderId}/cancel")
-    public ResponseEntity<Map<String, String>> getCancelledSchedule(
+    public ResponseEntity<Boolean> getCancelledSchedule(
             @PathVariable
-            Long orderId,
-            @RequestBody
-            OrderDetailDto orderDetailDto
+            Long orderId
     ) {
-        Map<String, String> response = new HashMap<>();
-
-        String isCancelledSchedule = orderService.getCancelTheSChedule(orderId, orderDetailDto);
-        response.put("예약이 취소되었습니다.", isCancelledSchedule);
-        return ResponseEntity.ok(response);
+        Boolean isCancelledSchedule = orderService.getCancelTheSchedule(orderId);;
+        return ResponseEntity.ok(isCancelledSchedule);
     }
 }

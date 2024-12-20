@@ -18,8 +18,6 @@ import com.example.toucheese_be.domain.studio.entity.Studio;
 import com.example.toucheese_be.domain.studio.repository.StudioRepository;
 import com.example.toucheese_be.global.error.ErrorCode;
 import com.example.toucheese_be.global.error.GlobalCustomException;
-import com.example.toucheese_be.global.exception.AlreadyCancelledException;
-import com.example.toucheese_be.global.exception.OrderNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -106,74 +104,76 @@ public class OrderService {
         return true;
     }
 
-    // 예약 일정 탭 구현
-    public Map<String, List<OrderDetailDto>> checkedSchedule(Long userId) {
-        // 사용자 예약 주문을 사용자 ID로 조회
-        List<Order> orders = orderRepository.findByUserId(userId);
-
-        // 결과를 저장할 맵 생성
-        Map<String, List<OrderDetailDto>> scheduleMap = new HashMap<>();
-        scheduleMap.put("다가오는 예약 일정", new ArrayList<>());
-        scheduleMap.put("이전 예약 일정", new ArrayList<>());
-
-        // 주문이 없는 경우 빈 리스트를 반환
-
-        if(orders.isEmpty()){
-            return scheduleMap;
-        }
-        // 주문 상태에 따라 리스트에 추가
-        for(Order order : orders){
-            OrderStatus orderStatus = order.getStatus();
-
-            // 주문 세부 정보를 DTO로 변환
-            List<OrderDetailDto> orderDetailDtos = order.getOrderDetails();
-
-            // 주문 상태에 따라 리스트에 추가
-            switch (orderStatus){
-                case KEEP_RESERVATION:
-                    scheduleMap.get("다가오는 예약 일정").addAll(orderDetailDtos);
-                    break;
-
-                case CANCEL_RESERVATION:
-                case FINISHED_FILM:
-                case CONFIRM_RESERVATION:
-                    scheduleMap.get("이전 예약 일정").addAll(orderDetailDtos);
-                    break;
-
-
-            }
-
+//    // 예약 일정 탭 구현
+//    public Map<String, List<OrderDetailDto>> checkedSchedule(Long userId) {
+//        // 사용자 예약 주문을 사용자 ID로 조회
+//        List<Order> orders = orderRepository.findByUserId(userId);
 //
-//            if (orderStatus.equals(OrderStatus.KEEP_RESERVATION)) {
-//                // "다가오는 예약 일정"에 추가
-//                scheduleMap.get("다가오는 예약 일정").addAll(orderDetailDtos);
-//            } else if (orderStatus.equals(OrderStatus.CONFIRM_RESERVATION)) {
-//                // "이전 예약 일정"에 추가
-//                scheduleMap.get("이전 예약 일정").addAll(orderDetailDtos);
-//            } else if (orderStatus.equals(OrderStatus.CANCEL_RESERVATION)) {
-//                // "이전 예약 일정"에 추가
-//                scheduleMap.get("이전 예약 일정").addAll(orderDetailDtos);
-//            }else {
+//        // 결과를 저장할 맵 생성
+//        Map<String, List<OrderDetailDto>> scheduleMap = new HashMap<>();
+//        scheduleMap.put("다가오는 예약 일정", new ArrayList<>());
+//        scheduleMap.put("이전 예약 일정", new ArrayList<>());
+//
+//        // 주문이 없는 경우 빈 리스트를 반환
+//
+//        if(orders.isEmpty()){
+//            return scheduleMap;
+//        }
+//        // 주문 상태에 따라 리스트에 추가
+//        for(Order order : orders){
+//            OrderStatus orderStatus = order.getStatus();
+//
+//            // 주문 세부 정보를 DTO로 변환
+//            List<OrderDetailDto> orderDetailDtos = order.getOrderDetails();
+//
+//            // 주문 상태에 따라 리스트에 추가
+//            switch (orderStatus){
+//                case KEEP_RESERVATION:
+//                    scheduleMap.get("다가오는 예약 일정").addAll(orderDetailDtos);
+//                    break;
+//
+//                case CANCEL_RESERVATION:
+//                case FINISHED_FILM:
+//                case CONFIRM_RESERVATION:
+//                    scheduleMap.get("이전 예약 일정").addAll(orderDetailDtos);
+//                    break;
+//
 //
 //            }
+//
+////
+////            if (orderStatus.equals(OrderStatus.KEEP_RESERVATION)) {
+////                // "다가오는 예약 일정"에 추가
+////                scheduleMap.get("다가오는 예약 일정").addAll(orderDetailDtos);
+////            } else if (orderStatus.equals(OrderStatus.CONFIRM_RESERVATION)) {
+////                // "이전 예약 일정"에 추가
+////                scheduleMap.get("이전 예약 일정").addAll(orderDetailDtos);
+////            } else if (orderStatus.equals(OrderStatus.CANCEL_RESERVATION)) {
+////                // "이전 예약 일정"에 추가
+////                scheduleMap.get("이전 예약 일정").addAll(orderDetailDtos);
+////            }else {
+////
+////            }
+//
+//        }
+//
+//        return scheduleMap;
+//    }
 
-        }
-
-        return scheduleMap;
-    }
-
-    public String getCancelTheSChedule(Long orderId, OrderDetailDto orderDetailDto) {
+    public Boolean getCancelTheSchedule(Long orderId) {
 
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new OrderNotFoundException(orderId));
+                .orElseThrow(() -> new GlobalCustomException(ErrorCode.ORDER_NOT_FOUND));
+//                .orElseThrow(() -> new OrderNotFoundException(orderId));
 
         if(order.getStatus() == OrderStatus.CANCEL_RESERVATION){
-            throw new AlreadyCancelledException(orderId);
+            // throw new AlreadyCancelledException(orderId);
+            throw new GlobalCustomException(ErrorCode.ORDER_ALREADY_REJECTED);
         }
 
         order.setStatus(OrderStatus.CANCEL_RESERVATION);
         orderRepository.save(order);
 
-        return "예약이 취소되었습니다.";
+        return true;
     }
 }

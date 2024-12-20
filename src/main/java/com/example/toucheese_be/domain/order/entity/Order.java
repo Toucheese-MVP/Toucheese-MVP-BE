@@ -54,13 +54,13 @@ public class Order {
     private List<OrderItem> orderItems;
 
 
-    public List<OrderDetailDto> getOrderDetails() {
-        return orderItems.stream()
-                .map(orderItem -> new OrderDetailDto(
-                        orderItem.getId(),
-                        orderItem.getItem().getName(),
-                        orderItem.getQuantity(),
-                        orderItem.getTotalPrice()
-                )).collect(Collectors.toList());
-    }
+//    public List<OrderDetailDto> getOrderDetails() {
+//        return orderItems.stream()
+//                .map(orderItem -> new OrderDetailDto(
+//                        orderItem.getId(),
+//                        orderItem.getItem().getName(),
+//                        orderItem.getQuantity(),
+//                        orderItem.getTotalPrice()
+//                )).collect(Collectors.toList());
+//    }
 }

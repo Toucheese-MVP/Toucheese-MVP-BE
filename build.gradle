@@ -36,8 +36,6 @@ dependencies {
 	// redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
-	// docker compose
-	developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
 
 	// jjwt
 	implementation 'io.jsonwebtoken:jjwt-api:0.12.5'

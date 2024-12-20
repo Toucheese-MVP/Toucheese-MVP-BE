@@ -15,6 +15,7 @@ public enum ErrorCode {
     ORDER_NOT_FOUND(404, "1006", "해당 예약 정보를 찾을 수 없습니다."),
     ORDER_ALREADY_APPROVED(409, "ORDER_ALREADY_APPROVED", "해당 예약 정보는 이미 승인 되었습니다."),
     ORDER_ALREADY_REJECTED(409, "ORDER_ALREADY_REJECTED", "해당 예약 정보는 이미 거절 되었습니다."),
+    ORDER_ALREADY_CANCELLED(409, "ORDER_ALREADY_CANCELLED", "해당 예약 정보는 이미 취소 되었습니다."),
 
     // 회원관련 예외
     SIGN_UP_PASSWORD_CHECK_NOT_MATCH(400, "2001", "비밀번호와 비밀번호 확인이 일치하지 않습니다."),
