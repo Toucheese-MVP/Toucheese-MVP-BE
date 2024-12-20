@@ -5,14 +5,14 @@ on:
 
 jobs:
   deliever:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout Source
         uses: actions/checkout@v4
       # 이미지 태그 설정
       - name: Set Image Tag
         id: image-tag
-        run: echo "TAG=${date +%s}-ci" >> "$GITHUB_OUTPUT"
+        run: echo "TAG=$(date +%s)-ci" >> "$GITHUB_OUTPUT"
       # Docker Build 진행
       - name: Build the Docker image
         env:
