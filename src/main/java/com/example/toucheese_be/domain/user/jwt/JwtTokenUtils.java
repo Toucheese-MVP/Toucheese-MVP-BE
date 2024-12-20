@@ -11,6 +11,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import java.util.Date;
 import java.util.Optional;
+import java.util.UUID;
 import javax.crypto.SecretKey;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Component;
 public class JwtTokenUtils {
     private final SecretKey secretKey;
     private static final long ACCESS_TOKEN_EXPIRATION_TIME = 1000 * 60 * 60 * 24;
+    private static final long REFRESH_TOKEN_EXPIRATION_TIME = 60 * 60 * 24 * 30L;
 
     public JwtTokenUtils(
             @Value("${jwt.secret}")
@@ -33,11 +35,11 @@ public class JwtTokenUtils {
 
 
     // JWT (accessToken) 생성
-    public JwtTokenDto generateAccessToken(PrincipalDetails principalDetails) {
+    public String generateAccessToken(PrincipalDetails principalDetails) {
         String authorities = principalDetails.getAuthorities().toString();
         Date now = new Date();
         Date accessExpiration = new Date(now.getTime() + ACCESS_TOKEN_EXPIRATION_TIME);
-        String accessToken = Jwts.builder()
+        return Jwts.builder()
                 .subject(principalDetails.getUsername())
                 .claim("userId", principalDetails.getUserId())
                 .claim("email", principalDetails.getEmail())
@@ -46,12 +48,10 @@ public class JwtTokenUtils {
                 .expiration(accessExpiration)
                 .signWith(secretKey, Jwts.SIG.HS256)
                 .compact();
+    }
 
-        return JwtTokenDto.builder()
-                .accessToken(accessToken)
-                .issuedAt(now)
-                .expiration(accessExpiration)
-                .build();
+    public String generateRefreshToken() {
+        return UUID.randomUUID().toString();
     }
 
 
@@ -105,8 +105,15 @@ public class JwtTokenUtils {
         }
     }
 
+    // JWT
     public Claims getClaims(String token) {
         // 형식, 서명, 만료 시간 검증 통과
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload();
     }
+
+    public String extractEmailFromToken(String token) {
+        return Optional.ofNullable(getClaims(token).get("email", String.class))
+                .orElseThrow(() -> new RuntimeException("AccessToken 에서 이메일 추출 실패"));
+    }
+
 }
