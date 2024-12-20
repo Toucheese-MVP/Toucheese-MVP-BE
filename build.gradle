@@ -29,15 +29,15 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 
-	// oauth2
-	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-
 	// Spring Security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	testImplementation 'org.springframework.security:spring-security-test'
 
 	// redis
-	// implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	// docker compose
+	developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
 
 	// jjwt
 	implementation 'io.jsonwebtoken:jjwt-api:0.12.5'

@@ -2,8 +2,9 @@ package com.example.toucheese_be.domain.user.controller;
 
 
 import com.example.toucheese_be.domain.user.dto.request.CreateUserDto;
+import com.example.toucheese_be.domain.user.dto.request.OAuthSignInDto;
 import com.example.toucheese_be.domain.user.dto.request.SignInDto;
-import com.example.toucheese_be.domain.user.jwt.JwtTokenDto;
+import com.example.toucheese_be.domain.user.jwt.TokenResponseDto;
 import com.example.toucheese_be.domain.user.service.PrincipalDetailsService;
 import com.example.toucheese_be.domain.user.dto.response.UserDto;
 import jakarta.validation.Valid;
@@ -31,10 +32,19 @@ public class UserController {
 
     // 일반 로그인
     @PostMapping("/sign-in")
-    public ResponseEntity<JwtTokenDto> signIn(
+    public ResponseEntity<String> signIn(
         @RequestBody
         SignInDto dto
     ) {
         return ResponseEntity.ok(principalDetailsService.signIn(dto));
+    }
+
+    // 소셜 로그인
+    @PostMapping("/sign-in/oauth")
+    public ResponseEntity<TokenResponseDto> oAuthSignIn(
+            @RequestBody
+            OAuthSignInDto dto
+    ) {
+        return ResponseEntity.ok(principalDetailsService.oAuthSignIn(dto));
     }
 }

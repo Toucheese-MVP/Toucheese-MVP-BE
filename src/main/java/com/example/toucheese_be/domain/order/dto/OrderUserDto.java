@@ -1,5 +1,6 @@
 package com.example.toucheese_be.domain.order.dto;
 
+import com.example.toucheese_be.domain.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,8 +21,8 @@ public class OrderUserDto {
 //    public static OrderUserDto fromEntity(User user) {
 //        return OrderUserDto.builder()
 //                .userId(user.getId())
-//                .userName(user.getName())
-//                .userPhone(user.getPhoneNumber())
+//                .userName(user.getNickname())
+//                .userPhone(user.getPhone())
 //                .userEmail(user.getEmail())
 //                .build();
 //    }

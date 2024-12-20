@@ -3,7 +3,6 @@ package com.example.toucheese_be.domain.user.entity;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,19 +10,23 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PrincipalDetails implements UserDetails, OAuth2User {
+public class PrincipalDetails implements UserDetails {
     private Long userId;
     private String username;
     private String email;
     private String authorities;
-    private Map<String, Object> attributes;
 
+    public PrincipalDetails(User user) {
+        this.userId = user.getId();
+        this.username = user.getUsername();
+        this.email = user.getEmail();
+        this.authorities = user.getRole().getRoles();
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -42,17 +45,6 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
     @Override
     public String getUsername() {
-        return username;
-    }
-
-    // OAuth2 메서드
-    @Override
-    public String getName() {
         return email;
-    }
-
-    @Override
-    public Map<String, Object> getAttributes() {
-        return attributes;
     }
 }

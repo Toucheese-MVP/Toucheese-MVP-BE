@@ -1,11 +1,15 @@
 package com.example.toucheese_be.domain.order.entity;
 
+import com.example.toucheese_be.domain.order.dto.OrderDetailDto;
 import com.example.toucheese_be.domain.order.entity.constant.OrderStatus;
 import com.example.toucheese_be.domain.user.entity.User;
 import com.example.toucheese_be.domain.studio.entity.Studio;
+import io.micrometer.common.KeyValues;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -42,10 +46,21 @@ public class Order {
     // 주문 상태
     @Enumerated(EnumType.STRING)
     @Builder.Default
-    private OrderStatus status = OrderStatus.KEEP;
+    private OrderStatus status = OrderStatus.KEEP_RESERVATION;
 
     // 주문 상품과 연결
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @BatchSize(size = 10)
     private List<OrderItem> orderItems;
+
+
+    public List<OrderDetailDto> getOrderDetails() {
+        return orderItems.stream()
+                .map(orderItem -> new OrderDetailDto(
+                        orderItem.getId(),
+                        orderItem.getItem().getName(),
+                        orderItem.getQuantity(),
+                        orderItem.getTotalPrice()
+                )).collect(Collectors.toList());
+    }
 }

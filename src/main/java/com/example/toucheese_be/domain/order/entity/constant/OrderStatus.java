@@ -4,9 +4,10 @@ import lombok.Getter;
 
 @Getter
 public enum OrderStatus {
-    KEEP("진행 중"),
-    SUCCESS("예약 성공"),
-    FAIL("예약 취소");
+    KEEP_RESERVATION("예약 대기"),
+    CONFIRM_RESERVATION("예약 확정"),
+    FINISHED_FILM("촬영 완료"),
+    CANCEL_RESERVATION("예약 취소");
 
     private final String nowReserveInfo;
 

@@ -1,7 +1,7 @@
 package com.example.toucheese_be.domain.user.entity;
 
 import com.example.toucheese_be.domain.user.constant.Role;
-import com.example.toucheese_be.domain.user.constant.SocialType;
+import com.example.toucheese_be.domain.user.constant.SocialProvider;
 import com.example.toucheese_be.domain.order.entity.Order;
 import jakarta.persistence.*;
 import java.util.ArrayList;
@@ -30,12 +30,13 @@ public class User {
     private String nickname;
     private String phone;
     private String profileImg;
+    private String socialId;
 
     @Enumerated(EnumType.STRING)
     private Role role;
 
     @Enumerated(EnumType.STRING)
-    private SocialType socialType;
+    private SocialProvider socialProvider;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
