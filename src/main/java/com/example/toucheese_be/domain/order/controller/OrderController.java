@@ -1,5 +1,6 @@
 package com.example.toucheese_be.domain.order.controller;
 
+import com.example.toucheese_be.domain.order.dto.OrderDetailDto;
 import com.example.toucheese_be.domain.order.dto.request.OrderRequestDto;
 import com.example.toucheese_be.domain.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,11 +26,11 @@ public class OrderController {
     }
 
     @GetMapping("/{userId}/schedule")
-    public ResponseEntity<List<String>> getOrderSchedule(
+    public ResponseEntity<Map<String, List<OrderDetailDto>>> getOrderSchedule(
             @PathVariable
             Long userId
     ){
-        List<String> isOrderScheduled = orderService.checkedSchedule(userId);
+        Map<String, List<OrderDetailDto>> isOrderScheduled = orderService.checkedSchedule(userId);
 
         return ResponseEntity.ok(isOrderScheduled);
     }
