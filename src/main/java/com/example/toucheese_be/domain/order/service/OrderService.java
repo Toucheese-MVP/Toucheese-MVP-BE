@@ -18,6 +18,8 @@ import com.example.toucheese_be.domain.studio.entity.Studio;
 import com.example.toucheese_be.domain.studio.repository.StudioRepository;
 import com.example.toucheese_be.global.error.ErrorCode;
 import com.example.toucheese_be.global.error.GlobalCustomException;
+import com.example.toucheese_be.global.exception.AlreadyCancelledException;
+import com.example.toucheese_be.global.exception.OrderNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -158,5 +160,20 @@ public class OrderService {
         }
 
         return scheduleMap;
+    }
+
+    public String getCancelTheSChedule(Long orderId, OrderDetailDto orderDetailDto) {
+
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new OrderNotFoundException(orderId));
+
+        if(order.getStatus() == OrderStatus.CANCEL_RESERVATION){
+            throw new AlreadyCancelledException(orderId);
+        }
+
+        order.setStatus(OrderStatus.CANCEL_RESERVATION);
+        orderRepository.save(order);
+
+        return "예약이 취소되었습니다.";
     }
 }
