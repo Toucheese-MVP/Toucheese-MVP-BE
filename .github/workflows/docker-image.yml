@@ -32,4 +32,4 @@ jobs:
       - name : Push the Docker Image
         env:
           TAG: ${{ steps.image-tag.outputs.TAG }}
-        run: docker push "${{ secrets.DOCKERHUB_USERNAME }}/toucheese:${{ steps.image-tag.outputs.TAG }}"
+        run: docker push "toucheeseteam2/toucheese:${{ steps.image-tag.outputs.TAG }}"
