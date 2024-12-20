@@ -106,7 +106,6 @@ public class OrderService {
         return true;
     }
 
-
     // 예약 일정 탭 구현
     public Map<String, List<OrderDetailDto>> checkedSchedule(Long userId) {
         // 사용자 예약 주문을 사용자 ID로 조회
@@ -118,18 +117,19 @@ public class OrderService {
         scheduleMap.put("이전 예약 일정", new ArrayList<>());
 
         // 주문이 없는 경우 빈 리스트를 반환
-        if (orders.isEmpty()) {
+
+        if(orders.isEmpty()){
             return scheduleMap;
         }
         // 주문 상태에 따라 리스트에 추가
-        for (Order order : orders) {
+        for(Order order : orders){
             OrderStatus orderStatus = order.getStatus();
 
             // 주문 세부 정보를 DTO로 변환
             List<OrderDetailDto> orderDetailDtos = order.getOrderDetails();
 
             // 주문 상태에 따라 리스트에 추가
-            switch (orderStatus) {
+            switch (orderStatus){
                 case KEEP_RESERVATION:
                     scheduleMap.get("다가오는 예약 일정").addAll(orderDetailDtos);
                     break;

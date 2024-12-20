@@ -25,7 +25,8 @@ public enum ErrorCode {
     AUTHENTICATION_FAILED(403, "2006", "인증 확인에 실패했습니다."),
 
     // 토큰 관련 예외
-    REFRESH_TOKEN_NOT_EQAUL(401, "3001", "Refresh Token 이 일치하지 않습니다.");
+    REFRESH_TOKEN_NOT_EQAUL(401, "3001", "Refresh Token 이 일치하지 않습니다."),
+    ACCESS_TOKEN_EXPIRED(401, "3002", "Access Token 이 만료되었습니다.");
 
     private final int status;
     private final String code;
