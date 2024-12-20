@@ -1,0 +1,12 @@
+{
+  "applicationName": "boot-github-cicd",
+  "deploymentGroupName": "toucheese-team2-group",
+  "revision": {
+    "revisionType": "S3",
+    "s3Location": {
+      "bucket": "s3://toucheese-team2-s3",
+      "key": "codedeploy.zip",
+      "bundleType": "zip"
+    }
+  }
+}
