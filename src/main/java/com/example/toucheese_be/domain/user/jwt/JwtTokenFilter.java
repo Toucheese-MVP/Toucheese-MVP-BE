@@ -1,6 +1,8 @@
 package com.example.toucheese_be.domain.user.jwt;
 
 
+import com.example.toucheese_be.global.error.ErrorCode;
+import com.example.toucheese_be.global.error.GlobalCustomException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
@@ -56,7 +58,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } catch (JwtException | IllegalArgumentException e) {
             log.error("JWT 검증 실패: {}", e.getMessage());
-            sendErrorResponse(response, e.getMessage());
+            throw new GlobalCustomException(ErrorCode.REFRESH_TOKEN_NOT_EQAUL);
         }
     }
 
