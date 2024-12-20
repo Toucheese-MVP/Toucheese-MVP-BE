@@ -36,6 +36,11 @@ public class ItemService {
                 .orElseThrow(() -> new IllegalArgumentException("스튜디오를 찾을 수 없습니다."));
 
         // StudioInfoDto 변환
+        // TODO
+        //  * 프로필 사진 로딩이 느린 이유 -> StudioImage 엔티티에서 사진을 받아오지 않음
+        //  * 스튜디오가 이후 자신의 프로필을 업로드할 경우를 대비해
+        //  * 이미지를 S3에 저장한 후, S3 객체의 Public URL을 반환하여 이를 DTO 필드로 반환
+        //  * 변할 가능성이 큰 프로필 사진의 경우만 일단 생각
         StudioInfoDto studioInfoDto = StudioInfoDto.fromEntity(studio);
 
         // 스튜디오에 해당하는 아이템들을 가져옴
