@@ -21,7 +21,7 @@ jobs:
           TAG: ${{ steps.image-tag.outputs.TAG }}
         run: |
           docker buildx create --use
-          docker buildx build --platform linux/amd64 --tag "{{ secrets.DOCKERHUB_USERNAME }}/toucheese:$TAG" .
+          docker buildx build --platform linux/amd64 --tag "{{ secrets.DOCKERHUB_USERNAME }}/toucheese:${{ steps.image-tag.outputs.TAG }}" .
 
       # Docker hub 에 로그인 후 Push
       - name: Login to Docker Hub
@@ -32,4 +32,4 @@ jobs:
       - name : Push the Docker Image
         env:
           TAG: ${{ steps.image-tag.outputs.TAG }}
-        run: docker push "${{ secrets.DOCKERHUB_USERNAME }}/toucheese:$TAG"
+        run: docker push "${{ secrets.DOCKERHUB_USERNAME }}/toucheese:${{ steps.image-tag.outputs.TAG }}"
