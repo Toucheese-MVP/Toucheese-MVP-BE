@@ -4,7 +4,7 @@
   "revision": {
     "revisionType": "S3",
     "s3Location": {
-      "bucket": "s3://toucheese-team2-s3",
+      "bucket": "toucheese-team2-s3",
       "key": "codedeploy.zip",
       "bundleType": "zip"
     }
