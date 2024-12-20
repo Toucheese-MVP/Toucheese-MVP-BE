@@ -4,6 +4,7 @@ import com.example.toucheese_be.domain.order.dto.OrderDetailDto;
 import com.example.toucheese_be.domain.order.entity.constant.OrderStatus;
 import com.example.toucheese_be.domain.user.entity.User;
 import com.example.toucheese_be.domain.studio.entity.Studio;
+import io.micrometer.common.KeyValues;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -52,4 +53,14 @@ public class Order {
     @BatchSize(size = 10)
     private List<OrderItem> orderItems;
 
+
+    public List<OrderDetailDto> getOrderDetails() {
+        return orderItems.stream()
+                .map(orderItem -> new OrderDetailDto(
+                        orderItem.getId(),
+                        orderItem.getItem().getName(),
+                        orderItem.getQuantity(),
+                        orderItem.getTotalPrice()
+                )).collect(Collectors.toList());
+    }
 }

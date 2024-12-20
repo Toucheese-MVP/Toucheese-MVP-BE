@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -120,13 +121,41 @@ public class OrderService {
         // 주문 상태에 따라 리스트에 추가
         for(Order order : orders){
             OrderStatus orderStatus = order.getStatus();
-            List<OrderDetailDto> orderDetailDtos = order.getOrderDetails().stream()
-                    .map()
-                    .collect();
+
+            // 주문 세부 정보를 DTO로 변환
+            List<OrderDetailDto> orderDetailDtos = order.getOrderDetails();
+
+            // 주문 상태에 따라 리스트에 추가
+            switch (orderStatus){
+                case KEEP_RESERVATION:
+                    scheduleMap.get("다가오는 예약 일정").addAll(orderDetailDtos);
+                    break;
+
+                case CANCEL_RESERVATION:
+                case FINISHED_FILM:
+                case CONFIRM_RESERVATION:
+                    scheduleMap.get("이전 예약 일정").addAll(orderDetailDtos);
+                    break;
+
+
+            }
+
+//
+//            if (orderStatus.equals(OrderStatus.KEEP_RESERVATION)) {
+//                // "다가오는 예약 일정"에 추가
+//                scheduleMap.get("다가오는 예약 일정").addAll(orderDetailDtos);
+//            } else if (orderStatus.equals(OrderStatus.CONFIRM_RESERVATION)) {
+//                // "이전 예약 일정"에 추가
+//                scheduleMap.get("이전 예약 일정").addAll(orderDetailDtos);
+//            } else if (orderStatus.equals(OrderStatus.CANCEL_RESERVATION)) {
+//                // "이전 예약 일정"에 추가
+//                scheduleMap.get("이전 예약 일정").addAll(orderDetailDtos);
+//            }else {
+//
+//            }
+
         }
 
+        return scheduleMap;
     }
-
-
-
 }
