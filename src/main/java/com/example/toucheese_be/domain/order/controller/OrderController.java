@@ -28,16 +28,16 @@ public class OrderController {
     }
 
 
-//    // 예약 일정 탭 불러오기
-//    @GetMapping("/{userId}/schedule")
-//    public ResponseEntity<Map<String, List<OrderDetailDto>>> getOrderSchedule(
-//            @PathVariable
-//            Long userId
-//    ) {
-//        Map<String, List<OrderDetailDto>> isOrderScheduled = orderService.checkedSchedule(userId);
-//
-//        return ResponseEntity.ok(isOrderScheduled);
-//    }
+    // 예약 일정 탭 불러오기
+    @GetMapping("/{userId}/schedule")
+    public ResponseEntity<Map<String, List<OrderDetailDto>>> getOrderSchedule(
+            @PathVariable
+            Long userId
+    ) {
+        Map<String, List<OrderDetailDto>> isOrderScheduled = orderService.checkedSchedule(userId);
+
+        return ResponseEntity.ok(isOrderScheduled);
+    }
 
     //예약 취소
     @PutMapping("/{orderId}/cancel")

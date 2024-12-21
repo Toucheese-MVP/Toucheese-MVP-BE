@@ -24,7 +24,7 @@ public class OrderDetailDto {
     private String reservedDateTime;
     // 상품 확인
     private List<OrderItemDto> orderItemDto;
-
+}
 //    public static OrderDetailDto fromEntity(Order entity) {
 //        return OrderDetailDto.builder()
 //                .orderId(entity.getId())
@@ -37,4 +37,4 @@ public class OrderDetailDto {
 //                .build();
 //
 //    }
-}
+
