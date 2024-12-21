@@ -31,7 +31,7 @@ public class OrderItemDto {
     private Integer totalPrice;
     // 상품에 대한 옵션
     private List<OrderOptionDto> orderOptionDtos;
-
+}
 //    public static OrderItemDto fromEntity(OrderItem orderItem) {
 //        return OrderItemDto.builder()
 //                .itemId(orderItem.getId())
@@ -41,4 +41,3 @@ public class OrderItemDto {
 //                .totalPrice(orderItem.getTotalPrice())
 //                .build();
 //    }
-}

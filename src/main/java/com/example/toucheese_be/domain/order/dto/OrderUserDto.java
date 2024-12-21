@@ -17,7 +17,7 @@ public class OrderUserDto {
     private String userEmail;
     // 사용자 연락처
     private String userPhone;
-
+}
 //    public static OrderUserDto fromEntity(User user) {
 //        return OrderUserDto.builder()
 //                .userId(user.getId())
@@ -26,4 +26,4 @@ public class OrderUserDto {
 //                .userEmail(user.getEmail())
 //                .build();
 //    }
-}
+
