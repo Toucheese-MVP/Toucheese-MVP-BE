@@ -64,7 +64,7 @@ public class Order {
         // 주문 사용자 정보 DTO 생성
         OrderUserDto orderUserDto = OrderUserDto.builder()
                 .userId(this.user != null ? this.user.getId() : null) // 사용자 ID
-                .userName(this.user != null ? this.user.getNickname() : null) // 사용자 이름
+                .userName(this.user != null ? this.user.getUsername() : null) // 사용자 이름
                 .userEmail(this.user != null ? this.user.getEmail() : null) // 사용자 이메일
                 .userPhone(this.user != null ? this.user.getPhone() : null) // 사용자 연락처
                 .build();
@@ -78,7 +78,7 @@ public class Order {
         for (OrderItem orderItem : orderItems) {
             OrderItemDto orderItemDto = OrderItemDto.builder()
                     .itemId(orderItem.getItem().getId())
-                    .name(orderItem.getItem().getName())
+                    .itemName(orderItem.getItem().getName())
                     .item(orderItem.getItem()) // 필요에 따라 Item 객체를 포함
                     .itemImage(orderItem.getItem().getImage()) // 상품 이미지 URL
                     .quantity(orderItem.getQuantity())

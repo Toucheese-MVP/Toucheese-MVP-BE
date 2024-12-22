@@ -1,6 +1,10 @@
 package com.example.toucheese_be.domain.order.service;
 
+import com.example.toucheese_be.domain.item.dto.ItemDto;
 import com.example.toucheese_be.domain.order.dto.OrderDetailDto;
+import com.example.toucheese_be.domain.order.dto.OrderItemDto;
+import com.example.toucheese_be.domain.order.dto.OrderScheduleItemDto;
+import com.example.toucheese_be.domain.order.dto.OrderUserDto;
 import com.example.toucheese_be.domain.order.entity.constant.OrderStatus;
 import com.example.toucheese_be.domain.user.entity.User;
 import com.example.toucheese_be.domain.item.entity.Item;
@@ -22,6 +26,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -141,7 +146,8 @@ public class OrderService {
 
     // 예약 일정 탭 메서드
     public Map<String, List<OrderDetailDto>> checkedSchedule(Long userId) {
-        List<Order> orders = orderRepository.findByUserId(userId);
+        // 사용자 예약 주문을 사용자 ID로 조회 (최적화된 쿼리 사용)
+        List<Order> orders = orderRepository.findByUserIdWithDetails(userId);
 
         Map<String, List<OrderDetailDto>> scheduleMap = new HashMap<>();
         scheduleMap.put("다가오는 예약 일정", new ArrayList<>());
@@ -156,24 +162,54 @@ public class OrderService {
         for (Order order : orders) {
             OrderStatus orderStatus = order.getStatus();
 
-            // 주문 세부 정보를 DTO로 변환
-            List<OrderDetailDto> orderDetails = order.getOrderDetails();
+            // 주문 상품 정보 DTO 생성
+            List<OrderItemDto> orderItemDtos = new ArrayList<>();
+            for (OrderItem orderItem : order.getOrderItems()) {
+                Item item = orderItem.getItem();
+                Studio studio = item.getStudio(); // 스튜디오 정보
 
-            // 주문 상태에 따라 리스트에 추가
-            switch (orderStatus) {
-                case KEEP_RESERVATION:
-                    scheduleMap.get("다가오는 예약 일정").addAll(orderDetails);
-                    break;
+                OrderItemDto orderItemDto = OrderItemDto.builder()
+                        .itemId(item.getId())
+                        .itemName(item.getName())
+                        .totalPrice(orderItem.getTotalPrice())
+                        .build();
 
-                case CANCEL_RESERVATION:
-                case FINISHED_FILM:
-                case CONFIRM_RESERVATION:
-                    scheduleMap.get("이전 예약 일정").addAll(orderDetails);
-                    break;
+                orderItemDtos.add(orderItemDto);
+
+                // 사용자 정보 DTO 생성
+                OrderUserDto orderUserDto = OrderUserDto.builder()
+                        .userId(order.getUser() != null ? order.getUser().getId() : null)
+                        .userName(order.getUser() != null ? order.getUser().getUsername() : null)
+                        .userEmail(order.getUser() != null ? order.getUser().getEmail() : null)
+                        .userPhone(order.getUser() != null ? order.getUser().getPhone() : null)
+                        .build();
+
+                // 최종 DTO 생성
+                OrderDetailDto detailDto = OrderDetailDto.builder()
+                        .orderId(order.getId())
+                        .orderUserDto(orderUserDto)
+                        .studioName(studio.getName()) // 스튜디오 이름
+                        .reservedDateTime(order.getOrderDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))) // 예약 시간
+                        .orderItemDto(orderItemDtos) // 주문 상품 DTO 리스트
+                        .build();
+
+                // 주문 상태에 따라 리스트에 추가
+                switch (orderStatus) {
+                    case KEEP_RESERVATION:
+                        scheduleMap.get("다가오는 예약 일정").add(detailDto);
+                        break;
+
+                    case CANCEL_RESERVATION:
+                    case FINISHED_FILM:
+                    case CONFIRM_RESERVATION:
+                        scheduleMap.get("이전 예약 일정").add(detailDto);
+                        break;
+                }
             }
         }
 
         return scheduleMap;
+    }
 /*
         // 사용자 예약 주문을 사용자 ID로 조회
         List<Order> orders = orderRepository.findByUserId(userId);
@@ -208,6 +244,6 @@ public class OrderService {
 
 
             }*/
-        }
+
 
 }
