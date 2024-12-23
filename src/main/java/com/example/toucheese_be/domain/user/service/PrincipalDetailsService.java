@@ -16,11 +16,10 @@ import com.example.toucheese_be.domain.user.repository.UserRepository;
 import com.example.toucheese_be.global.common.AuthenticationFacade;
 import com.example.toucheese_be.global.error.ErrorCode;
 import com.example.toucheese_be.global.error.GlobalCustomException;
+import java.util.Date;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -192,6 +191,4 @@ public class PrincipalDetailsService implements UserDetailsService {
                 .authorities(user.getRole().getRoles())
                 .build();
     }
-
-
 }
