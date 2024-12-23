@@ -5,15 +5,13 @@ import com.example.toucheese_be.domain.user.dto.request.CreateUserDto;
 import com.example.toucheese_be.domain.user.dto.request.OAuthSignInDto;
 import com.example.toucheese_be.domain.user.dto.request.SignInDto;
 import com.example.toucheese_be.domain.user.dto.request.UpdateUserDto;
-import com.example.toucheese_be.domain.user.jwt.ApiResponse;
+import com.example.toucheese_be.global.common.ApiResponse;
 import com.example.toucheese_be.domain.user.jwt.TokenResponseDto;
 import com.example.toucheese_be.domain.user.service.PrincipalDetailsService;
 import com.example.toucheese_be.domain.user.dto.response.UserDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -46,7 +44,7 @@ public class UserController {
 
     // 소셜 로그인
     @PostMapping("/sign-in/oauth")
-    public ResponseEntity<ApiResponse<TokenResponseDto>> oAuthSignIn(
+    public ApiResponse<TokenResponseDto> oAuthSignIn(
             @RequestBody
             OAuthSignInDto dto
     ) {

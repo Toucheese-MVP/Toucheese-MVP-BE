@@ -1,6 +1,5 @@
 package com.example.toucheese_be.domain.order.service;
 
-import com.example.toucheese_be.domain.order.dto.OrderDetailDto;
 import com.example.toucheese_be.domain.order.entity.constant.OrderStatus;
 import com.example.toucheese_be.domain.user.entity.User;
 import com.example.toucheese_be.domain.item.entity.Item;
@@ -16,17 +15,13 @@ import com.example.toucheese_be.domain.user.repository.UserRepository;
 
 import com.example.toucheese_be.domain.studio.entity.Studio;
 import com.example.toucheese_be.domain.studio.repository.StudioRepository;
-import com.example.toucheese_be.global.error.ErrorCode;
+import com.example.toucheese_be.global.common.constant.ErrorCode;
 import com.example.toucheese_be.global.error.GlobalCustomException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

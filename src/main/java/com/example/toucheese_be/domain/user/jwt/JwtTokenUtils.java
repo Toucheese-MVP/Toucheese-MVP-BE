@@ -1,6 +1,8 @@
 package com.example.toucheese_be.domain.user.jwt;
 
 import com.example.toucheese_be.domain.user.entity.PrincipalDetails;
+import com.example.toucheese_be.global.common.constant.ErrorCode;
+import com.example.toucheese_be.global.error.GlobalCustomException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
@@ -36,16 +38,14 @@ public class JwtTokenUtils {
 
     // JWT (accessToken) 생성
     public String generateAccessToken(PrincipalDetails principalDetails) {
-        String authorities = principalDetails.getAuthorities().toString();
         Date now = new Date();
-        Date accessExpiration = new Date(now.getTime() + ACCESS_TOKEN_EXPIRATION_TIME);
         return Jwts.builder()
                 .subject(principalDetails.getUsername())
                 .claim("userId", principalDetails.getUserId())
                 .claim("email", principalDetails.getEmail())
-                .claim("auth", authorities)
+                .claim("auth", principalDetails.getAuthorities().toString())
                 .issuedAt(now)
-                .expiration(accessExpiration)
+                .expiration(new Date(now.getTime() + ACCESS_TOKEN_EXPIRATION_TIME))
                 .signWith(secretKey, Jwts.SIG.HS256)
                 .compact();
     }
@@ -57,22 +57,12 @@ public class JwtTokenUtils {
 
     public Authentication getAuthentication(String token) {
         Claims claims = getClaims(token);
-
-        Long userId = Optional.ofNullable(claims.get("userId", Long.class))
-                .orElseThrow(() -> new RuntimeException("잘못된 토큰입니다."));
-        String email = Optional.ofNullable(claims.get("email", String.class))
-                .orElseThrow(() -> new RuntimeException("잘못된 토큰입니다."));
-        String auth = Optional.ofNullable(claims.get("auth", String.class))
-                .orElseThrow(() -> new RuntimeException("잘못된 토큰입니다."));
-
-
         PrincipalDetails principalDetails = PrincipalDetails.builder()
-                .userId(userId)
+                .userId(claims.get("userId", Long.class))
                 .username(claims.getSubject())
-                .email(email)
-                .authorities(auth)
+                .email(claims.get("email", String.class))
+                .authorities(claims.get("auth", String.class))
                 .build();
-
         return new UsernamePasswordAuthenticationToken(principalDetails, "", principalDetails.getAuthorities());
     }
 
@@ -85,22 +75,22 @@ public class JwtTokenUtils {
         } catch (Exception e) {
             if (e instanceof SecurityException) {
                 log.debug("[SecurityException] 잘못된 토큰");
-                throw new JwtException("[SecurityException] 잘못된 토큰입니다.");
+                throw new GlobalCustomException(ErrorCode.JWT_SECURITY_EXCEPTION, e);
             } else if (e instanceof MalformedJwtException) {
                 log.debug("[MalformedJwtException] 잘못된 토큰");
-                throw new JwtException("[MalformedJwtException] 잘못된 토큰입니다.");
+                throw new GlobalCustomException(ErrorCode.MALFORMED_JWT_EXCEPTION, e);
             } else if (e instanceof ExpiredJwtException) {
                 log.debug("[ExpiredJwtException] 토큰 만료");
-                throw new JwtException("[ExpiredJwtException] 토큰 만료");
+                throw new GlobalCustomException(ErrorCode.EXPIRED_JWT_EXCEPTION, e);
             } else if (e instanceof UnsupportedJwtException) {
                 log.debug("[UnsupportedJwtException] 잘못된 형식의 토큰");
-                throw new JwtException("[UnsupportedJwtException] 잘못된 형식의 토큰");
+                throw new GlobalCustomException(ErrorCode.UNSUPPORTED_JWT_EXCEPTION, e);
             } else if (e instanceof IllegalArgumentException) {
                 log.debug("[IllegalArgumentException]");
-                throw new JwtException("[IllegalArgumentException]");
+                throw new GlobalCustomException(ErrorCode.ILLEGAL_ARGUMENT_JWT_EXCEPTION, e);
             } else {
                 log.debug("[토큰검증 오류]" + e.getClass());
-                throw new JwtException("[토큰검증 오류] 미처리 토큰 오류");
+                throw new GlobalCustomException(ErrorCode.TOKEN_VALIDATION_FAIL, e);
             }
         }
     }
@@ -111,9 +101,11 @@ public class JwtTokenUtils {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload();
     }
 
-    public String extractEmailFromToken(String token) {
-        return Optional.ofNullable(getClaims(token).get("email", String.class))
-                .orElseThrow(() -> new RuntimeException("AccessToken 에서 이메일 추출 실패"));
+    public Long extractUserIdFromToken(String token) {
+        return getClaims(token).get("userId", Long.class);
     }
 
+    public String extractEmailFromToken(String token) {
+        return getClaims(token).get("email", String.class);
+    }
 }

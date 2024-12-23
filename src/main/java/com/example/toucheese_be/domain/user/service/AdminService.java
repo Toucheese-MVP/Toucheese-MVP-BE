@@ -5,7 +5,7 @@ import com.example.toucheese_be.domain.order.entity.Order;
 import com.example.toucheese_be.domain.order.entity.constant.OrderStatus;
 import com.example.toucheese_be.domain.order.repository.OrderRepository;
 import com.example.toucheese_be.domain.studio.dto.PageRequestDto;
-import com.example.toucheese_be.global.error.ErrorCode;
+import com.example.toucheese_be.global.common.constant.ErrorCode;
 import com.example.toucheese_be.global.error.GlobalCustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
