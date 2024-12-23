@@ -20,7 +20,7 @@ public class OrderItemDto {
     // 싱품 ID
     private Long itemId;
     // 상품 가격
-    private String name;
+    private String itemName;
     // 상품
     private Item item;
     // 상품 이미지
