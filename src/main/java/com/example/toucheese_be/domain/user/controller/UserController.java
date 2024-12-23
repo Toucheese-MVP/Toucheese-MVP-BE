@@ -5,6 +5,7 @@ import com.example.toucheese_be.domain.user.dto.request.CreateUserDto;
 import com.example.toucheese_be.domain.user.dto.request.OAuthSignInDto;
 import com.example.toucheese_be.domain.user.dto.request.SignInDto;
 import com.example.toucheese_be.domain.user.dto.request.UpdateUserDto;
+import com.example.toucheese_be.domain.user.jwt.ApiResponse;
 import com.example.toucheese_be.domain.user.jwt.TokenResponseDto;
 import com.example.toucheese_be.domain.user.service.PrincipalDetailsService;
 import com.example.toucheese_be.domain.user.dto.response.UserDto;
@@ -45,11 +46,11 @@ public class UserController {
 
     // 소셜 로그인
     @PostMapping("/sign-in/oauth")
-    public ResponseEntity<TokenResponseDto> oAuthSignIn(
+    public ResponseEntity<ApiResponse<TokenResponseDto>> oAuthSignIn(
             @RequestBody
             OAuthSignInDto dto
     ) {
-        return ResponseEntity.ok(principalDetailsService.oAuthSignIn(dto));
+        return principalDetailsService.oAuthSignIn(dto);
     }
 
     // 추가 정보 업데이트

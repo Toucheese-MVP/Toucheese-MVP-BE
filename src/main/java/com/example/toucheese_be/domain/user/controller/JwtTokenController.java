@@ -16,13 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/token")
+@RequestMapping("/api/v1/auth")
 public class JwtTokenController {
-    private final JwtTokenUtils jwtTokenUtils;
-    private final RefreshTokenService refreshTokenService;
     private final PrincipalDetailsService principalDetailsService;
 
-    @PostMapping("/refresh")
+    @PostMapping("/reissuance")
     public ResponseEntity<TokenResponseDto> refreshAccessToken(
         @RequestBody
         TokenRequestDto dto

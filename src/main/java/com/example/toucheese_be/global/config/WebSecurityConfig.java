@@ -37,17 +37,14 @@ public class WebSecurityConfig {
                                 "/api/v1/toss/**",
                                 "/api/v1/admin/**",
                                 "/api/v1/auth/profile/update",
-                                "/api/v1/token/**",
+                                "/api/v1/auth/reissuance",
                                 "/api/v1/order/**"
                         )
                         .authenticated()
-//                        .requestMatchers(
-//                                "/api/v1/studio/**"
-//                        )
-//                        .hasAuthority("ROLE_GUEST")
                         .requestMatchers(
                                 "/api/v1/order/**",
-                                "/api/v1/auth/profile/update"
+                                "/api/v1/auth/profile/update",
+                                "/api/v1/auth/reissuance"
                         )
                         .hasAuthority("ROLE_MEMBER")
 //                        .requestMatchers(

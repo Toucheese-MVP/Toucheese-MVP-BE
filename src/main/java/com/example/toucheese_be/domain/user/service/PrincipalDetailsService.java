@@ -5,6 +5,7 @@ import com.example.toucheese_be.domain.user.constant.SocialProvider;
 import com.example.toucheese_be.domain.user.dto.request.OAuthSignInDto;
 import com.example.toucheese_be.domain.user.dto.request.UpdateUserDto;
 import com.example.toucheese_be.domain.user.entity.PrincipalDetails;
+import com.example.toucheese_be.domain.user.jwt.ApiResponse;
 import com.example.toucheese_be.domain.user.jwt.JwtTokenUtils;
 import com.example.toucheese_be.domain.user.dto.request.CreateUserDto;
 import com.example.toucheese_be.domain.user.dto.request.SignInDto;
@@ -19,8 +20,8 @@ import com.example.toucheese_be.global.error.GlobalCustomException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -38,6 +39,7 @@ public class PrincipalDetailsService implements UserDetailsService {
 
     /**
      * 일반 회원가입
+     *
      * @param dto
      * @return
      */
@@ -62,6 +64,7 @@ public class PrincipalDetailsService implements UserDetailsService {
 
     /**
      * 일반 로그인
+     *
      * @param dto
      * @return
      */
@@ -81,26 +84,32 @@ public class PrincipalDetailsService implements UserDetailsService {
 
     /**
      * 소셜 로그인
+     *
      * @param dto
      * @return
      */
-    public TokenResponseDto oAuthSignIn(OAuthSignInDto dto) {
+    public ResponseEntity<ApiResponse<TokenResponseDto>> oAuthSignIn(OAuthSignInDto dto) {
         // socialId 존재 유무 판단
         Optional<User> optionalUser = userRepository.findBySocialId(dto.getSocialId());
         PrincipalDetails principalDetails;
+        HttpStatus status;
+        String code;
+        String message;
 
         // 로그인을 한적이 있는 경우
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            log.info("{}님은 로그인을 한 적이 있습니다", user.getUsername());
+            log.info("{} 님은 로그인을 한 적이 있습니다", user.getUsername());
             user.setEmail(dto.getEmail());
             user.setUsername(dto.getUsername());
             userRepository.save(user);
             principalDetails = new PrincipalDetails(user);
+            status = HttpStatus.OK;
+            message = String.format("%s 님은 로그인을 한 적이 있습니다.", dto.getEmail());
+            code = "USER_LOGGED_IN";
         }
         // 최초 로그인
         else {
-            log.info("최초 로그인 입니다.");
             User user = userRepository.save(User.builder()
                     .socialId(dto.getSocialId())
                     .email(dto.getEmail())
@@ -108,24 +117,38 @@ public class PrincipalDetailsService implements UserDetailsService {
                     .socialProvider(SocialProvider.valueOf(dto.getSocialProvider()))
                     .role(Role.MEMBER)
                     .build());
+            log.info("{} 최초 로그인 입니다.", user.getUsername());
             principalDetails = new PrincipalDetails(user);
+            status = HttpStatus.CREATED;
+            message = String.format("%s 님은 최초 로그인 입니다.", dto.getEmail());
+            code = "USER_REGISTERED";
         }
 
         String accessToken = jwtTokenUtils.generateAccessToken(principalDetails);
         String refreshToken = jwtTokenUtils.generateRefreshToken();
-
         refreshTokenService.saveRefreshToken(principalDetails.getEmail(), refreshToken);
 
-        return TokenResponseDto.builder()
+        TokenResponseDto tokenResponseDto = TokenResponseDto.builder()
                 .accessToken(accessToken)
                 .issuedAt(jwtTokenUtils.getClaims(accessToken).getIssuedAt())
                 .expiration(jwtTokenUtils.getClaims(accessToken).getExpiration())
                 .refreshToken(refreshToken)
                 .build();
+
+        ApiResponse<TokenResponseDto> apiResponse = new ApiResponse<>(
+                status.value(),
+                code,
+                message,
+                tokenResponseDto
+        );
+
+        return ResponseEntity.status(status).body(apiResponse);
+
     }
 
     /**
      * accessToken, refreshToken 재발급
+     *
      * @param dto
      * @return
      */
@@ -163,6 +186,7 @@ public class PrincipalDetailsService implements UserDetailsService {
 
     /**
      * profile update
+     *
      * @return
      */
     public Boolean profileUpdate(UpdateUserDto dto) {
@@ -192,6 +216,4 @@ public class PrincipalDetailsService implements UserDetailsService {
                 .authorities(user.getRole().getRoles())
                 .build();
     }
-
-
 }
