@@ -29,12 +29,10 @@ public class OrderController {
 
 
     // 예약 일정 탭 불러오기
-    @GetMapping("/{userId}/schedule")
-    public ResponseEntity<Map<String, List<OrderDetailDto>>> getOrderSchedule(
-            @PathVariable
-            Long userId
-    ) {
-        Map<String, List<OrderDetailDto>> isOrderScheduled = orderService.checkedSchedule(userId);
+    @GetMapping("/schedule")
+    public ResponseEntity<List<OrderDetailDto>> getOrderSchedule() {
+
+        List<OrderDetailDto> isOrderScheduled = orderService.checkedSchedule();
 
         return ResponseEntity.ok(isOrderScheduled);
     }
@@ -47,5 +45,12 @@ public class OrderController {
     ) {
         Boolean isCancelledSchedule = orderService.getCancelTheSchedule(orderId);;
         return ResponseEntity.ok(isCancelledSchedule);
+    }
+
+    @GetMapping("/schedule/details")
+    public ResponseEntity<List<OrderDetailDto>> getViewDetailedSchedule(){
+        List<OrderDetailDto> isViewDetailedSchedule = orderService.viewDetailedSchedule();
+
+        return ResponseEntity.ok(isViewDetailedSchedule);
     }
 }
