@@ -15,7 +15,7 @@ import java.util.List;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long>, OrderRepositoryCustom {
     @Query("SELECT o FROM Order o WHERE o.id = ?1")
-    Order findOrdersWithDetails(Long orderId);
+    Order findOrdersWithDetails(Long userId);
 
     List<Order> findByUserId(Long userId);
 

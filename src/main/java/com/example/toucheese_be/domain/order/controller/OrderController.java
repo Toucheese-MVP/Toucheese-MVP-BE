@@ -47,7 +47,8 @@ public class OrderController {
         return ResponseEntity.ok(isCancelledSchedule);
     }
 
-    @GetMapping("/schedule/details")
+    // 예약 일정 상세보기
+    @GetMapping("/schedule/detailed")
     public ResponseEntity<List<OrderDetailDto>> getViewDetailedSchedule(){
         List<OrderDetailDto> isViewDetailedSchedule = orderService.viewDetailedSchedule();
 

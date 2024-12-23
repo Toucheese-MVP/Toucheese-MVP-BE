@@ -1,10 +1,7 @@
 package com.example.toucheese_be.domain.order.service;
 
 import com.example.toucheese_be.domain.item.dto.ItemDto;
-import com.example.toucheese_be.domain.order.dto.OrderDetailDto;
-import com.example.toucheese_be.domain.order.dto.OrderItemDto;
-import com.example.toucheese_be.domain.order.dto.OrderScheduleItemDto;
-import com.example.toucheese_be.domain.order.dto.OrderUserDto;
+import com.example.toucheese_be.domain.order.dto.*;
 import com.example.toucheese_be.domain.order.entity.constant.OrderStatus;
 import com.example.toucheese_be.domain.user.entity.PrincipalDetails;
 import com.example.toucheese_be.domain.user.entity.User;
@@ -110,29 +107,6 @@ public class OrderService {
         return true;
     }
 
-    // 예약 일정 탭 구현
-
-
-//
-////
-////            if (orderStatus.equals(OrderStatus.KEEP_RESERVATION)) {
-////                // "다가오는 예약 일정"에 추가
-////                scheduleMap.get("다가오는 예약 일정").addAll(orderDetailDtos);
-////            } else if (orderStatus.equals(OrderStatus.CONFIRM_RESERVATION)) {
-////                // "이전 예약 일정"에 추가
-////                scheduleMap.get("이전 예약 일정").addAll(orderDetailDtos);
-////            } else if (orderStatus.equals(OrderStatus.CANCEL_RESERVATION)) {
-////                // "이전 예약 일정"에 추가
-////                scheduleMap.get("이전 예약 일정").addAll(orderDetailDtos);
-////            }else {
-////
-////            }
-//
-//        }
-//
-//        return scheduleMap;
-//    }
-
     // 예약 취소하기 메서드
     public Boolean getCancelTheSchedule(Long orderId) {
         Order order = orderRepository.findById(orderId)
@@ -145,6 +119,7 @@ public class OrderService {
         return true;
     }
 
+    // 예약 일정 탭 메서드
     public List<OrderDetailDto> checkedSchedule() {
         // 사용자 예약 주문을 사용자 ID로 조회 (최적화된 쿼리 사용)
         PrincipalDetails principalDetails = authFacade.getAuth();
@@ -199,14 +174,109 @@ public class OrderService {
             schedule.add(detailDto); // 리스트에 추가
         }
         return schedule; // 단일 리스트 반환
-        }
-
-    public List<OrderDetailDto> viewDetailedSchedule() {
-        return null;
     }
 
+
+    // 예약 일정 상세보기
+    public List<OrderDetailDto> viewDetailedSchedule() {
+        // 사용자 예약 주문을 사용자 ID로 조회 (최적화된 쿼리 사용)
+        PrincipalDetails principalDetails = authFacade.getAuth();
+        List<Order> orders = orderRepository.findByUserIdWithDetails(principalDetails.getUserId());
+
+        // 단일 리스트로 변경
+        List<OrderDetailDto> detailedSchedule = new ArrayList<>();
+
+        // 주문이 없는 경우 빈 리스트를 반환
+        if (orders.isEmpty()) {
+            return detailedSchedule;
+        }
+
+        // 주문 상태에 따라 리스트에 추가
+        for (Order order : orders) {
+            // 주문 상품 정보 DTO 생성
+            List<OrderItemDto> orderItemDtos = new ArrayList<>();
+
+            // 스튜디오 이름 초기화
+            String studioName = "정보 없음"; // 기본값 설정
+            if (order.getStudio() != null) {
+                studioName = order.getStudio().getName(); // 스튜디오 정보 가져오기
+            }
+
+            for (OrderItem orderItem : order.getOrderItems()) {
+                Item item = orderItem.getItem();
+
+                // 주문 옵션 DTO 리스트 초기화
+                List<OrderOptionDto> orderOptionDtos = new ArrayList<>();
+                if (orderItem != null // && orderItem.getOrderOptions() != null
+                 ) {
+                    for (OrderOption option : orderItem.getOrderOptions()) {
+                        // 주문 옵션 DTO 생성
+                        OrderOptionDto optionDto = new OrderOptionDto(
+                                option.getId(),
+                                option.getName(),
+                                option.getPrice(),
+                                option.getQuantity());
+                        orderOptionDtos.add(optionDto); // 리스트에 추가
+                    }
+
+                    OrderItemDto orderItemDto = OrderItemDto.builder()
+                            .itemName(item != null ? item.getName() : "정보 없음")
+                            .itemImage(item != null ? item.getImage() : "정보 없음")
+                            .quantity(item != null ? orderItem.getQuantity() : null)
+                            .totalPrice(item != null ? orderItem.getTotalPrice() : null)
+                            .orderOptionDtos(orderOptionDtos)
+                            .build();
+
+                    orderItemDtos.add(orderItemDto);
+                }
+
+                // 사용자 정보 DTO 생성
+                OrderUserDto orderUserDto = OrderUserDto.builder()
+                        .userName(order.getUser() != null ? order.getUser().getUsername() : "정보 없음")
+                        .userEmail(order.getUser().getEmail() != null ? order.getUser().getEmail() : "정보 없음")
+                        .userPhone(order.getUser().getPhone() != null ? order.getUser().getPhone() : "정보 없음")
+                        .build();
+
+                // 최종 DTO 생성
+                OrderDetailDto detailDto = OrderDetailDto.builder()
+                        .orderId(order.getId())
+                        .orderUserDto(orderUserDto)
+                        .reservedDateTime(order.getOrderDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                        .studioName(studioName)
+                        .orderItemDto(orderItemDtos)
+                        .build();
+
+                detailedSchedule.add(detailDto);
+            }
+        }
+        return detailedSchedule;
+    }
+}
     /*
-    // 예약 일정 탭 메서드
+
+    // 예약 일정 탭 구현
+
+
+//
+////
+////            if (orderStatus.equals(OrderStatus.KEEP_RESERVATION)) {
+////                // "다가오는 예약 일정"에 추가
+////                scheduleMap.get("다가오는 예약 일정").addAll(orderDetailDtos);
+////            } else if (orderStatus.equals(OrderStatus.CONFIRM_RESERVATION)) {
+////                // "이전 예약 일정"에 추가
+////                scheduleMap.get("이전 예약 일정").addAll(orderDetailDtos);
+////            } else if (orderStatus.equals(OrderStatus.CANCEL_RESERVATION)) {
+////                // "이전 예약 일정"에 추가
+////                scheduleMap.get("이전 예약 일정").addAll(orderDetailDtos);
+////            }else {
+////
+////            }
+//
+//        }
+//
+//        return scheduleMap;
+//    }
+
     public List<OrderDetailDto> checkedSchedule() {
         // 사용자 예약 주문을 사용자 ID로 조회 (최적화된 쿼리 사용)
         PrincipalDetails principalDetails = authFacade.getAuth();
@@ -322,4 +392,3 @@ public class OrderService {
                 }*/
 
 
-}
