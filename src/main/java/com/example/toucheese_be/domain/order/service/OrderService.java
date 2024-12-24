@@ -24,9 +24,11 @@ import com.example.toucheese_be.global.common.AuthenticationFacade;
 import com.example.toucheese_be.global.error.GlobalCustomException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Service;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -173,11 +175,17 @@ public class OrderService {
                     .reservedDateTime(order.getOrderDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))) // 예약 시간
                     //.studioId(studioId)
                     .studioName(studioName)// 스튜디오 이름
-                    .orderItemDto(orderItemDtos) // 주문 상품 DTO 리스트
+                    .orderItemDto(orderItemDtos)// 주문 상품 DTO 리스트
+                    .status(order.getStatus())
+                    .modifiable(order.getStatus() == OrderStatus.KEEP_RESERVATION) // 주문 상태가 예약 대기일 경우 수정 가능
                     .build();
 
             schedule.add(detailDto); // 리스트에 추가
         }
+        // 정렬: 예약 대기 상태가 위로 오도록 정렬하고, 날짜순 정렬
+        schedule.sort(Comparator.comparing(OrderDetailDto::getStatus)
+                .thenComparing((Comparator.comparing(OrderDetailDto::getReservedDateTime)).reversed()));
+
         return schedule; // 단일 리스트 반환
     }
 

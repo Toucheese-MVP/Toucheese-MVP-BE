@@ -1,6 +1,7 @@
 package com.example.toucheese_be.domain.order.dto;
 
 import com.example.toucheese_be.domain.order.entity.Order;
+import com.example.toucheese_be.domain.order.entity.constant.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,6 +27,10 @@ public class OrderDetailDto {
     private String reservedDateTime;
     // 상품 확인
     private List<OrderItemDto> orderItemDto;
+    // 예약 상태
+    private OrderStatus status;
+    // 수정 가능 여부
+    private boolean modifiable;
 }
 //    public static OrderDetailDto fromEntity(Order entity) {
 //        return OrderDetailDto.builder()
