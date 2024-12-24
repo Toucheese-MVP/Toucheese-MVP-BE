@@ -9,3 +9,36 @@ spring:
   # 처음에 나오는 Spring Logo 제거
   main:
     banner-mode: off
+
+#  springdoc:
+#    swagger-ui:
+#      display-request-duration: true
+#    api-docs:
+#      path: /v1/api-docs
+#    paths-to-match:
+#      - /api/v1/**
+#
+
+  springdoc:
+    packages-to-scan: com.example.toucheese_be
+    default-consumes-media-type: application/json;charset=UTF-8
+    default-produces-media-type: application/json;charset=UTF-8
+    swagger-ui:
+      path: /
+      disable-swagger-default-url: true
+      display-request-duration: true
+      operations-sorter: alpha
+
+logging:
+  level:
+    root: info
+    org:
+      hibernate:
+        SQL: debug
+        stat: debug
+        type:
+          descriptor:
+            sql: trace
+      springframework:
+        security: debug
+      springdoc: warn

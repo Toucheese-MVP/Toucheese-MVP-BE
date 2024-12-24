@@ -5,7 +5,6 @@ import com.example.toucheese_be.domain.user.constant.SocialProvider;
 import com.example.toucheese_be.domain.user.dto.request.OAuthSignInDto;
 import com.example.toucheese_be.domain.user.dto.request.UpdateUserDto;
 import com.example.toucheese_be.domain.user.entity.PrincipalDetails;
-import com.example.toucheese_be.global.common.ApiResponse;
 import com.example.toucheese_be.domain.user.jwt.JwtTokenUtils;
 import com.example.toucheese_be.domain.user.dto.request.CreateUserDto;
 import com.example.toucheese_be.domain.user.dto.request.SignInDto;
@@ -15,15 +14,13 @@ import com.example.toucheese_be.domain.user.jwt.TokenRequestDto;
 import com.example.toucheese_be.domain.user.jwt.TokenResponseDto;
 import com.example.toucheese_be.domain.user.repository.UserRepository;
 import com.example.toucheese_be.global.common.AuthenticationFacade;
+import com.example.toucheese_be.global.common.CommonResponse;
 import com.example.toucheese_be.global.common.constant.ErrorCode;
-import com.example.toucheese_be.global.common.constant.SuccessCode;
 import com.example.toucheese_be.global.error.GlobalCustomException;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -90,11 +87,11 @@ public class PrincipalDetailsService implements UserDetailsService {
      * @param dto
      * @return
      */
-    public ApiResponse<TokenResponseDto> oAuthSignIn(OAuthSignInDto dto) {
+    public CommonResponse<TokenResponseDto> oAuthSignIn(OAuthSignInDto dto) {
         // socialId 존재 유무 판단
         Optional<User> optionalUser = userRepository.findBySocialId(dto.getSocialId());
         PrincipalDetails principalDetails;
-        SuccessCode successCode;
+        boolean isNewUser;
 
         // 로그인을 한적이 있는 경우
         if (optionalUser.isPresent()) {
@@ -104,11 +101,11 @@ public class PrincipalDetailsService implements UserDetailsService {
             user.setUsername(dto.getUsername());
             userRepository.save(user);
             principalDetails = new PrincipalDetails(user);
-            successCode = SuccessCode.USER_DONT_NEED_SIGN_UP;
+            isNewUser = false;
         }
         // 최초 로그인
         else {
-            String userEmail = dto.getEmail() == null ? UUID.randomUUID() + "@private.com" : dto.getEmail();
+            String userEmail = dto.getEmail() == null ? dto.getSocialId().toString() + "@private.com" : dto.getEmail();
 
             User user = userRepository.save(User.builder()
                     .socialId(dto.getSocialId())
@@ -119,7 +116,7 @@ public class PrincipalDetailsService implements UserDetailsService {
                     .build());
             log.info("최초 로그인 입니다. (userId : {})", user.getId());
             principalDetails = new PrincipalDetails(user);
-            successCode = SuccessCode.USER_NEED_SIGH_UP;
+            isNewUser = true;
         }
 
         String accessToken = jwtTokenUtils.generateAccessToken(principalDetails);
@@ -133,7 +130,11 @@ public class PrincipalDetailsService implements UserDetailsService {
                 .refreshToken(refreshToken)
                 .build();
 
-        return ApiResponse.success(tokenResponseDto, successCode);
+        if (isNewUser) {
+            return CommonResponse.created(tokenResponseDto);
+        } else {
+            return CommonResponse.ok(tokenResponseDto);
+        }
     }
 
     /**

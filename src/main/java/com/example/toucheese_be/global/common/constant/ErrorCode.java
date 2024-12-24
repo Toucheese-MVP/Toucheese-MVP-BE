@@ -29,11 +29,10 @@ public enum ErrorCode {
 
     // 토큰 관련 예외
     REFRESH_TOKEN_NOT_EQAUL(4016, HttpStatus.UNAUTHORIZED, "Refresh Token 이 일치하지 않습니다."),
-
     NOT_FOUND_END_POINT(4017, HttpStatus.NOT_FOUND, "존재하지 않는 API입니다."),
     JWT_SECURITY_EXCEPTION(4018, HttpStatus.FORBIDDEN, "[SecurityException] 잘못된 토큰입니다."),
     MALFORMED_JWT_EXCEPTION(4019, HttpStatus.FORBIDDEN, "[MalformedJwtException] 잘못된 토큰입니다."),
-    EXPIRED_JWT_EXCEPTION(4020, HttpStatus.FORBIDDEN, "[ExpiredJwtException] access 토큰 만료"),
+    EXPIRED_JWT_EXCEPTION(4020, HttpStatus.FORBIDDEN, "Access Token이 만료되었습니다."),
     UNSUPPORTED_JWT_EXCEPTION(4021, HttpStatus.FORBIDDEN, "[UnsupportedJwtException] 잘못된 형식의 토큰"),
     ILLEGAL_ARGUMENT_JWT_EXCEPTION(4022, HttpStatus.FORBIDDEN, "[IllegalArgumentException] 잘못된 형식의 토큰"),
     TOKEN_VALIDATION_FAIL(4033, HttpStatus.FORBIDDEN, "[토큰 검증 오류]"),

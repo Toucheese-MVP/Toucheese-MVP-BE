@@ -68,6 +68,9 @@ public class JwtTokenUtils {
 
 
     // 정상적인 JWT 인지 판단
+
+    // 비회원, 리프레시 토큰 만료 -> 로그인 유도 (에러코드 정의)
+    // 액세스 토큰 만료 -> 재발급 유도 (에러코드 정의)
     public boolean validate(String token) {
         try {
             getClaims(token);
