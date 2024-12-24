@@ -5,7 +5,6 @@ import com.example.toucheese_be.domain.user.constant.SocialProvider;
 import com.example.toucheese_be.domain.user.dto.request.OAuthSignInDto;
 import com.example.toucheese_be.domain.user.dto.request.UpdateUserDto;
 import com.example.toucheese_be.domain.user.entity.PrincipalDetails;
-import com.example.toucheese_be.domain.user.jwt.ApiResponse;
 import com.example.toucheese_be.domain.user.jwt.JwtTokenUtils;
 import com.example.toucheese_be.domain.user.dto.request.CreateUserDto;
 import com.example.toucheese_be.domain.user.dto.request.SignInDto;
@@ -15,13 +14,13 @@ import com.example.toucheese_be.domain.user.jwt.TokenRequestDto;
 import com.example.toucheese_be.domain.user.jwt.TokenResponseDto;
 import com.example.toucheese_be.domain.user.repository.UserRepository;
 import com.example.toucheese_be.global.common.AuthenticationFacade;
-import com.example.toucheese_be.global.error.ErrorCode;
+import com.example.toucheese_be.global.common.CommonResponse;
+import com.example.toucheese_be.global.common.constant.ErrorCode;
 import com.example.toucheese_be.global.error.GlobalCustomException;
 import java.util.Optional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -88,40 +87,36 @@ public class PrincipalDetailsService implements UserDetailsService {
      * @param dto
      * @return
      */
-    public ResponseEntity<ApiResponse<TokenResponseDto>> oAuthSignIn(OAuthSignInDto dto) {
+    public CommonResponse<TokenResponseDto> oAuthSignIn(OAuthSignInDto dto) {
         // socialId 존재 유무 판단
         Optional<User> optionalUser = userRepository.findBySocialId(dto.getSocialId());
         PrincipalDetails principalDetails;
-        HttpStatus status;
-        String code;
-        String message;
+        boolean isNewUser;
 
         // 로그인을 한적이 있는 경우
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            log.info("{} 님은 로그인을 한 적이 있습니다", user.getUsername());
+            log.info("이전에 로그인을 한 적이 있습니다. (userId : {})", user.getId());
             user.setEmail(dto.getEmail());
             user.setUsername(dto.getUsername());
             userRepository.save(user);
             principalDetails = new PrincipalDetails(user);
-            status = HttpStatus.OK;
-            message = String.format("%s 님은 로그인을 한 적이 있습니다.", dto.getEmail());
-            code = "USER_LOGGED_IN";
+            isNewUser = false;
         }
         // 최초 로그인
         else {
+            String userEmail = dto.getEmail() == null ? dto.getSocialId().toString() + "@private.com" : dto.getEmail();
+
             User user = userRepository.save(User.builder()
                     .socialId(dto.getSocialId())
-                    .email(dto.getEmail())
+                    .email(userEmail)
                     .username(dto.getUsername())
                     .socialProvider(SocialProvider.valueOf(dto.getSocialProvider()))
                     .role(Role.MEMBER)
                     .build());
-            log.info("{} 최초 로그인 입니다.", user.getUsername());
+            log.info("최초 로그인 입니다. (userId : {})", user.getId());
             principalDetails = new PrincipalDetails(user);
-            status = HttpStatus.CREATED;
-            message = String.format("%s 님은 최초 로그인 입니다.", dto.getEmail());
-            code = "USER_REGISTERED";
+            isNewUser = true;
         }
 
         String accessToken = jwtTokenUtils.generateAccessToken(principalDetails);
@@ -135,15 +130,11 @@ public class PrincipalDetailsService implements UserDetailsService {
                 .refreshToken(refreshToken)
                 .build();
 
-        ApiResponse<TokenResponseDto> apiResponse = new ApiResponse<>(
-                status.value(),
-                code,
-                message,
-                tokenResponseDto
-        );
-
-        return ResponseEntity.status(status).body(apiResponse);
-
+        if (isNewUser) {
+            return CommonResponse.created(tokenResponseDto);
+        } else {
+            return CommonResponse.ok(tokenResponseDto);
+        }
     }
 
     /**

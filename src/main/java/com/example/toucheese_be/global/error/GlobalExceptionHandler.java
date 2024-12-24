@@ -1,33 +1,35 @@
 package com.example.toucheese_be.global.error;
 
-import io.jsonwebtoken.JwtException;
+import com.example.toucheese_be.global.common.CommonResponse;
+import com.example.toucheese_be.global.common.constant.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    // 런타임 에러
-    @ExceptionHandler(GlobalCustomException.class)
-    public ResponseEntity<?> handleGlobalCustomException(GlobalCustomException e) {
-        log.error("Error occurs {}", e.toString());
-        return buildResponseEntity(e.getErrorCode());
+    // 존재하지 않는 요청에 대한 예외
+    @ExceptionHandler(value = {NoHandlerFoundException.class, HttpRequestMethodNotSupportedException.class})
+    public CommonResponse<?> handleNoPageFoundException(Exception e) {
+        log.error("GlobalExceptionHandler catch NoHandlerFoundException : {}", e.getMessage());
+        return CommonResponse.fail(ErrorCode.NOT_FOUND_END_POINT);
     }
 
-    private ResponseEntity<?> buildResponseEntity(ErrorCode errorCode) {
-        // HTTP 응답의 헤더 설정
-        HttpHeaders resHeaders = new HttpHeaders();
-        resHeaders.add("Content-Type", "application/json;charset=UTF-8");
-        ErrorResponse errorResponse = new ErrorResponse(errorCode);
-        HttpStatus status = HttpStatus.resolve(errorCode.getStatus());
-        if (status == null) {
-            status = HttpStatus.INTERNAL_SERVER_ERROR;
-        }
-        // HTTP 응답을 구성 (응답 본문, 헤더, 상태코드)
-        return new ResponseEntity<>(errorResponse, resHeaders, status);
+    // 런타임 예외 처리
+    @ExceptionHandler(value = {GlobalCustomException.class})
+    public CommonResponse<?> handleGlobalCustomException(GlobalCustomException e) {
+        log.error("handleCustomException() in GlobalExceptionHandler throw CustomException : {}", e.getMessage());
+        return CommonResponse.fail(e.getErrorCode());
+    }
+
+    // 기본 예외
+    @ExceptionHandler(value = {Exception.class})
+    public CommonResponse<?> handleException(Exception e) {
+        log.error("handleException() in GlobalExceptionHandler throw Exception : {}", e.getMessage());
+        e.printStackTrace();
+        return CommonResponse.fail(ErrorCode.INTERNAL_SERVER_ERROR);
     }
 }

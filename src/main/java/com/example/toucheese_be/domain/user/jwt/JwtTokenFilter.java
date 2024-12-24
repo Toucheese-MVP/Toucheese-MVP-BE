@@ -1,7 +1,7 @@
 package com.example.toucheese_be.domain.user.jwt;
 
 
-import com.example.toucheese_be.global.error.ErrorCode;
+import com.example.toucheese_be.global.common.constant.ErrorCode;
 import com.example.toucheese_be.global.error.GlobalCustomException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.JwtException;
@@ -27,10 +27,17 @@ import java.util.Map;
 public class JwtTokenFilter extends OncePerRequestFilter {
     private final JwtTokenUtils jwtTokenUtils;
 
-
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String[] excludePath = {
+                "/swagger-ui/",
+                "/swagger-ui/**",
+                "/v3/api-docs/",
+                "/v3/api-docs/**",
+                "/static/**",
+                "/resources/**",
+                "/META-INF/resources/**",
+                "/public/**",
                 "/api/v1/studio/**",
                 "/api/v1/auth/sign-up/**",
                 "/api/v1/auth/sign-in/**"

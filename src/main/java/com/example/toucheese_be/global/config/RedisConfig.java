@@ -37,7 +37,7 @@ public class RedisConfig {
         /* RedisTemplate을 받아와 set, get, delete 사용 */
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
 
-        /* Key & value Serializer, Factory 설저 */
+        /* Key & value Serializer, Factory 설정 */
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new StringRedisSerializer());
         redisTemplate.setConnectionFactory(redisConnectionFactory());
