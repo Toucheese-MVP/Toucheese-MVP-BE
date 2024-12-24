@@ -16,6 +16,8 @@ import java.util.stream.Collectors;
 public class OrderDetailDto {
     // 주문 ID
     private Long orderId;
+
+    private Long studioId;
     // 내 정보
     private OrderUserDto orderUserDto;
     // 스튜디오 이름
