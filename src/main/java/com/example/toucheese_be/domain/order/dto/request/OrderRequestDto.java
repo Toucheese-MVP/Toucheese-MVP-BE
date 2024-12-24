@@ -11,9 +11,6 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 public class OrderRequestDto {
-    private String name;
-    private String email;
-    private String phone;
     private Long studioId;
     private LocalDateTime orderDateTime;
     private List<OrderRequestItemDto> orderRequestItemDtos;
