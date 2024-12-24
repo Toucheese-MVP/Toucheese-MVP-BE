@@ -18,7 +18,7 @@ import com.example.toucheese_be.domain.user.repository.UserRepository;
 
 import com.example.toucheese_be.domain.studio.entity.Studio;
 import com.example.toucheese_be.domain.studio.repository.StudioRepository;
-import com.example.toucheese_be.global.common.constant.ErrorCode;
+import com.example.toucheese_be.global.error.ErrorCode;
 import com.example.toucheese_be.global.common.AuthenticationFacade;
 import com.example.toucheese_be.global.error.GlobalCustomException;
 import jakarta.transaction.Transactional;
