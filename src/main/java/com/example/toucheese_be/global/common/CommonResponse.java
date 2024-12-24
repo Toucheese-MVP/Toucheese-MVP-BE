@@ -1,6 +1,6 @@
 package com.example.toucheese_be.global.common;
 
-import com.example.toucheese_be.global.common.constant.ErrorCode;
+import com.example.toucheese_be.global.error.ErrorCode;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.annotation.Nullable;
 import org.springframework.http.HttpStatus;

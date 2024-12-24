@@ -1,7 +1,6 @@
 package com.example.toucheese_be.domain.order.service;
 
 
-import com.example.toucheese_be.domain.item.dto.ItemDto;
 import com.example.toucheese_be.domain.order.dto.*;
 import com.example.toucheese_be.domain.order.entity.constant.OrderStatus;
 import com.example.toucheese_be.domain.user.entity.PrincipalDetails;

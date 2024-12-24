@@ -15,10 +15,9 @@ import com.example.toucheese_be.domain.user.jwt.TokenResponseDto;
 import com.example.toucheese_be.domain.user.repository.UserRepository;
 import com.example.toucheese_be.global.common.AuthenticationFacade;
 import com.example.toucheese_be.global.common.CommonResponse;
-import com.example.toucheese_be.global.common.constant.ErrorCode;
+import com.example.toucheese_be.global.error.ErrorCode;
 import com.example.toucheese_be.global.error.GlobalCustomException;
 import java.util.Optional;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -105,7 +104,12 @@ public class PrincipalDetailsService implements UserDetailsService {
         }
         // 최초 로그인
         else {
-            String userEmail = dto.getEmail() == null ? dto.getSocialId().toString() + "@private.com" : dto.getEmail();
+            String userEmail = "none";
+            if (dto.getEmail() == null || dto.getEmail().isEmpty()) {
+                userEmail = dto.getSocialId() + "@private.com";
+            } else {
+                userEmail = dto.getEmail();
+            }
 
             User user = userRepository.save(User.builder()
                     .socialId(dto.getSocialId())
