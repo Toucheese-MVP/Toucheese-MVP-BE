@@ -1,4 +1,4 @@
-package com.example.toucheese_be.global.common.constant;
+package com.example.toucheese_be.global.error;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

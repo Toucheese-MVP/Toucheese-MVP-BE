@@ -1,6 +1,5 @@
 package com.example.toucheese_be.global.error;
 
-import com.example.toucheese_be.global.common.constant.ErrorCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

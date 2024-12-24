@@ -1,7 +1,7 @@
 package com.example.toucheese_be.domain.user.jwt;
 
 
-import com.example.toucheese_be.global.common.constant.ErrorCode;
+import com.example.toucheese_be.global.error.ErrorCode;
 import com.example.toucheese_be.global.error.GlobalCustomException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.JwtException;

@@ -1,7 +1,6 @@
 package com.example.toucheese_be.domain.order.service;
 
 
-import com.example.toucheese_be.domain.item.dto.ItemDto;
 import com.example.toucheese_be.domain.order.dto.*;
 import com.example.toucheese_be.domain.order.entity.constant.OrderStatus;
 import com.example.toucheese_be.domain.user.entity.PrincipalDetails;
@@ -19,16 +18,14 @@ import com.example.toucheese_be.domain.user.repository.UserRepository;
 
 import com.example.toucheese_be.domain.studio.entity.Studio;
 import com.example.toucheese_be.domain.studio.repository.StudioRepository;
-import com.example.toucheese_be.global.common.constant.ErrorCode;
-import com.example.toucheese_be.global.common.AuthenticationFacade;
 import com.example.toucheese_be.global.error.ErrorCode;
+import com.example.toucheese_be.global.common.AuthenticationFacade;
 import com.example.toucheese_be.global.error.GlobalCustomException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @Service
