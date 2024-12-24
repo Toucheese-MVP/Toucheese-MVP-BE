@@ -10,7 +10,6 @@ import com.example.toucheese_be.domain.order.entity.QOrderItem;
 import com.example.toucheese_be.domain.order.entity.QOrderOption;
 import com.example.toucheese_be.domain.studio.dto.PageRequestDto;
 import com.example.toucheese_be.domain.studio.entity.QStudio;
-// import com.example.toucheese_be.domain.studio.entity.Studio;
 import com.example.toucheese_be.domain.studio.entity.constant.StudioImageType;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Collections;
@@ -41,6 +40,7 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
         List<Order> ordersWithItems = jpaQueryFactory.selectFrom(order)
                 .distinct()
                 .leftJoin(order.orderItems, orderItem).fetchJoin()
+                .orderBy(order.orderDateTime.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -57,6 +57,7 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
         // 3. AdminOrderDto로 변환
         List<AdminOrderDto> adminOrderDtos = ordersWithItems.stream().map(orderEntity -> AdminOrderDto.builder()
                         .orderId(orderEntity.getId())
+                        .orderStatus(orderEntity.getStatus().toString())
                         .studioName(orderEntity.getStudio().getName())
                         .studioProfile(orderEntity.getStudio().getImages().stream()
                                 .filter(studioImage -> studioImage.getType().equals(StudioImageType.PROFILE))
