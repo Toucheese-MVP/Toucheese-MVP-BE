@@ -260,6 +260,8 @@ public class OrderService {
                         .orderId(order.getId())
                         .orderUserDto(orderUserDto)
                         .reservedDateTime(order.getOrderDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                        .status(order.getStatus())
+                        .modifiable(order.getStatus() == OrderStatus.KEEP_RESERVATION)
                         .studioId(studioId)
                         .studioName(studioName)
                         .orderItemDto(orderItemDtos)
