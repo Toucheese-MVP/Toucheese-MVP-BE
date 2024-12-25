@@ -2,6 +2,7 @@ package com.example.toucheese_be.domain.order.service;
 
 
 import com.example.toucheese_be.domain.order.dto.*;
+import com.example.toucheese_be.domain.order.dto.request.OrderRequestItemDto;
 import com.example.toucheese_be.domain.order.entity.constant.OrderStatus;
 import com.example.toucheese_be.domain.user.entity.PrincipalDetails;
 import com.example.toucheese_be.domain.user.entity.User;
@@ -188,6 +189,80 @@ public class OrderService {
         return schedule; // 단일 리스트 반환
     }
 
+    // 예약 일정 수정 메서드
+    public Boolean getModifyTheSchedule(Long orderId, OrderRequestDto updatedDto) {
+        PrincipalDetails principalDetails = authFacade.getAuth();
+
+        // 현재 사용자의 주문 조회
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new GlobalCustomException(ErrorCode.ORDER_NOT_FOUND));
+
+        // 사용자가 해당 주문의 소유자인지 확인
+        if (!order.getUser().getId().equals(principalDetails.getUserId())) {
+            throw new GlobalCustomException(ErrorCode.UNAUTHORIZED_ACCESS);
+        }
+
+        // 수정할 내용 반영
+        order.setOrderDateTime(updatedDto.getOrderDateTime());
+
+        // 주문 아이템 수정 (기존 아이템을 삭제하고 새로운 아이템으로 추가하는 방식)
+        List<OrderItem> updatedOrderItems = new ArrayList<>();
+        for (OrderRequestItemDto itemDto : updatedDto.getOrderRequestItemDtos()) {
+            Item item = itemRepository.findById(itemDto.getItemId())
+                    .orElseThrow(() -> new GlobalCustomException(ErrorCode.ITEM_NOT_FOUND));
+
+            // 새로운 OrderItem 생성
+            OrderItem orderItem = OrderItem.builder()
+                    .item(item)
+                    .name(item.getName())
+                    .price(item.getPrice())
+                    .quantity(itemDto.getItemQuantity())
+                    .order(order) // 현재 주문 설정
+                    .build();
+
+            // 주문 옵션 생성
+            List<OrderOption> orderOptions = itemDto.getOrderRequestOptionDtos().stream()
+                    .map(orderRequestOptionDto -> {
+                        ItemOption itemOption = itemOptionRepository.findById(orderRequestOptionDto.getOptionId())
+                                .orElseThrow(() -> new GlobalCustomException(ErrorCode.ITEM_OPTION_NOT_FOUND));
+
+                        // OrderOption 생성
+                        OrderOption orderOption = OrderOption.builder()
+                                .itemOptionId(itemOption)
+                                .name(itemOption.getOption().getName())
+                                .price(itemOption.getOption().getPrice())
+                                .quantity(orderRequestOptionDto.getOptionQuantity())
+                                .build();
+
+                        // OrderOption에 OrderItem 설정
+                        orderOption.setOrderItem(orderItem);
+
+                        return orderOption;
+                    })
+                    .toList();
+
+            // OrderItem에 생성한 OrderOptions 추가
+            orderItem.setOrderOptions(orderOptions);
+
+            int orderOptionsTotalPrice = orderOptions.stream()
+                    .mapToInt(option -> option.getPrice() * option.getQuantity())
+                    .sum();
+
+            int totalOrderItemPrice = item.getPrice() * itemDto.getItemQuantity() + orderOptionsTotalPrice;
+            orderItem.setTotalPrice(totalOrderItemPrice); // 총 가격 설정
+
+            updatedOrderItems.add(orderItem);
+        }
+
+        // 기존 주문 아이템 삭제 후 새로운 아이템 추가
+        order.getOrderItems().clear();
+        order.getOrderItems().addAll(updatedOrderItems);
+
+        // 변경된 주문 저장
+        orderRepository.save(order);
+
+        return true;
+    }
 
     // 예약 일정 상세보기
     public List<OrderDetailDto> viewDetailedSchedule() {
