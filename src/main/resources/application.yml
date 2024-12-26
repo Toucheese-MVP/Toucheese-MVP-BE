@@ -10,12 +10,6 @@ spring:
   main:
     banner-mode: off
 
-#fcm:
-#  file_path: /Users/seonik/개발/LikeLion/멋사 로켓단 2기/Toucheese-BE/src/main/resources/firebase/toucheese-fcm.json
-#  url: https://fcm.googleapis.com/v1/projects/toucheese-2/messages:send
-#  google_api: https://www.googleapis.com/auth/cloud-platform
-#  project_id: toucheese-2
-
 springdoc:
   packages-to-scan: com.example.toucheese_be
   swagger-ui:

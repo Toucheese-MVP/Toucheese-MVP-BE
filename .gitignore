@@ -36,4 +36,3 @@ out/
 ### VS Code ###
 .vscode/
 db.sqlite
-src/main/resources/firebase/toucheese-fcm.json
