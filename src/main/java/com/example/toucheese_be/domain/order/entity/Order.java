@@ -73,14 +73,15 @@ public class Order {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String reservedDateTime = this.orderDateTime.format(formatter);
 
-        // 주문 상품 정보 DTO 생성
-        List<OrderItemDto> orderItemDtos = new ArrayList<>();
-        for (OrderItem orderItem : orderItems) {
-            OrderItemDto orderItemDto = OrderItemDto.builder()
-                    .itemId(orderItem.getItem().getId())
-                    .itemName(orderItem.getItem().getName())
+        // 첫 번째 주문 아이템만 처리
+        OrderItemDto orderItemDto = null;
+        if (!orderItems.isEmpty()) {
+            OrderItem orderItem = orderItems.get(0); // 첫 번째 아이템 가져오기
+            orderItemDto = OrderItemDto.builder()
+                    .itemId(orderItem.getItem() != null ? orderItem.getItem().getId() : null)
+                    .itemName(orderItem.getItem() != null ? orderItem.getItem().getName() : "정보 없음")
                     .item(orderItem.getItem()) // 필요에 따라 Item 객체를 포함
-                    .itemImage(orderItem.getItem().getImage()) // 상품 이미지 URL
+                    .itemImage(orderItem.getItem() != null ? orderItem.getItem().getImage() : null) // 상품 이미지 URL
                     .quantity(orderItem.getQuantity())
                     .totalPrice(orderItem.getTotalPrice())
                     .orderOptionDtos(orderItem.getOrderOptions().stream()
@@ -92,17 +93,18 @@ public class Order {
                                     .build())
                             .collect(Collectors.toList())) // 옵션 DTO 리스트
                     .build();
-
-            orderItemDtos.add(orderItemDto);
         }
 
         // 최종 DTO 생성
         OrderDetailDto detailDto = OrderDetailDto.builder()
                 .orderId(this.id)
                 .orderUserDto(orderUserDto) // 주문 사용자 정보 DTO
-                .studioName(this.studio.getName()) // 스튜디오 이름
+                .studioId(this.studio != null ? this.studio.getId() : null) // 스튜디오 ID
+                .studioName(this.studio != null ? this.studio.getName() : "정보 없음") // 스튜디오 이름
                 .reservedDateTime(reservedDateTime) // 예약 시간
-                .orderItemDto(orderItemDtos) // 주문 상품 DTO 리스트
+                .orderItemDto(orderItemDto) // 단일 주문 상품 DTO
+                .status(this.status) // 주문 상태
+                .modifiable(this.status == OrderStatus.KEEP_RESERVATION) // 수정 가능 여부
                 .build();
 
         orderDetails.add(detailDto);

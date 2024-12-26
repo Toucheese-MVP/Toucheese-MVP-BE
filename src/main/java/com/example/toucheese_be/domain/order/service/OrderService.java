@@ -124,7 +124,6 @@ public class OrderService {
         // 사용자 예약 주문을 사용자 ID로 조회 (최적화된 쿼리 사용)
         PrincipalDetails principalDetails = authFacade.getAuth();
         List<Order> orders = orderRepository.findByUserIdWithDetails(principalDetails.getUserId());
-
         List<OrderDetailDto> schedule = new ArrayList<>(); // 단일 리스트로 변경
 
         // 주문이 없는 경우 빈 리스트를 반환
@@ -135,36 +134,29 @@ public class OrderService {
         // 주문 상태에 따라 리스트에 추가
         for (Order order : orders) {
             // 주문 상품 정보 DTO 생성
-            List<OrderItemDto> orderItemDtos = new ArrayList<>();
-
-            // Long studioId = null;
-            // if(order.getStudio() != null){
-            //     studioId = order.getStudio().getId();
-            // }
+            OrderItemDto orderItemDto = null; // 단일 DTO 초기화
 
             String studioName = "정보 없음";
-            if(order.getStudio() != null){
+            if (order.getStudio() != null) {
                 studioName = order.getStudio().getName();
             }
 
-            for (OrderItem orderItem : order.getOrderItems()) {
+            // 첫 번째 주문 아이템만 처리
+            if (!order.getOrderItems().isEmpty()) {
+                OrderItem orderItem = order.getOrderItems().get(0); // 첫 번째 아이템 가져오기
                 Item item = orderItem.getItem();
 
-                OrderItemDto orderItemDto = OrderItemDto.builder()
+                orderItemDto = OrderItemDto.builder()
                         .itemId(item != null ? item.getId() : null)
                         .itemName(item != null ? item.getName() : "정보 없음")
-                        .quantity(item != null ? orderItem.getQuantity() : null)
+                        .quantity(orderItem.getQuantity())
                         .build();
-
-                orderItemDtos.add(orderItemDto);
             }
 
             // 사용자 정보 DTO 생성
             OrderUserDto orderUserDto = OrderUserDto.builder()
-                    .userId(order.getId() != null ? order.getUser().getId() : null)
-                    .userName(order.getUser() != null ? order.getUser().getUsername() : null)
-                    //.userEmail(order.getUser() != null ? order.getUser().getEmail() : null)
-                    //.userPhone(order.getUser() != null ? order.getUser().getPhone() : null)
+                    .userId(order.getUser() != null ? order.getUser().getId() : null)
+                    .userName(order.getUser() != null ? order.getUser().getUsername() : "정보 없음")
                     .build();
 
             // 최종 DTO 생성
@@ -172,18 +164,18 @@ public class OrderService {
                     .orderId(order.getId())
                     .orderUserDto(orderUserDto)
                     .reservedDateTime(order.getOrderDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))) // 예약 시간
-                    //.studioId(studioId)
-                    .studioName(studioName)// 스튜디오 이름
-                    .orderItemDto(orderItemDtos)// 주문 상품 DTO 리스트
+                    .studioName(studioName) // 스튜디오 이름
+                    .orderItemDto(orderItemDto) // 단일 주문 상품 DTO
                     .status(order.getStatus())
                     .modifiable(order.getStatus() == OrderStatus.KEEP_RESERVATION) // 주문 상태가 예약 대기일 경우 수정 가능
                     .build();
 
             schedule.add(detailDto); // 리스트에 추가
         }
+
         // 정렬: 예약 대기 상태가 위로 오도록 정렬하고, 날짜순 정렬
         schedule.sort(Comparator.comparing(OrderDetailDto::getStatus)
-                .thenComparing((Comparator.comparing(OrderDetailDto::getReservedDateTime)).reversed()));
+                .thenComparing(Comparator.comparing(OrderDetailDto::getReservedDateTime).reversed()));
 
         return schedule; // 단일 리스트 반환
     }
@@ -255,14 +247,19 @@ public class OrderService {
                         .userPhone(order.getUser().getPhone() != null ? order.getUser().getPhone() : "정보 없음")
                         .build();
 
+                // 첫 번째 아이템 선택 (비어있지 않은 경우)
+                OrderItemDto orderItemDto = orderItemDtos.isEmpty() ? null : orderItemDtos.get(0);
+
                 // 최종 DTO 생성
                 OrderDetailDto detailDto = OrderDetailDto.builder()
                         .orderId(order.getId())
                         .orderUserDto(orderUserDto)
                         .reservedDateTime(order.getOrderDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                        .status(order.getStatus())
+                        .modifiable(order.getStatus() == OrderStatus.KEEP_RESERVATION)
                         .studioId(studioId)
                         .studioName(studioName)
-                        .orderItemDto(orderItemDtos)
+                        .orderItemDto(orderItemDto) // 단일 주문 상품 DTO
                         .build();
 
                 detailedSchedule.add(detailDto);
