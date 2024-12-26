@@ -17,7 +17,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TokenResponseDto {
-    private UserDto userDto;
     private String accessToken;
     private Date issuedAt;
     private Date expiration;

@@ -5,6 +5,7 @@ import com.example.toucheese_be.domain.user.dto.request.CreateUserDto;
 import com.example.toucheese_be.domain.user.dto.request.OAuthSignInDto;
 import com.example.toucheese_be.domain.user.dto.request.SignInDto;
 import com.example.toucheese_be.domain.user.dto.request.UpdateUserDto;
+import com.example.toucheese_be.domain.user.dto.response.SocialLoginDto;
 import com.example.toucheese_be.domain.user.jwt.TokenResponseDto;
 import com.example.toucheese_be.domain.user.service.PrincipalDetailsService;
 import com.example.toucheese_be.domain.user.dto.response.UserDto;
@@ -62,7 +63,7 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "서버 에러",
                     content = @Content(schema = @Schema(implementation = ApiResponse.class)))
     })
-    public CommonResponse<TokenResponseDto> oAuthSignIn(
+    public CommonResponse<SocialLoginDto> oAuthSignIn(
             @RequestBody
             OAuthSignInDto dto
     ) {

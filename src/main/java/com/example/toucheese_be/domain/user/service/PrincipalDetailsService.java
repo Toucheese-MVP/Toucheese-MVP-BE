@@ -4,6 +4,7 @@ import com.example.toucheese_be.domain.user.constant.Role;
 import com.example.toucheese_be.domain.user.constant.SocialProvider;
 import com.example.toucheese_be.domain.user.dto.request.OAuthSignInDto;
 import com.example.toucheese_be.domain.user.dto.request.UpdateUserDto;
+import com.example.toucheese_be.domain.user.dto.response.SocialLoginDto;
 import com.example.toucheese_be.domain.user.entity.PrincipalDetails;
 import com.example.toucheese_be.domain.user.jwt.JwtTokenUtils;
 import com.example.toucheese_be.domain.user.dto.request.CreateUserDto;
@@ -86,7 +87,7 @@ public class PrincipalDetailsService implements UserDetailsService {
      * @param dto
      * @return
      */
-    public CommonResponse<TokenResponseDto> oAuthSignIn(OAuthSignInDto dto) {
+    public CommonResponse<SocialLoginDto> oAuthSignIn(OAuthSignInDto dto) {
         // socialId 존재 유무 판단
         Optional<User> optionalUser = userRepository.findBySocialId(dto.getSocialId());
         PrincipalDetails principalDetails;
@@ -128,18 +129,29 @@ public class PrincipalDetailsService implements UserDetailsService {
         String refreshToken = jwtTokenUtils.generateRefreshToken();
         refreshTokenService.saveRefreshToken(principalDetails.getEmail(), refreshToken);
 
-        TokenResponseDto tokenResponseDto = TokenResponseDto.builder()
-                .userDto(UserDto.fromEntity(user))
+        TokenResponseDto tokens = TokenResponseDto.builder()
                 .accessToken(accessToken)
                 .issuedAt(jwtTokenUtils.getClaims(accessToken).getIssuedAt())
                 .expiration(jwtTokenUtils.getClaims(accessToken).getExpiration())
                 .refreshToken(refreshToken)
                 .build();
 
+        SocialLoginDto socialLoginDto = SocialLoginDto.builder()
+                .userId(user.getId())
+                .userEmail(user.getEmail())
+                .username(user.getUsername())
+                .nickname(user.getPhone())
+                .phone(user.getPhone())
+                .role(user.getRole())
+                .socialProvider(user.getSocialProvider())
+                .tokens(tokens)
+                .build();
+
+
         if (isNewUser) {
-            return CommonResponse.created(tokenResponseDto);
+            return CommonResponse.created(SocialLoginDto);
         } else {
-            return CommonResponse.ok(tokenResponseDto);
+            return CommonResponse.ok(SocialLoginDto);
         }
     }
 
@@ -149,7 +161,7 @@ public class PrincipalDetailsService implements UserDetailsService {
      * @param dto
      * @return
      */
-    public TokenResponseDto refreshAccessToken(TokenRequestDto dto) {
+    public SocialLoginDto refreshAccessToken(TokenRequestDto dto) {
         String accessToken = dto.getAccessToken();
         String refreshToken = dto.getRefreshToken();
         String email = jwtTokenUtils.extractEmailFromToken(accessToken);
@@ -174,14 +186,25 @@ public class PrincipalDetailsService implements UserDetailsService {
             User user = userRepository.findByEmail(email)
                     .orElseThrow(() -> new GlobalCustomException(ErrorCode.USER_NOT_FOUND));
 
-            // 응답 DTO
-            return TokenResponseDto.builder()
-                    .userDto(UserDto.fromEntity(user))
+            TokenResponseDto tokens = TokenResponseDto.builder()
                     .accessToken(newAccessToken)
                     .issuedAt(jwtTokenUtils.getClaims(newAccessToken).getIssuedAt())
                     .expiration(jwtTokenUtils.getClaims(newAccessToken).getExpiration())
                     .refreshToken(newRefreshToken)
                     .build();
+
+            // 응답 DTO
+            return SocialLoginDto.builder()
+                    .userId(user.getId())
+                    .userEmail(user.getEmail())
+                    .username(user.getUsername())
+                    .nickname(user.getPhone())
+                    .phone(user.getPhone())
+                    .role(user.getRole())
+                    .socialProvider(user.getSocialProvider())
+                    .tokens(tokens)
+                    .build();
+
         }
     }
 
