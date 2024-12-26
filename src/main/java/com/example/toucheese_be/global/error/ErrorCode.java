@@ -26,6 +26,7 @@ public enum ErrorCode {
     USER_NOT_FOUND(4013, HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다."),
     UPDATE_USERNAME_EMPTY(4014, HttpStatus.BAD_REQUEST, "사용자 이름이 비어있습니다."),
     AUTHENTICATION_FAILED(4015, HttpStatus.FORBIDDEN, "인증 확인에 실패했습니다."),
+    UNAUTHORIZED_ACCESS(4016, HttpStatus.BAD_REQUEST, "회원님의 예약 내역이 아닙니다."),
 
     // 토큰 관련 예외
     REFRESH_TOKEN_NOT_EQAUL(4016, HttpStatus.UNAUTHORIZED, "Refresh Token 이 일치하지 않습니다."),
@@ -42,6 +43,7 @@ public enum ErrorCode {
     INTERNAL_SERVER_ERROR(5000, HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 오류가 발생했습니다."),
     DATABASE_ERROR(5001, HttpStatus.INTERNAL_SERVER_ERROR, "데이터베이스 오류가 발생했습니다."),
     EXTERNAL_API_ERROR(5002, HttpStatus.INTERNAL_SERVER_ERROR, "외부 API 호출 중 오류가 발생했습니다.");
+
 
     private final Integer code;
     private final HttpStatus httpStatus;
