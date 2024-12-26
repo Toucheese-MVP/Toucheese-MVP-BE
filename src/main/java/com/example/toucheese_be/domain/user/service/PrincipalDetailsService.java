@@ -91,10 +91,11 @@ public class PrincipalDetailsService implements UserDetailsService {
         Optional<User> optionalUser = userRepository.findBySocialId(dto.getSocialId());
         PrincipalDetails principalDetails;
         boolean isNewUser;
+        User user;
 
         // 로그인을 한적이 있는 경우
         if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
+            user = optionalUser.get();
             log.info("이전에 로그인을 한 적이 있습니다. (userId : {})", user.getId());
             user.setEmail(dto.getEmail());
             user.setUsername(dto.getUsername());
@@ -111,7 +112,7 @@ public class PrincipalDetailsService implements UserDetailsService {
                 userEmail = dto.getEmail();
             }
 
-            User user = userRepository.save(User.builder()
+            user = userRepository.save(User.builder()
                     .socialId(dto.getSocialId())
                     .email(userEmail)
                     .username(dto.getUsername())
@@ -128,6 +129,7 @@ public class PrincipalDetailsService implements UserDetailsService {
         refreshTokenService.saveRefreshToken(principalDetails.getEmail(), refreshToken);
 
         TokenResponseDto tokenResponseDto = TokenResponseDto.builder()
+                .userDto(UserDto.fromEntity(user))
                 .accessToken(accessToken)
                 .issuedAt(jwtTokenUtils.getClaims(accessToken).getIssuedAt())
                 .expiration(jwtTokenUtils.getClaims(accessToken).getExpiration())
@@ -169,8 +171,12 @@ public class PrincipalDetailsService implements UserDetailsService {
 
             log.info("새로운 Access Token 및 Refresh Token 발급 성공. 사용지: {}", email);
 
+            User user = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new GlobalCustomException(ErrorCode.USER_NOT_FOUND));
+
             // 응답 DTO
             return TokenResponseDto.builder()
+                    .userDto(UserDto.fromEntity(user))
                     .accessToken(newAccessToken)
                     .issuedAt(jwtTokenUtils.getClaims(newAccessToken).getIssuedAt())
                     .expiration(jwtTokenUtils.getClaims(newAccessToken).getExpiration())
