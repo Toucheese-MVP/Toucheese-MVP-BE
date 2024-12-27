@@ -38,15 +38,18 @@ public class OrderController {
     }
 
     // 예약 일정 상세보기
-    @GetMapping("/schedule/detailed")
-    public ResponseEntity<List<OrderDetailDto>> getViewDetailedSchedule(){
-        List<OrderDetailDto> isViewDetailedSchedule = orderService.viewDetailedSchedule();
+    @GetMapping("{orderId}/schedule/detailed")
+    public ResponseEntity<List<OrderDetailDto>> getViewDetailedSchedule(
+            @PathVariable
+            Long orderId
+    ){
+        List<OrderDetailDto> isViewDetailedSchedule = orderService.viewDetailedSchedule(orderId);
 
         return ResponseEntity.ok(isViewDetailedSchedule);
     }
 
     // 예약 일정 수정하기
-    @PutMapping("/{orderId}/schedule/detailed")
+    @PutMapping("/{orderId}/schedule/modify")
     public ResponseEntity<Boolean> getModifiedSchedule(
             @PathVariable
             Long orderId,
@@ -66,18 +69,6 @@ public class OrderController {
     ) {
         Boolean isCancelledSchedule = orderService.getCancelTheSchedule(orderId);;
         return ResponseEntity.ok(isCancelledSchedule);
-    }
-
-
-    // 예약 일정 상세보기
-    @GetMapping("{orderId}/schedule/detailed")
-    public ResponseEntity<List<OrderDetailDto>> getViewDetailedSchedule(
-            @PathVariable
-            Long orderId
-    ){
-        List<OrderDetailDto> isViewDetailedSchedule = orderService.viewDetailedSchedule(orderId);
-
-        return ResponseEntity.ok(isViewDetailedSchedule);
     }
 
 }

@@ -3,10 +3,8 @@ FROM eclipse-temurin:17 as build
 WORKDIR /app
 COPY . .
 
-RUN <<EOF
-./gradlew bootJar
-mv build/libs/*.jar app.jar
-EOF
+# Gradle 빌드 실행
+RUN ./gradlew clean bootJar && mv build/libs/*.jar app.jar
 
 # 여기부터 새로운 Stage
 FROM eclipse-temurin:17-jre
