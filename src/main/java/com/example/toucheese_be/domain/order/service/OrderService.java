@@ -27,10 +27,13 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Service;
+
+import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
@@ -173,7 +176,8 @@ public class OrderService {
             OrderDetailDto detailDto = OrderDetailDto.builder()
                     .orderId(order.getId())
                     .orderUserDto(orderUserDto)
-                    .reservedDateTime(order.getOrderDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))) // 예약 시간
+                    .reservedDateTime(order.getOrderDateTime().format(DateTimeFormatter.ofPattern("MM월 dd일(E)", Locale.KOREA)))
+                            //getOrderDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))) // 예약 시간
                     .studioName(studioName) // 스튜디오 이름
                     .studioId(order.getStudio() != null ? order.getStudio().getId() : null) // 스튜디오 ID
                     .orderItemDto(orderItemDto) // 단일 주문 상품 DTO
@@ -271,6 +275,7 @@ public class OrderService {
     // 예약 일정 상세보기
     public List<OrderDetailDto> viewDetailedSchedule(Long orderId) {
         // 사용자 예약 주문을 사용자 ID로 조회 (최적화된 쿼리 사용)
+        SimpleDateFormat formatter = new SimpleDateFormat("MM월 dd일(E) a h시", Locale.KOREA);
         PrincipalDetails principalDetails = authFacade.getAuth();
         List<Order> orders = orderRepository.findByUserIdWithDetails(principalDetails.getUserId());
 
@@ -357,7 +362,8 @@ public class OrderService {
                 OrderDetailDto detailDto = OrderDetailDto.builder()
                         .orderId(order.getId())
                         .orderUserDto(orderUserDto)
-                        .reservedDateTime(order.getOrderDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                        .reservedDateTime(order.getOrderDateTime().toString())
+//                        .reservedDateTime(formatter.format(order.getOrderDateTime()))
                         .status(order.getStatus())
                         .modifiable(order.getStatus() == OrderStatus.KEEP_RESERVATION)
                         .studioId(studioId)
@@ -384,7 +390,7 @@ public class OrderService {
         OrderDetailDto detailDto = OrderDetailDto.builder()
                 .orderId(order.getId())
                 .orderUserDto(orderUserDto)
-                .reservedDateTime(order.getOrderDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .reservedDateTime(order.getOrderDateTime().format(DateTimeFormatter.ofPattern("MM월 dd일(E) a h시", Locale.KOREA)))
                 .status(order.getStatus())
                 .modifiable(order.getStatus() == OrderStatus.KEEP_RESERVATION)
                 .studioId(studioId)
