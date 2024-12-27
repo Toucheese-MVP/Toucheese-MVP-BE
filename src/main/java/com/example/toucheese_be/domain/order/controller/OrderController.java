@@ -48,9 +48,12 @@ public class OrderController {
     }
 
     // 예약 일정 상세보기
-    @GetMapping("/schedule/detailed")
-    public ResponseEntity<List<OrderDetailDto>> getViewDetailedSchedule(){
-        List<OrderDetailDto> isViewDetailedSchedule = orderService.viewDetailedSchedule();
+    @GetMapping("{orderId}/schedule/detailed")
+    public ResponseEntity<List<OrderDetailDto>> getViewDetailedSchedule(
+            @PathVariable
+            Long orderId
+    ){
+        List<OrderDetailDto> isViewDetailedSchedule = orderService.viewDetailedSchedule(orderId);
 
         return ResponseEntity.ok(isViewDetailedSchedule);
     }
