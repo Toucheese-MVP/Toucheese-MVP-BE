@@ -10,15 +10,6 @@ spring:
   main:
     banner-mode: off
 
-#  springdoc:
-#    swagger-ui:
-#      display-request-duration: true
-#    api-docs:
-#      path: /v1/api-docs
-#    paths-to-match:
-#      - /api/v1/**
-#
-
 springdoc:
   packages-to-scan: com.example.toucheese_be
   swagger-ui:

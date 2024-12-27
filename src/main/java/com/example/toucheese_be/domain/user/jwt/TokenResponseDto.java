@@ -2,6 +2,7 @@ package com.example.toucheese_be.domain.user.jwt;
 
 
 
+import com.example.toucheese_be.domain.user.dto.response.UserDto;
 import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

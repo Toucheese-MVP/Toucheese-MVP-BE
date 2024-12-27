@@ -16,7 +16,7 @@ elif [ $last_run -eq 8082 ]; then
   next_run=8081
 fi
 
-echo "$next_run" > "$HOME/last_run"
+echo "$next_run" > "$HOME/last_run" # 여기까진 문제 없이 된거임
 
 sudo docker run --env-file /home/ubuntu/.env -d --name "toucheese-$next_run" -p "$next_run:8080" toucheeseteam2/toucheese:latest
 
@@ -29,4 +29,11 @@ sudo systemctl restart nginx.service
 
 if [ $last_run -ne -1 ]; then
   sudo docker stop "toucheese-$last_run"
+  sudo docker rm "toucheese-$last_run"
+fi
+
+# 컨테이너가 정상적으로 실행 중인지 확인
+if ! sudo docker ps | grep "toucheese-$next_run"; then
+    echo "Error: Container toucheese-$next_run failed to start."
+    exit 1
 fi

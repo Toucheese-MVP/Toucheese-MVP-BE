@@ -1,5 +1,6 @@
 package com.example.toucheese_be.domain.user.controller;
 
+import com.example.toucheese_be.domain.user.dto.response.SocialLoginDto;
 import com.example.toucheese_be.domain.user.jwt.TokenRequestDto;
 import com.example.toucheese_be.domain.user.jwt.TokenResponseDto;
 import com.example.toucheese_be.domain.user.jwt.JwtTokenUtils;
@@ -38,7 +39,7 @@ public class JwtTokenController {
             @ApiResponse(responseCode = "4020", description = "액세스 토큰이 만료되었습니다.",
                     content = @Content(schema = @Schema(implementation = ApiResponse.class)))
     })
-    public ResponseEntity<TokenResponseDto> refreshAccessToken(
+    public ResponseEntity<SocialLoginDto> refreshAccessToken(
         @RequestBody
         TokenRequestDto dto
     ) {
