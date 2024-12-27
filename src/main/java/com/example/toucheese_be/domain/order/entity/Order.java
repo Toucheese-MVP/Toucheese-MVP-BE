@@ -9,10 +9,13 @@ import com.example.toucheese_be.domain.user.entity.User;
 import com.example.toucheese_be.domain.studio.entity.Studio;
 import io.micrometer.common.KeyValues;
 import jakarta.persistence.*;
+
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import lombok.AllArgsConstructor;
@@ -70,8 +73,13 @@ public class Order {
                 .build();
 
         // 예약 시간 포맷팅 (예: "yyyy-MM-dd HH:mm:ss" 형식으로 변환)
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+//        SimpleDateFormat formatter = new SimpleDateFormat("MM월 dd일(E) a h시", Locale.KOREA);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM월 dd일(E) a h시", Locale.KOREA);
         String reservedDateTime = this.orderDateTime.format(formatter);
+//        String reservedDateTime = formatter.format(orderDateTime);
+//        String reservedDateTime = orderDateTime.toString();
+
 
         // 첫 번째 주문 아이템만 처리
         OrderItemDto orderItemDto = null;
