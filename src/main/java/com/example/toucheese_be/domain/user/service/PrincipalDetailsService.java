@@ -149,9 +149,9 @@ public class PrincipalDetailsService implements UserDetailsService {
 
 
         if (isNewUser) {
-            return CommonResponse.created(SocialLoginDto);
+            return CommonResponse.created(socialLoginDto);
         } else {
-            return CommonResponse.ok(SocialLoginDto);
+            return CommonResponse.ok(socialLoginDto);
         }
     }
 

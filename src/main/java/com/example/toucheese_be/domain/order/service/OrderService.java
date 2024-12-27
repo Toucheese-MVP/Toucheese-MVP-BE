@@ -362,7 +362,7 @@ public class OrderService {
                         .modifiable(order.getStatus() == OrderStatus.KEEP_RESERVATION)
                         .studioId(studioId)
                         .studioName(studioName)
-                        .orderItemDto(orderItemDtos)
+                        .orderItemDto(orderItemDto)
                         .build();
 
 
