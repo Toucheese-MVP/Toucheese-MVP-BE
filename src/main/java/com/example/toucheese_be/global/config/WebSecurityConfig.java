@@ -38,7 +38,8 @@ public class WebSecurityConfig {
                                 "/api/v1/studio/**",
                                 "/api/v1/auth/sign-up/**",
                                 "/api/v1/auth/sign-in/**",
-                                "/api/v1/admin/**"
+                                "/api/v1/admin/**",
+                                "/api/v1/auth/details"
                         )
                         .permitAll()
                         .requestMatchers(

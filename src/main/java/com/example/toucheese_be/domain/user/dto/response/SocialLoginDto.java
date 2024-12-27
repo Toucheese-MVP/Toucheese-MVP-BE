@@ -16,10 +16,11 @@ import lombok.Setter;
 @NoArgsConstructor
 public class SocialLoginDto {
     private Long userId;
-    private String userEmail;
+    private String email;
     private String username;
     private String nickname;
     private String phone;
+    private String profileImg;
     private Role role;
     private SocialProvider socialProvider;
     private TokenResponseDto tokens;

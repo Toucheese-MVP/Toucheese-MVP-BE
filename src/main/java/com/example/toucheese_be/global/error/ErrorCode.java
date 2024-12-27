@@ -17,6 +17,8 @@ public enum ErrorCode {
     ORDER_ALREADY_APPROVED(4006, HttpStatus.CONFLICT, "해당 예약 정보는 이미 승인 되었습니다."),
     ORDER_ALREADY_REJECTED(4007, HttpStatus.CONFLICT, "해당 예약 정보는 이미 거절 되었습니다."),
     ORDER_ALREADY_CANCELLED(4008, HttpStatus.CONFLICT, "해당 예약 정보는 이미 취소 되었습니다."),
+    ORDER_ALREADY_FINISH(4036, HttpStatus.CONFLICT, "해당 예약 정보는 이미 촬영 완료 처리되었습니다."),
+    ORDER_CANT_FINISH(4037, HttpStatus.CONFLICT, "해당 예약은 촬영 완료 처리할 수 없습니다."),
 
     // 회원 관련 예외
     SIGN_UP_PASSWORD_CHECK_NOT_MATCH(4009, HttpStatus.BAD_REQUEST, "비밀번호와 비밀번호 확인이 일치하지 않습니다."),
@@ -37,6 +39,7 @@ public enum ErrorCode {
     ILLEGAL_ARGUMENT_JWT_EXCEPTION(4022, HttpStatus.FORBIDDEN, "[IllegalArgumentException] 잘못된 형식의 토큰"),
     TOKEN_VALIDATION_FAIL(4033, HttpStatus.FORBIDDEN, "[토큰 검증 오류]"),
     EXTRACT_EMAIL_FROM_TOKEN_FAIL(4034, HttpStatus.FORBIDDEN, "accessToken에서 email 추출 실패"),
+    FCM_SERVICE_UNAVAILABLE(4035, HttpStatus.NOT_FOUND, "FCM 서비스 통신에 실패하였습니다."),
 
     // 서버 관련 에러
     INTERNAL_SERVER_ERROR(5000, HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 오류가 발생했습니다."),
