@@ -1,6 +1,7 @@
 package com.example.toucheese_be.domain.user.jwt;
 
 
+import com.example.toucheese_be.global.common.CommonResponse;
 import com.example.toucheese_be.global.error.ErrorCode;
 import com.example.toucheese_be.global.error.GlobalCustomException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -61,9 +62,9 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             }
 
             filterChain.doFilter(request, response);
-        } catch (JwtException | IllegalArgumentException e) {
+        } catch (GlobalCustomException e) {
             log.error("JWT 검증 실패: {}", e.getMessage());
-            throw new GlobalCustomException(ErrorCode.REFRESH_TOKEN_NOT_EQAUL);
+            sendErrorResponse(response, e.getErrorCode());
         }
     }
 
@@ -75,16 +76,14 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         return null;
     }
 
-    private void sendErrorResponse(HttpServletResponse response, String errorMessage) throws IOException {
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+    private void sendErrorResponse(HttpServletResponse response, ErrorCode errorCode) throws IOException {
+        response.setStatus(errorCode.getHttpStatus().value());
         response.setContentType("application/json;charset=UTF-8");
 
-        Map<String, String> errors = new HashMap<>();
-        errors.put("error", "Unauthorized");
-        errors.put("message", errorMessage);
+        CommonResponse<Object> errorResponse = CommonResponse.fail(errorCode);
 
         try (PrintWriter writer = response.getWriter()) {
-            writer.write(new ObjectMapper().writeValueAsString(errors));
+            writer.write(new ObjectMapper().writeValueAsString(errorResponse));
             writer.flush();
         }
     }

@@ -18,6 +18,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -71,11 +72,17 @@ public class UserController {
     }
 
     // 추가 정보 업데이트
-    @PutMapping("profile/update")
+    @PutMapping("/profile/update")
     public Boolean profileUpdate(
             @RequestBody
             UpdateUserDto dto
     ) {
         return principalDetailsService.profileUpdate(dto);
+    }
+
+    // 인증된 사용자 정보 조회
+    @GetMapping("/details")
+    public CommonResponse<UserDto> getUserDetails() {
+        return principalDetailsService.getUserDetails();
     }
 }

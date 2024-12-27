@@ -1,6 +1,7 @@
 package com.example.toucheese_be.domain.user.controller;
 
 
+import com.example.toucheese_be.domain.user.fcm.FcmNotificationRequestDto;
 import com.example.toucheese_be.domain.user.service.AdminService;
 import com.example.toucheese_be.domain.user.dto.response.AdminOrderDto;
 import com.example.toucheese_be.domain.studio.dto.PageRequestDto;
@@ -51,6 +52,17 @@ public class AdminController {
             Long orderId
     ) {
         return adminService.rejectOrder(orderId);
+    }
+
+    /**
+     * 관리자 페이지 - 촬영 완료
+     */
+    @PutMapping("/{orderId}/finish")
+    public ResponseEntity<Boolean> finishOrder(
+            @PathVariable
+            Long orderId
+    ) {
+        return adminService.finishOrder(orderId);
     }
 
 }

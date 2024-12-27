@@ -138,10 +138,11 @@ public class PrincipalDetailsService implements UserDetailsService {
 
         SocialLoginDto socialLoginDto = SocialLoginDto.builder()
                 .userId(user.getId())
-                .userEmail(user.getEmail())
+                .email(user.getEmail())
                 .username(user.getUsername())
                 .nickname(user.getPhone())
                 .phone(user.getPhone())
+                .profileImg(user.getProfileImg())
                 .role(user.getRole())
                 .socialProvider(user.getSocialProvider())
                 .tokens(tokens)
@@ -196,7 +197,7 @@ public class PrincipalDetailsService implements UserDetailsService {
             // 응답 DTO
             return SocialLoginDto.builder()
                     .userId(user.getId())
-                    .userEmail(user.getEmail())
+                    .email(user.getEmail())
                     .username(user.getUsername())
                     .nickname(user.getPhone())
                     .phone(user.getPhone())
@@ -227,6 +228,19 @@ public class PrincipalDetailsService implements UserDetailsService {
             userRepository.save(user);
             return true;
         }
+    }
+
+
+    /**
+     * get user details
+     *
+     * @return
+     */
+    public CommonResponse<UserDto> getUserDetails() {
+        PrincipalDetails principalDetails = authFacade.getAuth();
+        User user = userRepository.findById(principalDetails.getUserId())
+                .orElseThrow(() -> new GlobalCustomException(ErrorCode.USER_NOT_FOUND));
+        return CommonResponse.ok(UserDto.fromEntity(user));
     }
 
     @Override
