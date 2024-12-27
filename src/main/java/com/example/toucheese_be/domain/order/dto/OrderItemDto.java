@@ -27,6 +27,10 @@ public class OrderItemDto {
     private String itemImage;
     // 상품 가격
     private Integer quantity;
+    // 아이템 가격
+    private Integer itemPrice;
+    // 옵션 가격의 총합
+    private Integer optionTotalPrice;
     // 최종 가격
     private Integer totalPrice;
     // 상품에 대한 옵션

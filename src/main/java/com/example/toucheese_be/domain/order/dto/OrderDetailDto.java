@@ -26,11 +26,13 @@ public class OrderDetailDto {
     // 예약 시간
     private String reservedDateTime;
     // 상품 확인
-    private List<OrderItemDto> orderItemDto;
+    private OrderItemDto orderItemDto;
     // 예약 상태
     private OrderStatus status;
     // 수정 가능 여부
     private boolean modifiable;
+
+    private String studioImage;
 }
 //    public static OrderDetailDto fromEntity(Order entity) {
 //        return OrderDetailDto.builder()

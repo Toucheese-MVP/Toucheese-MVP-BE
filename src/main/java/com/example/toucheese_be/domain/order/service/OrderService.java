@@ -4,6 +4,7 @@ package com.example.toucheese_be.domain.order.service;
 import com.example.toucheese_be.domain.order.dto.*;
 import com.example.toucheese_be.domain.order.dto.request.OrderRequestItemDto;
 import com.example.toucheese_be.domain.order.entity.constant.OrderStatus;
+import com.example.toucheese_be.domain.studio.entity.StudioImage;
 import com.example.toucheese_be.domain.user.entity.PrincipalDetails;
 import com.example.toucheese_be.domain.user.entity.User;
 import com.example.toucheese_be.domain.item.entity.Item;
@@ -125,7 +126,6 @@ public class OrderService {
         // 사용자 예약 주문을 사용자 ID로 조회 (최적화된 쿼리 사용)
         PrincipalDetails principalDetails = authFacade.getAuth();
         List<Order> orders = orderRepository.findByUserIdWithDetails(principalDetails.getUserId());
-
         List<OrderDetailDto> schedule = new ArrayList<>(); // 단일 리스트로 변경
 
         // 주문이 없는 경우 빈 리스트를 반환
@@ -136,55 +136,58 @@ public class OrderService {
         // 주문 상태에 따라 리스트에 추가
         for (Order order : orders) {
             // 주문 상품 정보 DTO 생성
-            List<OrderItemDto> orderItemDtos = new ArrayList<>();
+            OrderItemDto orderItemDto = null; // 단일 DTO 초기화
 
-            // Long studioId = null;
-            // if(order.getStudio() != null){
-            //     studioId = order.getStudio().getId();
-            // }
 
-            String studioName = "정보 없음";
-            if(order.getStudio() != null){
+            List<StudioImage> images = order.getStudio().getImages(); // List<StudioImage> 반환
+            String studioImage = "정보 없음"; // 기본값 설정
+            String studioName = "정보 없음"; // 기본값 설정
+
+            if (order.getStudio() != null) {
                 studioName = order.getStudio().getName();
+                if (images != null && !images.isEmpty()) {
+                    studioImage = images.get(0).getImageUrl(); // 첫 번째 이미지의 URL 선택
+                }
             }
 
-            for (OrderItem orderItem : order.getOrderItems()) {
+            // 첫 번째 주문 아이템만 처리
+            if (!order.getOrderItems().isEmpty()) {
+                OrderItem orderItem = order.getOrderItems().get(0); // 첫 번째 아이템 가져오기
                 Item item = orderItem.getItem();
 
-                OrderItemDto orderItemDto = OrderItemDto.builder()
+                orderItemDto = OrderItemDto.builder()
                         .itemId(item != null ? item.getId() : null)
                         .itemName(item != null ? item.getName() : "정보 없음")
-                        .quantity(item != null ? orderItem.getQuantity() : null)
+                        .quantity(orderItem.getQuantity())
                         .build();
-
-                orderItemDtos.add(orderItemDto);
             }
 
             // 사용자 정보 DTO 생성
             OrderUserDto orderUserDto = OrderUserDto.builder()
-                    .userId(order.getId() != null ? order.getUser().getId() : null)
-                    .userName(order.getUser() != null ? order.getUser().getUsername() : null)
-                    //.userEmail(order.getUser() != null ? order.getUser().getEmail() : null)
-                    //.userPhone(order.getUser() != null ? order.getUser().getPhone() : null)
+                    .userId(order.getUser() != null ? order.getUser().getId() : null)
+                    .userName(order.getUser() != null ? order.getUser().getUsername() : "정보 없음")
                     .build();
 
+            // 최종 DTO 생성
             // 최종 DTO 생성
             OrderDetailDto detailDto = OrderDetailDto.builder()
                     .orderId(order.getId())
                     .orderUserDto(orderUserDto)
                     .reservedDateTime(order.getOrderDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))) // 예약 시간
-                    //.studioId(studioId)
-                    .studioName(studioName)// 스튜디오 이름
-                    .orderItemDto(orderItemDtos)// 주문 상품 DTO 리스트
+                    .studioName(studioName) // 스튜디오 이름
+                    .studioId(order.getStudio() != null ? order.getStudio().getId() : null) // 스튜디오 ID
+                    .orderItemDto(orderItemDto) // 단일 주문 상품 DTO
                     .status(order.getStatus())
-                    .modifiable(order.getStatus() == OrderStatus.KEEP_RESERVATION) // 주문 상태가 예약 대기일 경우 수정 가능
+                    .modifiable(order.getStatus() == OrderStatus.KEEP_RESERVATION) // 수정 가능 여부
+                    .studioImage(studioImage) // 스튜디오 이미지 URL
                     .build();
 
             schedule.add(detailDto); // 리스트에 추가
         }
+
         // 정렬: 예약 대기 상태가 위로 오도록 정렬하고, 날짜순 정렬
         schedule.sort(Comparator.comparing(OrderDetailDto::getStatus)
-                .thenComparing((Comparator.comparing(OrderDetailDto::getReservedDateTime)).reversed()));
+                .thenComparing(Comparator.comparing(OrderDetailDto::getReservedDateTime).reversed()));
 
         return schedule; // 단일 리스트 반환
     }
@@ -264,8 +267,9 @@ public class OrderService {
         return true;
     }
 
+
     // 예약 일정 상세보기
-    public List<OrderDetailDto> viewDetailedSchedule() {
+    public List<OrderDetailDto> viewDetailedSchedule(Long orderId) {
         // 사용자 예약 주문을 사용자 ID로 조회 (최적화된 쿼리 사용)
         PrincipalDetails principalDetails = authFacade.getAuth();
         List<Order> orders = orderRepository.findByUserIdWithDetails(principalDetails.getUserId());
@@ -278,50 +282,69 @@ public class OrderService {
             return detailedSchedule;
         }
 
-        // 주문 상태에 따라 리스트에 추가
-        for (Order order : orders) {
-            // 주문 상품 정보 DTO 생성
-            List<OrderItemDto> orderItemDtos = new ArrayList<>();
+        // 특정 주문 ID에 해당하는 주문 찾기
+        Order order = orders.stream()
+                .filter(o -> o.getId().equals(orderId)) // orderId와 일치하는 주문 필터링
+                .findFirst()
+                .orElse(null); // 주문이 없으면 null 반환
 
-            Long studioId = null;
-            if(order.getStudio() != null){
-                studioId = order.getStudio().getId();
-            }
+        // 주문이 존재하지 않는 경우 빈 리스트 반환
+        if (order == null) {
+            return detailedSchedule;
+        }
 
-            // 스튜디오 이름 초기화
-            String studioName = "정보 없음"; // 기본값 설정
-            if (order.getStudio() != null) {
-                studioName = order.getStudio().getName(); // 스튜디오 정보 가져오기
-            }
+        // 주문 상품 정보 DTO 생성
+        List<OrderItemDto> orderItemDtos = new ArrayList<>();
 
-            for (OrderItem orderItem : order.getOrderItems()) {
-                Item item = orderItem.getItem();
+        Long studioId = null;
+        if (order.getStudio() != null) {
+            studioId = order.getStudio().getId();
+        }
 
-                // 주문 옵션 DTO 리스트 초기화
-                List<OrderOptionDto> orderOptionDtos = new ArrayList<>();
-                if (orderItem != null && orderItem.getOrderOptions() != null
-                 ) {
-                    for (OrderOption option : orderItem.getOrderOptions()) {
-                        // 주문 옵션 DTO 생성
-                        OrderOptionDto optionDto = new OrderOptionDto(
-                                option.getId(),
-                                option.getName(),
-                                option.getPrice(),
-                                option.getQuantity());
-                        orderOptionDtos.add(optionDto); // 리스트에 추가
-                    }
+        // 스튜디오 이름 초기화
+        String studioName = "정보 없음"; // 기본값 설정
+        if (order.getStudio() != null) {
+            studioName = order.getStudio().getName(); // 스튜디오 정보 가져오기
+        }
 
-                    OrderItemDto orderItemDto = OrderItemDto.builder()
-                            .itemId(item != null ? item.getId() : null)
-                            .itemName(item != null ? item.getName() : "정보 없음")
-                            .itemImage(item != null ? item.getImage() : "정보 없음")
-                            .quantity(item != null ? orderItem.getQuantity() : null)
-                            .totalPrice(item != null ? orderItem.getTotalPrice() : null)
-                            .orderOptionDtos(orderOptionDtos)
-                            .build();
+        for (OrderItem orderItem : order.getOrderItems()) {
+            Item item = orderItem.getItem();
 
-                    orderItemDtos.add(orderItemDto);
+            // 주문 옵션 DTO 리스트 초기화
+            List<OrderOptionDto> orderOptionDtos = new ArrayList<>();
+            Integer optionTotalPrice = 0; // 옵션 가격 총합 초기화
+
+            if (orderItem != null && orderItem.getOrderOptions() != null) {
+                for (OrderOption option : orderItem.getOrderOptions()) {
+                    // 주문 옵션 DTO 생성
+                    OrderOptionDto optionDto = new OrderOptionDto(
+                            option.getId(),
+                            option.getName(),
+                            option.getPrice(),
+                            option.getQuantity());
+                    orderOptionDtos.add(optionDto); // 리스트에 추가
+
+                    // 옵션 가격 총합 계산
+                    optionTotalPrice += option.getPrice() * option.getQuantity();
                 }
+            }
+
+
+            // 아이템 가격 및 총 가격 계산
+            Integer itemPrice = item != null ? item.getPrice() : 0; // 아이템 가격
+            Integer totalPrice = (itemPrice * orderItem.getQuantity()) + optionTotalPrice; // 총 가격 계산
+
+            // 주문 아이템 DTO 생성
+            OrderItemDto orderItemDto = OrderItemDto.builder()
+                    .itemId(item != null ? item.getId() : null)
+                    .itemName(item != null ? item.getName() : "정보 없음")
+                    .itemImage(item != null ? item.getImage() : "정보 없음")
+                    .quantity(orderItem.getQuantity())
+                    .itemPrice(itemPrice) // 아이템 가격 설정
+                    .optionTotalPrice(optionTotalPrice) // 옵션 가격 총합 설정
+                    .totalPrice(totalPrice) // 총 가격 설정
+                    .orderOptionDtos(orderOptionDtos)
+                    .build();
 
                 // 사용자 정보 DTO 생성
                 OrderUserDto orderUserDto = OrderUserDto.builder()
@@ -342,10 +365,36 @@ public class OrderService {
                         .orderItemDto(orderItemDtos)
                         .build();
 
-                detailedSchedule.add(detailDto);
-            }
+
+            orderItemDtos.add(orderItemDto);
         }
-        return detailedSchedule;
+
+        // 사용자 정보 DTO 생성
+        OrderUserDto orderUserDto = OrderUserDto.builder()
+                .userId(order.getId() != null ? order.getUser().getId() : null)
+                .userName(order.getUser() != null ? order.getUser().getUsername() : "정보 없음")
+                .userEmail(order.getUser().getEmail() != null ? order.getUser().getEmail() : "정보 없음")
+                .userPhone(order.getUser().getPhone() != null ? order.getUser().getPhone() : "정보 없음")
+                .build();
+
+        // 첫 번째 아이템 선택 (비어있지 않은 경우)
+        OrderItemDto orderItemDto = orderItemDtos.isEmpty() ? null : orderItemDtos.get(0);
+
+        // 최종 DTO 생성
+        OrderDetailDto detailDto = OrderDetailDto.builder()
+                .orderId(order.getId())
+                .orderUserDto(orderUserDto)
+                .reservedDateTime(order.getOrderDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .status(order.getStatus())
+                .modifiable(order.getStatus() == OrderStatus.KEEP_RESERVATION)
+                .studioId(studioId)
+                .studioName(studioName)
+                .orderItemDto(orderItemDto) // 단일 주문 상품 DTO
+                .build();
+
+        detailedSchedule.add(detailDto); // 리스트에 추가
+
+        return detailedSchedule; // 최종 결과 반환
     }
 }
     /*
