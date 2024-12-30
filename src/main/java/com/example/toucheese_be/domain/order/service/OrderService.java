@@ -116,10 +116,13 @@ public class OrderService {
                 .orElseThrow(() -> new GlobalCustomException(ErrorCode.ORDER_NOT_FOUND));
 //                .orElseThrow(() -> new OrderNotFoundException(orderId));
 
-        if(order.getStatus() == OrderStatus.KEEP_RESERVATION){
-            order.setStatus(OrderStatus.CANCEL_RESERVATION);
-            orderRepository.save(order);
+        // 주문 상태가 예약 대기 상태가 아닐 경우 예외 처리
+        if (order.getStatus() != OrderStatus.KEEP_RESERVATION) {
+            throw new GlobalCustomException(ErrorCode.ORDER_CANNOT_BE_CANCELLED);
         }
+
+        order.setStatus(OrderStatus.CANCEL_RESERVATION);
+        orderRepository.save(order);
 
         return true;
     }
