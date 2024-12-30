@@ -30,7 +30,7 @@ public class User {
     private String phone;
     private String profileImg;
     private String socialId;
-    private String firebaseToken;
+    //private String firebaseToken;
 
     @Enumerated(EnumType.STRING)
     private Role role;

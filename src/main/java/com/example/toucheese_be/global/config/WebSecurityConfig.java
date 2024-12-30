@@ -46,7 +46,8 @@ public class WebSecurityConfig {
                                 "/api/v1/toss/**",
                                 "/api/v1/auth/profile/update",
                                 "/api/v1/auth/reissuance",
-                                "/api/v1/order/**"
+                                "/api/v1/order/**",
+                                "/api/v1/auth/profile/update"
                         )
                         .authenticated()
                         .requestMatchers(
