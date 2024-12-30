@@ -6,6 +6,7 @@ import com.example.toucheese_be.domain.user.jwt.TokenResponseDto;
 import com.example.toucheese_be.domain.user.jwt.JwtTokenUtils;
 import com.example.toucheese_be.domain.user.service.PrincipalDetailsService;
 import com.example.toucheese_be.domain.user.service.RefreshTokenService;
+import com.example.toucheese_be.global.common.CommonResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,6 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,5 +47,14 @@ public class JwtTokenController {
     ) {
         return ResponseEntity.ok(principalDetailsService.refreshAccessToken(dto));
     }
+
+    // TODO: FCM Token 재발급
+//    @PostMapping("/reissuance/fcm")
+//    public CommonResponse<FcmResponseDto> refreshFcm(
+//            @RequestBody
+//            FcmRequestDto dto
+//    ) {
+//        return principalDetailsService.refreshFcm(dto);
+//    }
 
 }
