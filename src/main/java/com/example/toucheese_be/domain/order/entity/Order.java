@@ -75,7 +75,7 @@ public class Order {
         // 예약 시간 포맷팅 (예: "yyyy-MM-dd HH:mm:ss" 형식으로 변환)
 //        SimpleDateFormat formatter = new SimpleDateFormat("MM월 dd일(E) a h시", Locale.KOREA);
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM월 dd일(E) a h시", Locale.KOREA);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일(E) a h시", Locale.KOREA);
         String reservedDateTime = this.orderDateTime.format(formatter);
 //        String reservedDateTime = formatter.format(orderDateTime);
 //        String reservedDateTime = orderDateTime.toString();

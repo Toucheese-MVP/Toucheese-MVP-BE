@@ -1,6 +1,6 @@
 package com.example.toucheese_be.global.error;
 
-import com.google.api.Http;
+// import com.google.api.Http;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
