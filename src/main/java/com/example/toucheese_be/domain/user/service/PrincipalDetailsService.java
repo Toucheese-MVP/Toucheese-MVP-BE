@@ -218,16 +218,15 @@ public class PrincipalDetailsService implements UserDetailsService {
         // 현재 인증된 사용자 정보
         PrincipalDetails principalDetails = authFacade.getAuth();
 
-        User user = userRepository.findByEmail(principalDetails.getEmail())
+        User user = userRepository.findById(principalDetails.getUserId())
                 .orElseThrow(() -> new GlobalCustomException(ErrorCode.USER_NOT_FOUND));
 
-        if (dto.getUsername() == null || dto.getUsername().isEmpty()) {
-            throw new GlobalCustomException(ErrorCode.UPDATE_USERNAME_EMPTY);
-        } else {
-            user.setUsername(dto.getUsername());
-            userRepository.save(user);
-            return true;
-        }
+        user.setUsername(dto.getUsername() == null ? "none" : dto.getUsername());
+        user.setEmail(dto.getEmail() == null ? "none" : dto.getEmail());
+        user.setPhone(dto.getPhone() == null ? "none" : dto.getPhone());
+        user.setUsername(dto.getUsername() == null ? "none" : dto.getUsername());
+        userRepository.save(user);
+        return true;
     }
 
 

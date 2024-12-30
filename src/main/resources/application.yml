@@ -10,8 +10,8 @@ spring:
   main:
     banner-mode: off
 
-fcm:
-  config: ${FIREBASE_CONFIG}
+#fcm:
+#  config: ${FIREBASE_CONFIG}
 
 
 springdoc:
