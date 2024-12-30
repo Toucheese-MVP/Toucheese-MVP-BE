@@ -1,5 +1,6 @@
 package com.example.toucheese_be.global.error;
 
+import com.google.api.Http;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ public enum ErrorCode {
     ORDER_ALREADY_CANCELLED(4008, HttpStatus.CONFLICT, "해당 예약 정보는 이미 취소 되었습니다."),
     ORDER_ALREADY_FINISH(4036, HttpStatus.CONFLICT, "해당 예약 정보는 이미 촬영 완료 처리되었습니다."),
     ORDER_CANT_FINISH(4037, HttpStatus.CONFLICT, "해당 예약은 촬영 완료 처리할 수 없습니다."),
+    ORDER_CANNOT_BE_CANCELLED(4038, HttpStatus.CONFLICT, "해당 예약은 취소 처리할 수 없습니다."),
 
     // 회원 관련 예외
     SIGN_UP_PASSWORD_CHECK_NOT_MATCH(4009, HttpStatus.BAD_REQUEST, "비밀번호와 비밀번호 확인이 일치하지 않습니다."),
