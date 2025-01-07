@@ -11,11 +11,11 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     // 존재하지 않는 요청에 대한 예외
-    @ExceptionHandler(value = {NoHandlerFoundException.class, HttpRequestMethodNotSupportedException.class})
-    public CommonResponse<?> handleNoPageFoundException(Exception e) {
-        log.error("GlobalExceptionHandler catch NoHandlerFoundException : {}", e.getMessage());
-        return CommonResponse.fail(ErrorCode.NOT_FOUND_END_POINT);
-    }
+//    @ExceptionHandler(value = {NoHandlerFoundException.class, HttpRequestMethodNotSupportedException.class})
+//    public CommonResponse<?> handleNoPageFoundException(Exception e) {
+//        log.error("GlobalExceptionHandler catch NoHandlerFoundException : {}", e.getMessage());
+//        return CommonResponse.fail(ErrorCode.NOT_FOUND_END_POINT);
+//    }
 
     // 런타임 예외 처리
     @ExceptionHandler(value = {GlobalCustomException.class})
