@@ -33,11 +33,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         String[] excludePath = {
                 "/v3/api-docs/**",
                 "/swagger-ui/**",
-                "/swagger-ui/index.html/**",
-                "/swagger-resources/**",
-                "/webjars/**",
-                "/swagger-ui.html",
-                "/public/**",
                 "/api/v1/studio/**",
                 "/api/v1/auth/sign-up/**",
                 "/api/v1/auth/sign-in/**"
