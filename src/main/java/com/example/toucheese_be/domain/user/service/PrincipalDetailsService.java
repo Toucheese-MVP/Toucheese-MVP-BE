@@ -1,0 +1,210 @@
+package com.example.toucheese_be.domain.user.service;
+
+import com.example.toucheese_be.domain.user.constant.Role;
+import com.example.toucheese_be.domain.user.constant.SocialProvider;
+import com.example.toucheese_be.domain.user.dto.request.OAuthSignInDto;
+import com.example.toucheese_be.domain.user.dto.request.UpdateUserDto;
+import com.example.toucheese_be.domain.user.dto.response.SocialLoginDto;
+import com.example.toucheese_be.domain.user.entity.PrincipalDetails;
+import com.example.toucheese_be.domain.user.jwt.JwtTokenUtils;
+import com.example.toucheese_be.domain.user.dto.request.CreateUserDto;
+import com.example.toucheese_be.domain.user.dto.request.SignInDto;
+import com.example.toucheese_be.domain.user.dto.response.UserDto;
+import com.example.toucheese_be.domain.user.entity.User;
+import com.example.toucheese_be.domain.user.jwt.TokenRequestDto;
+import com.example.toucheese_be.domain.user.jwt.TokenResponseDto;
+import com.example.toucheese_be.domain.user.repository.UserRepository;
+import com.example.toucheese_be.global.common.AuthenticationFacade;
+import com.example.toucheese_be.global.common.CommonResponse;
+import com.example.toucheese_be.global.error.ErrorCode;
+import com.example.toucheese_be.global.error.GlobalCustomException;
+import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class PrincipalDetailsService implements UserDetailsService {
+    private final UserRepository userRepository;
+    private final JwtTokenUtils jwtTokenUtils;
+    private final RefreshTokenService refreshTokenService;
+    private final AuthenticationFacade authFacade;
+
+    /**
+     * 소셜 로그인
+     *
+     * @param dto
+     * @return
+     */
+    public CommonResponse<SocialLoginDto> oAuthSignIn(OAuthSignInDto dto) {
+        // socialId 존재 유무 판단
+        Optional<User> optionalUser = userRepository.findBySocialId(dto.getSocialId());
+        PrincipalDetails principalDetails;
+        boolean isNewUser;
+        User user;
+
+        // 로그인을 한적이 있는 경우
+        if (optionalUser.isPresent()) {
+            user = optionalUser.get();
+            log.info("이전에 로그인을 한 적이 있습니다. (userId : {})", user.getId());
+            user.setEmail(dto.getEmail());
+            user.setUsername(dto.getUsername());
+            userRepository.save(user);
+            principalDetails = new PrincipalDetails(user);
+            isNewUser = false;
+        }
+        // 최초 로그인
+        else {
+            String userEmail = "none";
+            if (dto.getEmail() == null || dto.getEmail().isEmpty()) {
+                userEmail = dto.getSocialId() + "@private.com";
+            } else {
+                userEmail = dto.getEmail();
+            }
+
+            user = userRepository.save(User.builder()
+                    .socialId(dto.getSocialId())
+                    .email(userEmail)
+                    .username(dto.getUsername())
+                    .socialProvider(SocialProvider.valueOf(dto.getSocialProvider()))
+                    .role(Role.MEMBER)
+                    .build());
+            log.info("최초 로그인 입니다. (userId : {})", user.getId());
+            principalDetails = new PrincipalDetails(user);
+            isNewUser = true;
+        }
+
+        String accessToken = jwtTokenUtils.generateAccessToken(principalDetails);
+        String refreshToken = jwtTokenUtils.generateRefreshToken();
+        refreshTokenService.saveRefreshToken(principalDetails.getEmail(), refreshToken);
+
+        TokenResponseDto tokens = TokenResponseDto.builder()
+                .accessToken(accessToken)
+                .issuedAt(jwtTokenUtils.getClaims(accessToken).getIssuedAt())
+                .expiration(jwtTokenUtils.getClaims(accessToken).getExpiration())
+                .refreshToken(refreshToken)
+                .build();
+
+        SocialLoginDto socialLoginDto = SocialLoginDto.builder()
+                .userId(user.getId())
+                .email(user.getEmail())
+                .username(user.getUsername())
+                .nickname(user.getPhone())
+                .phone(user.getPhone())
+                .profileImg(user.getProfileImg())
+                .role(user.getRole())
+                .socialProvider(user.getSocialProvider())
+                .tokens(tokens)
+                .build();
+
+
+        if (isNewUser) {
+            return CommonResponse.created(socialLoginDto);
+        } else {
+            return CommonResponse.ok(socialLoginDto);
+        }
+    }
+
+    /**
+     * accessToken, refreshToken 재발급
+     *
+     * @param dto
+     * @return
+     */
+    public SocialLoginDto refreshAccessToken(TokenRequestDto dto) {
+        String accessToken = dto.getAccessToken();
+        String refreshToken = dto.getRefreshToken();
+        String email = jwtTokenUtils.extractEmailFromToken(accessToken);
+
+        String storedRefreshToken = refreshTokenService.getRefreshToken(email);
+        // refresh token 불일치
+        if (storedRefreshToken == null || !storedRefreshToken.equals(refreshToken)) {
+            throw new GlobalCustomException(ErrorCode.REFRESH_TOKEN_NOT_EQAUL);
+        }
+        // refresh token 일치
+        else {
+            // 새로운 ATK, RTK 생성
+            PrincipalDetails principalDetails = loadUserByUsername(email);
+            String newAccessToken = jwtTokenUtils.generateAccessToken(principalDetails);
+            String newRefreshToken = jwtTokenUtils.generateRefreshToken();
+
+            refreshTokenService.deleteRefreshToken(email);
+            refreshTokenService.saveRefreshToken(email, newRefreshToken);
+
+            log.info("새로운 Access Token 및 Refresh Token 발급 성공. 사용지: {}", email);
+
+            User user = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new GlobalCustomException(ErrorCode.USER_NOT_FOUND));
+
+            TokenResponseDto tokens = TokenResponseDto.builder()
+                    .accessToken(newAccessToken)
+                    .issuedAt(jwtTokenUtils.getClaims(newAccessToken).getIssuedAt())
+                    .expiration(jwtTokenUtils.getClaims(newAccessToken).getExpiration())
+                    .refreshToken(newRefreshToken)
+                    .build();
+
+            // 응답 DTO
+            return SocialLoginDto.builder()
+                    .userId(user.getId())
+                    .email(user.getEmail())
+                    .username(user.getUsername())
+                    .nickname(user.getPhone())
+                    .phone(user.getPhone())
+                    .role(user.getRole())
+                    .socialProvider(user.getSocialProvider())
+                    .tokens(tokens)
+                    .build();
+
+        }
+    }
+
+    /**
+     * profile update
+     *
+     * @return
+     */
+    public Boolean profileUpdate(UpdateUserDto dto) {
+        // 현재 인증된 사용자 정보
+        PrincipalDetails principalDetails = authFacade.getAuth();
+
+        User user = userRepository.findById(principalDetails.getUserId())
+                .orElseThrow(() -> new GlobalCustomException(ErrorCode.USER_NOT_FOUND));
+
+        user.setUsername(dto.getUsername() == null ? "none" : dto.getUsername());
+        user.setEmail(dto.getEmail() == null ? "none" : dto.getEmail());
+        user.setPhone(dto.getPhone() == null ? "none" : dto.getPhone());
+        user.setUsername(dto.getUsername() == null ? "none" : dto.getUsername());
+        userRepository.save(user);
+        return true;
+    }
+
+
+    /**
+     * get user details
+     *
+     * @return
+     */
+    public CommonResponse<UserDto> getUserDetails() {
+        PrincipalDetails principalDetails = authFacade.getAuth();
+        User user = userRepository.findById(principalDetails.getUserId())
+                .orElseThrow(() -> new GlobalCustomException(ErrorCode.USER_NOT_FOUND));
+        return CommonResponse.ok(UserDto.fromEntity(user));
+    }
+
+    @Override
+    public PrincipalDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new GlobalCustomException(ErrorCode.USER_NOT_FOUND));
+        return PrincipalDetails.builder()
+                .userId(user.getId())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .authorities(user.getRole().getRoles())
+                .build();
+    }
+}

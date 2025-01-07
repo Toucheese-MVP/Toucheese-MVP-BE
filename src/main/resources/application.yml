@@ -13,22 +13,6 @@ spring:
 #fcm:
 #  config: ${FIREBASE_CONFIG}
 
-
-springdoc:
-  packages-to-scan: com.example.toucheese_be
-  swagger-ui:
-    path: /swagger-ui.html
-    operations-sorter: alpha
-    enabled: true
-    config-url: /v3/api-docs/swagger-config
-    urls:
-      - url: /v3/api-docs
-        name: API docs
-  api-docs:
-    path: /v3/api-docs
-    enabled: true
-  default-consumes-media-type: application/json;charset=UTF-8
-
 logging:
   level:
     root: info
