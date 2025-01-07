@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/studio")
 @RequiredArgsConstructor
-public class ReviewController {
+public class ReviewController implements ReviewApi{
     private final ReviewService reviewService;
 
     /**
      * 스튜디오 상세 조회 - 리뷰탭
      */
     @GetMapping("/{studioId}/reviews")
-    private ResponseEntity<StudioReviewDetailDto> getStudioReviews(
+    public ResponseEntity<StudioReviewDetailDto> getStudioReviews(
             @PathVariable
             Long studioId
     ) {
@@ -31,7 +31,7 @@ public class ReviewController {
      * 스튜디오 리뷰 상세 조회
      */
     @GetMapping("/review/{reviewId}/details")
-    private ResponseEntity<ReviewDetailDto> getReviewDetail(
+    public ResponseEntity<ReviewDetailDto> getReviewDetail(
             @PathVariable
             Long reviewId
     ) {

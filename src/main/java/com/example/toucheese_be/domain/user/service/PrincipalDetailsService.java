@@ -31,55 +31,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PrincipalDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
     private final JwtTokenUtils jwtTokenUtils;
     private final RefreshTokenService refreshTokenService;
     private final AuthenticationFacade authFacade;
-
-    /**
-     * 일반 회원가입
-     *
-     * @param dto
-     * @return
-     */
-    public UserDto signUp(CreateUserDto dto) {
-        if (userRepository.existsByEmail(dto.getEmail())) {
-            throw new GlobalCustomException(ErrorCode.SIGN_UP_DUPLICATED_EMAIL);
-        }
-        if (!dto.getPassword().equals(dto.getPasswordCheck())) {
-            throw new GlobalCustomException(ErrorCode.SIGN_UP_PASSWORD_CHECK_NOT_MATCH);
-        }
-
-        // 성명, 프로필 이미지, 휴대폰 번호는 null 인채로 생성
-        User savedUser = userRepository.save(User.builder()
-                .email(dto.getEmail())
-                .password(passwordEncoder.encode(dto.getPassword()))
-                .nickname(dto.getNickname())
-                .role(Role.MEMBER)
-                .build());
-
-        return UserDto.fromEntity(savedUser);
-    }
-
-    /**
-     * 일반 로그인
-     *
-     * @param dto
-     * @return
-     */
-    public String signIn(SignInDto dto) {
-        // 로그인 시만 DB 접근 (이외의 요청은 DB 접근 X)
-        User user = userRepository.findByEmail(dto.getEmail())
-                .orElseThrow(() -> new GlobalCustomException(ErrorCode.SIGN_IN_EMAIL_NOT_FOUND));
-        if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
-            throw new GlobalCustomException(ErrorCode.SIGN_IN_PASSWORD_NOT_MATCH);
-        }
-
-        // JWT 발급
-        // 아래 코드가 유효하려면 회원가입 시점에 PrincipalDetails 가 만들어지는 코드를 추가해야함
-        PrincipalDetails principalDetails = loadUserByUsername(user.getEmail());
-        return jwtTokenUtils.generateAccessToken(principalDetails);
-    }
 
     /**
      * 소셜 로그인

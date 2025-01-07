@@ -16,7 +16,7 @@ import java.util.List;
 @OpenAPIDefinition(
         info = @Info(
                 title = "Toucheese API",
-                description = "toucheese api"
+                description = "터치즈 API 명세서 입니다."
         )
 )
 public class SwaggerConfig {

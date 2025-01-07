@@ -7,7 +7,10 @@ import com.example.toucheese_be.domain.studio.dto.StudioSearchFilterDto;
 import com.example.toucheese_be.domain.studio.dto.StudioDto;
 import com.example.toucheese_be.domain.studio.dto.response.StudioDutyDateDto;
 import com.example.toucheese_be.domain.studio.service.StudioService;
+
 import java.util.List;
+
+import com.example.toucheese_be.global.common.CommonResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/studio")
 @RequiredArgsConstructor
-public class StudioController {
+public class StudioController implements StudioApi {
     private final StudioService studioService;
 
     /**
@@ -33,7 +36,6 @@ public class StudioController {
     public ResponseEntity<List<ConceptDto>> getConcepts() {
         return ResponseEntity.ok(studioService.getConcepts());
     }
-
 
     /**
      * 컨셉 별 스튜디오 조회 (전체 or 조건)

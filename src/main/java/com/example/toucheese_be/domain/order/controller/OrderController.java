@@ -15,7 +15,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/order")
-public class OrderController {
+public class OrderController implements OrderApi {
     private final OrderService orderService;
 
     @PostMapping("/create")
